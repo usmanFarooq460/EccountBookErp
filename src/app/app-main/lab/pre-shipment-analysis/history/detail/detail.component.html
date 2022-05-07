@@ -1,0 +1,24 @@
+<dx-data-grid
+  [dataSource]="detailArray"
+  [showColumnLines]="false"
+  [showRowLines]="true"
+  [rowAlternationEnabled]="true"
+  [allowColumnResizing]="true"
+  [columnAutoWidth]="true"
+  [showBorders]="true"
+  [wordWrapEnabled]="false"
+>
+  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+  
+  
+  <dxi-column dataField="SupplierCustomer" caption="Supplier Customer"  ></dxi-column>
+  <dxi-column dataField="ContractNo" caption="Contract No"  ></dxi-column>
+  <dxi-column dataField="Qty" caption="Qty"  ></dxi-column>
+  <dxi-column dataField="Status" caption="Status"  ></dxi-column>
+  <dxi-column dataField="SubLot" caption="Sub Lot"  ></dxi-column>
+  <dxi-column dataField="SubRemarks" caption="Remarks" ></dxi-column>
+  <dxo-summary>
+    <dxi-total-item column="Qty" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+  </dxo-summary>
+  <dxo-scrolling mode="infinite" [scrollByContent]="true" [scrollByThumb]="true"></dxo-scrolling>
+</dx-data-grid>

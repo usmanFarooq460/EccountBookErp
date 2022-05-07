@@ -1,0 +1,11 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\app",
+    "\\src\\app\\app-main",
+    "\\src\\app\\app-main\\analytics-dashboard"
+  ],
+  "SelectedNode": "\\src\\app\\app-main\\analytics-dashboard\\analytics-dashboard.module.ts",
+  "PreviewInSolutionExplorer": false
+}

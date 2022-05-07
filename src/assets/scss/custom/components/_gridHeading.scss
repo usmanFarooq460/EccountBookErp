@@ -1,0 +1,31 @@
+::ng-deep #GridWithHeading .dx-datagrid-header-panel {
+  padding: 0;
+  background-color: rgb(11, 131, 196);
+}
+::ng-deep #GridWithHeading .dx-datagrid-header-panel .dx-toolbar {
+  margin: 0;
+  padding-right: 20px;
+  background-color: transparent;
+}
+
+::ng-deep #GridWithHeading .dx-datagrid-header-panel .dx-toolbar-items-container {
+  height: 48px;
+}
+
+::ng-deep #GridWithHeading .dx-datagrid-header-panel .dx-toolbar-before .dx-toolbar-item:last-child {
+  padding-right: 3px;
+  color: rgb(140, 174, 238);
+}
+
+::ng-deep #GridWithHeading .dx-datagrid-header-panel .dx-selectbox {
+  margin: 1px;
+}
+
+::ng-deep #GridWithHeading .dx-datagrid-header-panel .dx-button {
+  margin: 1px;
+}
+::ng-deep #GridWithHeading .HeadingDiv {
+  display: inline-block;
+  font-family: "Abril Fatface", serif;
+  color: #fff;
+}

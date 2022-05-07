@@ -1,0 +1,517 @@
+<dx-popup
+  [width]="WidthOfPopupWithGrid"
+  [height]="HeightOfPopupWithGrid"
+  [position]="'center'"
+  [showTitle]="true"
+  titleTemplate="titleTemplate"
+  [dragEnabled]="true"
+  [showCloseButton]="true"
+  [closeOnOutsideClick]="false"
+  [(visible)]="PopupWithGridVisible"
+  [animation]="{ hide: { type: 'slideOut', direction: 'right', duration: 1000 }, show: { type: 'slideIn', direction: 'left', duration: 1500 } }"
+>
+  <div *dxTemplate="let content of 'titleTemplate'" class="d-flex justify-content-between">
+    <div class="">
+      <h4>Define Account</h4>
+    </div>
+    <div class="d-flex justify-content-end">
+      <!-- <dx-button class="p-0 border-0" type="danger" (onClick)="onLoadClick()" icon="download"></dx-button> -->
+      <dx-button class="p-0 border-0" (onClick)="RefreshForm()" icon="refresh"></dx-button>
+      <dx-button class="p-0 border-0" (onClick)="close()" icon="close"></dx-button>
+    </div>
+  </div>
+  <div *dxTemplate="let data of 'content'">
+    <dx-form id="form" [formData]="ChartOfAccountFormData" [colCountByScreen]="{ lg: 4, md: 3, sm: 2, xs: 2 }" #ChartOfAccountForm [showRequiredMark]="false">
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="ParentAccountCode"
+        editorType="dxSelectBox"
+        [editorOptions]="{
+          dataSource: parentAccountList,
+          valueExpr: 'AccountCode',
+          displayExpr: 'AccountTitle',
+          searchEnabled: true,
+          placeholder: 'Parent Account',
+          onValueChanged: handleChange
+        }"
+      >
+        <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+        <dxi-validation-rule type="required" message="Parent Account is required"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="AccountClass"
+        editorType="dxSelectBox"
+        [editorOptions]="{
+          items: accountClassList,
+          valueExpr: 'Id',
+          displayExpr: 'name',
+          readOnly: true,
+          placeholder: 'Account Class'
+        }"
+      >
+        <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+      </dxi-item>
+
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="Account_Level"
+        editorType="dxTextBox"
+        [editorOptions]="{
+          disabled: true,
+          placeholder: 'Account Level'
+        }"
+      >
+        <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+      </dxi-item>
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="AccountCode"
+        editorType="dxTextBox"
+        [editorOptions]="{
+          disabled: true,
+          placeholder: 'Account Code'
+        }"
+      >
+        <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+      </dxi-item>
+
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="AccountTitle"
+        editorType="dxTextBox"
+        [editorOptions]="{
+          placeholder: 'Account Title'
+        }"
+      >
+        <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+        <dxi-validation-rule type="required" message="Account Title is required"></dxi-validation-rule
+      ></dxi-item>
+
+      <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="AccountGroup"
+        editorType="dxSelectBox"
+        [editorOptions]="{
+          placeholder: 'Account Group',
+          items: groupDetailList,
+          displayExpr: 'name',
+          valueExpr: 'name',
+          searchEnabled: true,
+          disabled: groupDetailStatus
+        }"
+      >
+        <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+        <dxi-validation-rule type="required" message="Group/Detail is required"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="AccountTypeId"
+        editorType="dxSelectBox"
+        [editorOptions]="{
+          items: accountTypeList,
+          valueExpr: 'Id',
+          displayExpr: 'AccountType',
+          searchEnabled: true,
+          disabled: accountTypeStatus,
+          placeholder: 'Account Type'
+        }"
+      >
+        <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+        <dxi-validation-rule type="required" message="Account Type is required"></dxi-validation-rule>
+      </dxi-item>
+
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="PLNoteId"
+        editorType="dxSelectBox"
+        [editorOptions]="{
+          placeholder: 'PL Notes',
+          items: pLNotesList,
+          valueExpr: 'Id',
+          displayExpr: 'NoteTitle',
+          searchEnabled: true,
+          disabled: pLNoteStatus
+        }"
+      >
+        <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+        <dxi-validation-rule type="required" message="PL Notes is required"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="BSNoteId"
+        editorType="dxSelectBox"
+        [editorOptions]="{
+          placeholder: 'BS Notes',
+          items: bSNotesList,
+          valueExpr: 'Id',
+          displayExpr: 'NoteTitle',
+          searchEnabled: true,
+          disabled: bSNoteStatus
+        }"
+      >
+        <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+        <dxi-validation-rule type="required" message="BS Notes is required"></dxi-validation-rule
+      ></dxi-item>
+    </dx-form>
+    <div class="row mt-2 px-1">
+      <div class="col-md-12">
+        <dx-drop-down-box [(value)]="selectedCompanies" valueExpr="Id" displayExpr="CompName" placeholder="Select Comanies..." [dataSource]="CompaniesDataSource" [showClearButton]="true">
+          <div *dxTemplate="let data of 'content'">
+            <dx-data-grid
+              [dataSource]="CompaniesDataSource"
+              [columns]="['CompName', 'CompAddress', 'CompMobileA']"
+              [selection]="{ mode: 'multiple' }"
+              [hoverStateEnabled]="true"
+              [paging]="{ enabled: true, pageSize: 5 }"
+              [filterRow]="{ visible: true }"
+              [scrolling]="{ mode: 'virtual' }"
+              [height]="280"
+              [(selectedRowKeys)]="selectedCompanies"
+            >
+            </dx-data-grid>
+          </div>
+        </dx-drop-down-box>
+      </div>
+    </div>
+    <div class="d-flex justify-content-end mt-1">
+      <dx-button text="Save" (onClick)="onSubmit()" icon="save" type="success"></dx-button>
+
+      <!-- <dx-button type="danger" (onClick)="clear()" text="Close"></dx-button> -->
+    </div>
+    <dx-scroll-view height="65%" [showScrollbar]="'always'">
+      <div class="row">
+        <div class="col-sm-6 px-3">
+          <div class="row mt-2">
+            <div class="col-md-12 text-center">
+              <h5 style="font-weight: bold; font-family: cursive">Child Accounts of Parent</h5>
+            </div>
+            <div class="col-md-12">
+              <dx-data-grid
+                [height]="400"
+                id="ChildAccountGridOfSelectedParent"
+                #ChildAccountGridOfSelectedParent
+                [dataSource]="parentaccountacdatasource"
+                [showColumnLines]="false"
+                [showRowLines]="true"
+                [rowAlternationEnabled]="true"
+                [allowColumnResizing]="true"
+                [columnAutoWidth]="false"
+                [showBorders]="true"
+                [wordWrapEnabled]="true"
+              >
+                <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('ChildAccountListGridStateOfSelectedParentAccount') }}"></dxo-state-storing>
+                <dxo-search-panel [visible]="true" [width]="150"></dxo-search-panel>
+                <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+                <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+                <dxi-column dataField="" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+                <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+                  <div class="d-con-cell-action">
+                    <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+                  </div>
+                </div>
+                <dxi-column dataField="AccountCode" [visible]="false" caption="Code" dataType="string"></dxi-column>
+                <dxi-column dataField="AccountTitle" caption="Title" dataType="string"></dxi-column>
+                <dxo-summary>
+                  <dxi-total-item column="AccountTitle" summaryType="count" displayFormat="Total Accounts: {0}"> </dxi-total-item>
+                </dxo-summary>
+                <dxo-scrolling mode="infinite" [showScrollbar]="'always'"></dxo-scrolling>
+              </dx-data-grid>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 px-3">
+          <div class="row mt-2">
+            <div class="col-md-12 text-center">
+              <h5 style="font-weight: bold; font-family: cursive">Accounts (1st Level)</h5>
+            </div>
+            <div class="col-md-12">
+              <dx-data-grid
+                [height]="400"
+                id="FirstLevelAccountsGrid"
+                #FirstLevelAccountsGrid
+                [dataSource]="FirstLevelAccountsList"
+                [showColumnLines]="false"
+                [showRowLines]="true"
+                [rowAlternationEnabled]="true"
+                [allowColumnResizing]="true"
+                [columnAutoWidth]="false"
+                [showBorders]="true"
+                [wordWrapEnabled]="true"
+              >
+                <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('FirstLevelAccountsGridState') }}"></dxo-state-storing>
+                <dxo-search-panel [visible]="true" [width]="150"></dxo-search-panel>
+                <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+                <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+                <dxi-column dataField="" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+                <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+                  <div class="d-con-cell-action">
+                    <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+                  </div>
+                </div>
+                <dxi-column dataField="AccountCode" [visible]="false" caption="Code" dataType="string"></dxi-column>
+                <dxi-column dataField="AccountTitle" caption="Title" dataType="string"></dxi-column>
+                <dxi-column
+                  dataField="button"
+                  [fixed]="true"
+                  [fixedPosition]="'right'"
+                  [width]="90"
+                  alignment="center"
+                  caption="Action"
+                  [allowEditing]="false"
+                  [allowExporting]="false"
+                  [allowFiltering]="false"
+                  [allowFixing]="false"
+                  [allowGrouping]="false"
+                  [allowHeaderFiltering]="false"
+                  [allowHiding]="true"
+                  [allowReordering]="false"
+                  [allowResizing]="false"
+                  [allowSearch]="false"
+                  [allowSorting]="false"
+                  cellTemplate="buttonTemplate"
+                ></dxi-column>
+                <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+                  <div class="d-con-cell-action">
+                    <dx-button type="default" hint="Filter Child" stylingMode="text" (onClick)="FilterAccounts(cellInfo.data)">
+                      <i class="ri-eye-line"></i>
+                    </dx-button>
+                    <dx-button type="danger" hint="Add Child" stylingMode="text" (onClick)="AddChild(cellInfo.data)">
+                      <i class="ri-add-box-fill"></i>
+                    </dx-button>
+                  </div>
+                </div>
+                <dxo-summary>
+                  <dxi-total-item column="AccountTitle" summaryType="count" displayFormat="Total Accounts: {0}"> </dxi-total-item>
+                </dxo-summary>
+                <dxo-scrolling mode="infinite" [showScrollbar]="'always'"></dxo-scrolling>
+              </dx-data-grid>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 px-3">
+          <div class="row mt-2">
+            <div class="col-md-12 text-center">
+              <h5 style="font-weight: bold; font-family: cursive">Accounts (2nd Level)</h5>
+            </div>
+            <div class="col-md-12">
+              <dx-data-grid
+                [height]="400"
+                id="SecondLevelAccountsGrid"
+                #SecondLevelAccountsGrid
+                [dataSource]="SecondLevelAccountsList"
+                [showColumnLines]="false"
+                [showRowLines]="true"
+                [rowAlternationEnabled]="true"
+                [allowColumnResizing]="true"
+                [columnAutoWidth]="false"
+                [showBorders]="true"
+                [wordWrapEnabled]="true"
+              >
+                <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('SecondLevelAccountsGridState') }}"></dxo-state-storing>
+                <dxo-search-panel [visible]="true" [width]="150"></dxo-search-panel>
+                <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+                <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+                <dxi-column dataField="" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+                <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+                  <div class="d-con-cell-action">
+                    <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+                  </div>
+                </div>
+                <dxi-column dataField="AccountCode" [visible]="false" caption="Code" dataType="string"></dxi-column>
+                <dxi-column dataField="AccountTitle" caption="Title" dataType="string"></dxi-column>
+                <dxi-column
+                  dataField="button"
+                  [fixed]="true"
+                  [fixedPosition]="'right'"
+                  [width]="90"
+                  alignment="center"
+                  caption="Action"
+                  [allowEditing]="false"
+                  [allowExporting]="false"
+                  [allowFiltering]="false"
+                  [allowFixing]="false"
+                  [allowGrouping]="false"
+                  [allowHeaderFiltering]="false"
+                  [allowHiding]="true"
+                  [allowReordering]="false"
+                  [allowResizing]="false"
+                  [allowSearch]="false"
+                  [allowSorting]="false"
+                  cellTemplate="buttonTemplate"
+                ></dxi-column>
+                <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+                  <div class="d-con-cell-action">
+                    <dx-button type="default" hint="Filter Child" stylingMode="text" (onClick)="FilterAccounts(cellInfo.data)">
+                      <i class="ri-eye-line"></i>
+                    </dx-button>
+                    <dx-button type="danger" hint="Add Child" stylingMode="text" (onClick)="AddChild(cellInfo.data)">
+                      <i class="ri-add-box-fill"></i>
+                    </dx-button>
+                  </div>
+                </div>
+                <dxo-summary>
+                  <dxi-total-item column="AccountTitle" summaryType="count" displayFormat="Total Accounts: {0}"> </dxi-total-item>
+                </dxo-summary>
+                <dxo-scrolling mode="infinite" [showScrollbar]="'always'"></dxo-scrolling>
+              </dx-data-grid>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 px-3">
+          <div class="row mt-2">
+            <div class="col-md-12 text-center">
+              <h5 style="font-weight: bold; font-family: cursive">Accounts (3rd Level)</h5>
+            </div>
+            <div class="col-md-12">
+              <dx-data-grid
+                [height]="400"
+                id="ThirdLevelAcccountsGrid"
+                #ThirdLevelAcccountsGrid
+                [dataSource]="ThirdLevelAccountsList"
+                [showColumnLines]="false"
+                [showRowLines]="true"
+                [rowAlternationEnabled]="true"
+                [allowColumnResizing]="true"
+                [columnAutoWidth]="false"
+                [showBorders]="true"
+                [wordWrapEnabled]="true"
+              >
+                <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('ThirdLevelAcccountsGridState') }}"></dxo-state-storing>
+                <dxo-search-panel [visible]="true" [width]="150"></dxo-search-panel>
+                <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+                <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+                <dxi-column dataField="" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+                <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+                  <div class="d-con-cell-action">
+                    <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+                  </div>
+                </div>
+                <dxi-column dataField="AccountCode" [visible]="false" caption="Code" dataType="string"></dxi-column>
+                <dxi-column dataField="AccountTitle" caption="Title" dataType="string"></dxi-column>
+                <dxi-column
+                  dataField="button"
+                  [fixed]="true"
+                  [fixedPosition]="'right'"
+                  [width]="90"
+                  alignment="center"
+                  caption="Action"
+                  [allowEditing]="false"
+                  [allowExporting]="false"
+                  [allowFiltering]="false"
+                  [allowFixing]="false"
+                  [allowGrouping]="false"
+                  [allowHeaderFiltering]="false"
+                  [allowHiding]="true"
+                  [allowReordering]="false"
+                  [allowResizing]="false"
+                  [allowSearch]="false"
+                  [allowSorting]="false"
+                  cellTemplate="buttonTemplate"
+                ></dxi-column>
+                <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+                  <div class="d-con-cell-action">
+                    <dx-button type="default" hint="Filter Child" stylingMode="text" (onClick)="FilterAccounts(cellInfo.data)">
+                      <i class="ri-eye-line"></i>
+                    </dx-button>
+                    <dx-button type="danger" hint="Add Child" stylingMode="text" (onClick)="AddChild(cellInfo.data)">
+                      <i class="ri-add-box-fill"></i>
+                    </dx-button>
+                  </div>
+                </div>
+                <dxo-summary>
+                  <dxi-total-item column="AccountTitle" summaryType="count" displayFormat="Total Accounts: {0}"> </dxi-total-item>
+                </dxo-summary>
+                <dxo-scrolling mode="infinite" [showScrollbar]="'always'"></dxo-scrolling>
+              </dx-data-grid>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <h4 style="font-weight: bold; font-family: cursive">Accounts (4th Level)</h4>
+        </div>
+        <div class="col-md-12">
+          <dx-data-grid
+            [height]="400"
+            id="FourthLevelAccountsGrid"
+            #FourthLevelAccountsGrid
+            [dataSource]="FourthLevelAccountListt"
+            [showColumnLines]="false"
+            [showRowLines]="true"
+            [rowAlternationEnabled]="true"
+            [allowColumnResizing]="true"
+            [columnAutoWidth]="false"
+            [showBorders]="true"
+            [wordWrapEnabled]="true"
+          >
+            <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('FourthLevelAccountsGridState') }}"></dxo-state-storing>
+            <dxo-search-panel [visible]="true" [width]="150"></dxo-search-panel>
+            <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+            <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+            <dxo-header-filter [visible]="true"></dxo-header-filter>
+            <dxi-column dataField="" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+            <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+              <div class="d-con-cell-action">
+                <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+              </div>
+            </div>
+            <dxi-column dataField="AccountCode" [visible]="true" dataType="string" caption="Code"></dxi-column>
+            <dxi-column dataField="AccountTitle" caption="Title" dataType="string"></dxi-column>
+            <dxi-column dataField="AccountClassName" caption="Account Class" dataType="string"></dxi-column>
+            <dxi-column
+              dataField="button"
+              [fixed]="true"
+              [fixedPosition]="'right'"
+              [width]="90"
+              alignment="center"
+              caption="Action"
+              [allowEditing]="false"
+              [allowExporting]="false"
+              [allowFiltering]="false"
+              [allowFixing]="false"
+              [allowGrouping]="false"
+              [allowHeaderFiltering]="false"
+              [allowHiding]="true"
+              [allowReordering]="false"
+              [allowResizing]="false"
+              [allowSearch]="false"
+              [allowSorting]="false"
+              cellTemplate="buttonTemplate"
+            ></dxi-column>
+            <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+              <div class="d-con-cell-action">
+                <!-- <dx-button type="default"  hint="Filter Child" stylingMode="text" (onClick)="FilterAccounts(cellInfo.data)">
+                  <i class="ri-eye-line"></i>
+                </dx-button> -->
+                <dx-button type="danger" hint="Add Sibling" stylingMode="text" (onClick)="AddChild(cellInfo.data)">
+                  <i class="ri-add-box-fill"></i>
+                </dx-button>
+              </div>
+            </div>
+            <dxo-summary>
+              <dxi-total-item column="AccountTitle" summaryType="count" displayFormat="Total Accounts: {0}"> </dxi-total-item>
+            </dxo-summary>
+            <dxo-scrolling mode="infinite" [showScrollbar]="'always'"></dxo-scrolling>
+          </dx-data-grid>
+        </div>
+      </div>
+    </dx-scroll-view>
+  </div>
+</dx-popup>
+
+<div class="row">
+  <div class="col-md-12">
+    <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+    <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+    <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+  </div>
+  <div class="col-md-12">
+    <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+  </div>
+</div>

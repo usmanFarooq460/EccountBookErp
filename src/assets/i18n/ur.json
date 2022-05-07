@@ -1,0 +1,193 @@
+{
+	"Purchase_Trading": {
+		"Purchase_Bill": {
+			"Atachments": "اٹیچمنٹ",
+			"Form": {
+				"Calculations": "حسابات",
+				"Load_Caption": "پرچیز آرڈر سے لوڈ کریں۔",
+				"Loader_Title": "پرچیز آرڈر لوڈ",
+				"Payment_Due_Schedule": "ادائیگی کا واجب الادا شیڈول"
+			},
+			"Stock_Party": "اسٹاک پارٹی"
+		},
+		"purchase_Trading_Return": {
+			"Comm_Amount": "کمیشن کی رقم",
+			"comm_Remarks": "کمیشن کے ریمارکس"
+		},
+		"purchase_invoice_trading": {
+			"ItemAddLess": "شامل کریں/کم آئٹم",
+			"creditAccount": "اکاؤنٹ کریڈٹ",
+			"debitToItem": "آئٹم پر چارج کریں۔",
+			"suppAddLess": "سپلائر کم شامل کریں۔"
+		},
+		"purchase_order": {
+			"DeliveryStartDate": "ڈلیوری شروع ہونے کی تاریخ",
+			"OrderExpiryDate": "آرڈر کی میعاد ختم ہونے کی تاریخ",
+			"RefNo": "حوالہ نمبر",
+			"catSerail": "زمرہ سیریل",
+			"orderCat": "آرڈر کیٹیگری",
+			"termsDescription": "شرائط کی تفصیل",
+			"validateDate": "توثیق کی تاریخ"
+		}
+	},
+	"SharedGridCaptions": {
+		"Grid_Message": "ایک کالم ہیڈر کو اس کالم کے مطابق گروپ کرنے کے لیے یہاں گھسیٹیں۔",
+		"SR_": "سیریل نمبر",
+		"Total_Records": "کل ریکارڈز",
+		"action": "عمل",
+		"noRecordAdded": "کوئی ریکارڈ شامل نہیں کیا گیا۔",
+		"noRecordFound": "کوئی ریکارڈ نہیں ملا",
+		"open": "کھلا",
+		"sum": "کل"
+	},
+	"Stock_Reports": {
+		"Item_ledger": {
+			"Add_Less_weight": "کم وزن شامل کریں۔",
+			"Amount_In": "میں رقم",
+			"Amount_Out": "رقم باہر",
+			"Balance_Weight": "متوازن وزن",
+			"Bill_Weight_Out": "بل ویٹ آؤٹ",
+			"Bill_Weight_in": "بل ویٹ ان",
+			"Expense_Amount_in": "اخراجات کی رقم"
+		},
+		"Stock_reports_With_Average_Rates": {
+			"Retail_Rate": "ریٹیل ریٹ",
+			"Retail_Sale_Value": "ریٹیل سیل ویلیو",
+			"Whole_Sale_Rate": "ہول سیل ریٹ",
+			"Whole_Sale_Value": "ہول سیل ویلیو"
+		},
+		"Transaction_Stock_Rice": {
+			"Balance_Out": "بیلنس آؤٹ"
+		},
+		"stock_reports": {
+			"Closing": "بند کرنا",
+			"Main_Type": "اہم قسم",
+			"Report_Type": "رپورٹ کی قسم",
+			"Variety_Type": "ورائٹی کی قسم"
+		}
+	},
+	"Titles": {
+		"Purchase_Bill_History_Title": "خریداری کا بل",
+		"Purchase_Trading": {
+			"Purchase_Bill_Form_Title": "بل فارم خریدیں۔",
+			"Purchase_Return_form": "خریداری کی واپسی کا فارم",
+			"purchaseInvoiceTradingFormTitle": "خریداری کی رسید کی شکل",
+			"purchaseOrderHistoryTitle": "خریداری کا حکم",
+			"purchase_Invoice_Trading_History_Title": "خریداری کی رسید",
+			"purchase_Order_From": "پرچیز آرڈر کا فارم",
+			"purchase_Return_History": "خریداری کی واپسی۔"
+		},
+		"StockReports": {
+			"ItemLedger": "آئٹم لیجر",
+			"Item_Ledger_TradePro": "آئٹم لیجر ٹریڈ پرو",
+			"Stock_Report_TradePro": "اسٹاک رپورٹ ٹریڈ پرو",
+			"Stock_Reports_With_Average_Rates": "اوسط شرحوں کے ساتھ اسٹاک رپورٹس",
+			"Transactio_Stock_Rice": "لین دین اسٹاک چاول",
+			"stock_Report": "اسٹاک رپورٹس"
+		}
+	},
+	"sharedBtnsCaptions": {
+		"Clear": "صاف",
+		"Close": "بند کریں",
+		"Go_Back": "واپس جاو",
+		"Load": "لوڈ",
+		"Reset": "ری سیٹ کریں",
+		"Search": "تلاش کریں۔",
+		"add": "شامل کریں",
+		"add_new": "نیا شامل کریں",
+		"filter": "فلٹر",
+		"generate": "پیدا کریں۔",
+		"save": "محفوظ کریں",
+		"show": "دکھائیں۔",
+		"update": "اپ ڈیٹ"
+	},
+	"sharedFormHistoryCaptions": {
+		"Account": "اکاؤنٹ",
+		"Amount": "رقم",
+		"Average_Rate": "اوسط قیمت",
+		"Balance": "بقیہ",
+		"Balance_Qty": "توازن کی مقدار",
+		"Balance_Weight": "متوازن وزن",
+		"Bill_Amount": "بل رقم",
+		"Bill_Number": "بل نمبر",
+		"Branch": "برانچ کا نام",
+		"Closing_Balance": "اختتامی توازن",
+		"Comm_Rate": "کمیشن کی شرح",
+		"Commission_Amount": "کمیشن کی رقم",
+		"Commission_Remarks": "کمیشن کے ریمارکس",
+		"Crop_Year": "فصل کا سال",
+		"Current_Amount_In": "موجودہ رقم",
+		"Current_Quantity_In": "موجودہ مقدار میں",
+		"Current_Quantity_Out": "موجودہ مقدار ختم",
+		"Current_Weight_in": "موجودہ وزن میں",
+		"Current_weight_Out": "موجودہ وزن ختم",
+		"Date": "تاریخ",
+		"DeliveryDays": "ترسیل کے دن",
+		"Delivery_Term": "ترسیل کےضوابط",
+		"Description": "تفصیل",
+		"Doc_Type": "دستاویز کی قسم",
+		"DocumentDate": "دستاویز کی تاریخ",
+		"Document_Code": "دستاویز کوڈ",
+		"Due_Date": "اخری تاریخ",
+		"Due_Days": "مقررہ دن",
+		"Due_Percent": "واجب الادا فیصد",
+		"From_Date": "اس تاریخ سے",
+		"GP_No": "جی پی نمبر",
+		"Gp_Date": "جی پی کی تاریخ",
+		"Is_Required": "کی ضرورت ہے",
+		"Item_Category": "آئٹم کا زمرہ",
+		"Item_Code": "آئٹم کوڈ",
+		"Item_Quantity": "آئٹم کی مقدار",
+		"Item_Type": "چیز کی قسم",
+		"Job/Lot": "جاب/لاٹ",
+		"Manual_Bill": "دستی بل نمبر",
+		"Net_Weight": "کل وزن",
+		"Opening_Balance": "اوپننگ بیلنس",
+		"Opening_In": "اوپننگ بیلنس میں",
+		"Opening_Out": "اوپننگ بیلنس آؤٹ",
+		"Opening_Weight": "افتتاحی وزن",
+		"Order_Category": "آرڈر کیٹیگری",
+		"Order_Number": "آرڈر نمبر",
+		"Pack_Type": "پیک کی قسم",
+		"Payment_Term": "ادائیگی",
+		"Project_Name": "پراجیکٹ کا نام",
+		"Qty_In": "مقدار میں",
+		"Qty_Out": "مقدار ختم",
+		"Quantity": "مقدار",
+		"Rate": "قیمت",
+		"Rate_UOM": "پیمائش کی اکائی کی شرح",
+		"Record_Number": "ریکارڈ نمبر",
+		"Remarks": "ریمارکس",
+		"Stock_Price": "اسٹاک کی قیمت",
+		"Stock_Quantity": "اسٹاک کی مقدار",
+		"Stock_Value": "اسٹاک ویلیو",
+		"Stock_Weight": "اسٹاک وزن",
+		"Supplier_Customer": "فراہم کنندہ/کسٹمر",
+		"Tax": "ٹیکس %",
+		"Tax_Amount": "ٹیکس کی رقم",
+		"To_Date": "آج تک",
+		"Total_Amount": "کل رقم",
+		"Total_Quantity": "کل مقدار",
+		"Type": "قسم",
+		"UOM": "پیمائش کی اکائی",
+		"UOM_Code": "پیمائش کی اکائی کا کوڈ",
+		"User_Name": "صارف کا نام",
+		"Vehicle_No": "گاڑی کا نمبر",
+		"Voucher": "واؤچر",
+		"Warehouse": "گودام",
+		"Weight_In": "میں وزن",
+		"Weight_Out": "باہر کا وزن",
+		"commAgent": "کمیشن ایجنٹ",
+		"commType": "کمیشن کی قسم",
+		"credit": "کریڈٹ",
+		"debit": "ڈیبٹ",
+		"docNo": "دستاویز نمبر",
+		"expenseAmount": "اخراجات کی رقم",
+		"freightAmount": "مال برداری کی رقم",
+		"itemName": "شے کا نام",
+		"percentage": "فیصد",
+		"status": "حالت",
+		"supplierName": "سپلائر کے نام",
+		"userName": "صارف کا نام"
+	}
+}

@@ -1,0 +1,163 @@
+<div class="container-fluid">
+  <!-- start page title -->
+  <app-pagetitle *ngIf="SomeElementsVisible" title="Item Uom Schedule" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+  <!-- end page title -->
+  <div class="d-flex justify-content-between">
+    <div class="">
+      <dx-button id="add" class="ml-3 mb-3" type="default" text="Add New" icon="plus" (onClick)="addData()"> </dx-button>
+    </div>
+    <div class="">
+      <dx-button class="ml-3 mb-3" type="danger" text="Go Back" icon="back" [visible]="SomeElementsVisible" routerLink="/inventory-definition/item-history" style="background-color: #ffa100">
+      </dx-button>
+    </div>
+  </div>
+  <div class="row">
+    <!-- end col -->
+    <div class="col-md-12" [ngStyle]="{ height: IsLoadedInPopup == false ? gridColumnHeight : gridColumnHeightInPopupWithGrid }" #stickyGrid [class.sticky]="sticky">
+      <div class="card p-2 rounded">
+        <dx-data-grid
+          id="gridContainer"
+          [dataSource]="dataSource"
+          #dataGrid
+          [height]="IsLoadedInPopup == false ? gridHeight : gridHeightInPopupWithGrid"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+          [allowColumnReordering]="true"
+          (onToolbarPreparing)="onToolbarPreparing($event)"
+        >
+          <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-filter-row [visible]="filter"></dxo-filter-row>
+          <dxo-header-filter [visible]="filter"></dxo-header-filter>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-load-panel [enabled]="false"></dxo-load-panel>
+          <dxo-export [enabled]="true" fileName="Define Item UOM Schedule" [allowExportSelectedData]="true">
+            <dxo-texts exportAll="Export All Rows"></dxo-texts>
+          </dxo-export>
+          <dxo-paging [enabled]="true"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true"></dxo-pager>
+          <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('DefineItemUomScheduleHistoryGridState') }}"></dxo-state-storing>
+          <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+          <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+          <dxi-column dataField="Id" caption="Id" dataType="number" [visible]="false"></dxi-column>
+          <dxi-column dataField="" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+          <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+            <div class="d-con-cell-action">
+              <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+            </div>
+          </div>
+          <dxi-column dataField="ItemName" caption="ItemName " dataType="string"></dxi-column>
+          <dxi-column dataField="UOMCode" caption="Schedule Unit" dataType="string"></dxi-column>
+          <dxi-column dataField="Equivalent" caption="Equivalent" dataType="string"></dxi-column>
+          <dxi-column
+            dataField="button"
+            [fixed]="true"
+            [fixedPosition]="'right'"
+            [width]="65"
+            alignment="left"
+            caption="Action"
+            [allowEditing]="false"
+            [allowExporting]="false"
+            [allowFiltering]="false"
+            [allowFixing]="false"
+            [allowGrouping]="false"
+            [allowHeaderFiltering]="false"
+            [allowHiding]="false"
+            [allowReordering]="false"
+            [allowResizing]="false"
+            [allowSearch]="false"
+            [allowSorting]="false"
+            cellTemplate="buttonTemplate"
+          ></dxi-column>
+          <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+            <div class="d-con-cell-action">
+              <dx-button type="default" stylingMode="text" (onClick)="editPopup(cellInfo.data)">
+                <i class="ri-edit-2-line"></i>
+              </dx-button>
+            </div>
+          </div>
+          <dxo-scrolling [scrollByContent]="true" [scrollByThumb]="true" [showScrollbar]="'always'" [scrollLeft]="true" mode="infinite"></dxo-scrolling>
+          <dxo-summary>
+            <dxi-total-item column="ItemName" summaryType="count" displayFormat="Total Records: {0}"> </dxi-total-item>
+          </dxo-summary>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+      <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+      <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+    </div>
+    <div class="col-md-12">
+      <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+    </div>
+  </div>
+</div>
+<dx-popup
+  [width]="450"
+  [height]="300"
+  [showTitle]="true"
+  title="Item Uom Schedule"
+  [dragEnabled]="true"
+  [closeOnOutsideClick]="false"
+  [(visible)]="formPopup"
+  (onShown)="setFocus()"
+  [animation]="{ hide: { type: 'slideOut', direction: 'right', duration: 1000 }, show: { type: 'slideIn', direction: 'left', duration: 1500 } }"
+>
+  <div *dxTemplate="let data of 'content'">
+    <dx-form id="form" [formData]="ItemUomScheduleFormData" #ItemUomScheduleForm [showRequiredMark]="false" [colCountByScreen]="{ lg: 2, md: 2, sm: 1 }">
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="ItemId"
+        editorType="dxSelectBox"
+        [editorOptions]="{
+          placeholder: 'Item',
+          dataSource: itemList,
+          valueExpr: 'Id',
+          displayExpr: 'ItemName',
+          searchEnabled: true
+        }"
+      >
+        <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+        <dxi-validation-rule type="required" message="Item is required"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="ScheduleUnitId"
+        editorType="dxSelectBox"
+        [editorOptions]="{
+          placeholder: 'Schedule Unit',
+          items: uomList,
+          valueExpr: 'Id',
+          displayExpr: 'UOMCode',
+          searchEnabled: true
+        }"
+      >
+        <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+        <dxi-validation-rule type="required" message="Schedule Unit is required"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="Equivalent"
+        editorType="dxTextBox"
+        [editorOptions]="{
+          placeholder: 'Equivalent'
+        }"
+      >
+        <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+        <dxi-validation-rule type="required" message="Equivalent  is required"></dxi-validation-rule>
+      </dxi-item>
+    </dx-form>
+    <div class="mt-4 d-flex justify-content-end">
+      <dx-button type="success" (onClick)="Save()" icon="save" text="{{ ItemUomScheduleParamsId > 0 ? 'Update' : 'Save' }}"></dx-button>
+      <div class="m-1"></div>
+      <dx-button icon="remove" type="danger" text="Close" (onClick)="cancel()"></dx-button>
+    </div>
+  </div>
+</dx-popup>

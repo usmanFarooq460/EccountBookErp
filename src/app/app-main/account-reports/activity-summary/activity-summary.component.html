@@ -1,0 +1,125 @@
+<!-- Form Design By ================== Sufian Arshad 
+ Property Of ======================= Synergic Corporate Solution  -->
+<div class="container-fluid">
+  <app-pagetitle title="Activity Summary"></app-pagetitle>
+  <div class="row" *ngIf="!IsLoadedInPopup">
+    <div class="col-md-12">
+      <div class="card shadow-sm">
+        <dx-form id="form" [formData]="activitySummaryFormData" #activitySummaryForm [showRequiredMark]="false" [colCountByScreen]="{ lg: 5, md: 3, sm: 2, xs: 1 }">
+          <dxi-item
+            cssClass="px-1 m-0"
+            dataField="FromDate"
+            editorType="dxDateBox"
+            [editorOptions]="{
+              placeholder: 'From Date',
+              displayFormat: 'dd-MMM-yyyy',
+              showClearButton: 'true',
+              stylingMode: 'underlined'
+            }"
+          >
+            <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+            <dxi-validation-rule type="required" message="Date From is required"></dxi-validation-rule>
+          </dxi-item>
+          <dxi-item
+            cssClass="px-1 m-0"
+            dataField="ToDate"
+            editorType="dxDateBox"
+            [editorOptions]="{
+              placeholder: 'To Date',
+              displayFormat: 'dd-MMM-yyyy',
+              showClearButton: 'true',
+              stylingMode: 'underlined'
+            }"
+          >
+            <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+            <dxi-validation-rule type="required" message="Date To is required"></dxi-validation-rule>
+          </dxi-item>
+        </dx-form>
+        <div class="d-flex justify-content-end py-2">
+          <div class="m-0 p-1">
+            <dx-button type="success" (onClick)="FetchHistoryData()" text="Show"></dx-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12" [ngStyle]="{ height: IsLoadedInPopup == false ? gridColumnHeight : gridColumnHeightInPopupWithGrid }" #stickyGrid [class.sticky]="sticky">
+      <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+        <dx-data-grid
+          id="gridContainer"
+          #summaryActivityGrid
+          [height]="IsLoadedInPopup == false ? gridHeight : gridHeightInPopupWithGrid"
+          [dataSource]="dataSource"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnResizing]="true"
+          [allowColumnReordering]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+          (onToolbarPreparing)="onToolPreparingOfItemHistoryGrid($event)"
+        >
+          <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-filter-row [visible]="filter"></dxo-filter-row>
+          <dxo-header-filter [visible]="filter"></dxo-header-filter>
+          <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-load-panel [enabled]="false"></dxo-load-panel>
+          <dxo-export [enabled]="true" fileName="summary Activity" [allowExportSelectedData]="true">
+            <dxo-texts exportAll="Export All Rows"></dxo-texts>
+          </dxo-export>
+          <dxo-paging [enabled]="true"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 100, 500, 1000]" [showInfo]="true"></dxo-pager>
+          <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('summaryActivityGrid') }}"></dxo-state-storing>
+          <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+          <dxi-column dataField="" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+          <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+            <div class="d-con-cell-action">
+              <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+            </div>
+          </div>
+
+          <dxi-column dataField="AccountCode" caption="Account Code" dataType="string"></dxi-column>
+          <dxi-column dataField="AccountTitle" caption="Account Title" dataType="string"></dxi-column>
+          <dxi-column dataField="Opening" caption="Opening" dataType="number" [format]="{ type: 'fixedPoint', precision: DecimalSettings?.AmountPercision }"></dxi-column>
+          <dxi-column dataField="Debit" caption="Debit" dataType="number" [format]="{ type: 'fixedPoint', precision: DecimalSettings?.AmountPercision }"></dxi-column>
+          <dxi-column dataField="Credit" caption="Credit" dataType="number" [format]="{ type: 'fixedPoint', precision: DecimalSettings?.AmountPercision }"></dxi-column>
+          <dxi-column dataField="Closing" caption="Closing" dataType="number" [format]="{ type: 'fixedPoint', precision: DecimalSettings?.AmountPercision }"></dxi-column>
+
+          <dxo-summary>
+            <dxi-total-item column="Sr#" summaryType="count" displayFormat="{0}"> </dxi-total-item>
+            <dxi-total-item column="Opening" summaryType="sum" displayFormat="{0}" valueFormat="{{ DecimalSettings?.AmountFormatInGridTotals }}"> </dxi-total-item>
+            <dxi-total-item column="Debit" summaryType="sum" displayFormat="{0}" valueFormat="{{ DecimalSettings?.AmountFormatInGridTotals }}"> </dxi-total-item>
+            <dxi-total-item column="Credit" summaryType="sum" displayFormat="{0}" valueFormat="{{ DecimalSettings?.AmountFormatInGridTotals }}"> </dxi-total-item>
+            <dxi-total-item column="Closing" summaryType="sum" displayFormat="{0}" valueFormat="{{ DecimalSettings?.AmountFormatInGridTotals }}"> </dxi-total-item>
+
+            <dxi-group-item column="Opening" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="{{ DecimalSettings?.AmountFormatInGridTotals }}">
+            </dxi-group-item>
+            <dxi-group-item column="Debit" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="{{ DecimalSettings?.AmountFormatInGridTotals }}">
+            </dxi-group-item>
+            <dxi-group-item column="Credit" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="{{ DecimalSettings?.AmountFormatInGridTotals }}">
+            </dxi-group-item>
+            <dxi-group-item column="Closing" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="{{ DecimalSettings?.AmountFormatInGridTotals }}">
+            </dxi-group-item>
+          </dxo-summary>
+          <dxo-scrolling mode="infinite" [scrollByContent]="true" [scrollByThumb]="true" [showScrollbar]="'always'"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+      <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+      <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+    </div>
+  </div>
+</div>
+<!-- container-fluid -->

@@ -1,0 +1,193 @@
+{
+	"Purchase_Trading": {
+		"Purchase_Bill": {
+			"Atachments": "Attachments",
+			"Form": {
+				"Calculations": "Calculations",
+				"Load_Caption": "Load From Purchase Order",
+				"Loader_Title": "Purchase Order Load",
+				"Payment_Due_Schedule": "Payment Due Schedule"
+			},
+			"Stock_Party": "Stock Party"
+		},
+		"purchase_Trading_Return": {
+			"Comm_Amount": "Commission Amount",
+			"comm_Remarks": "Commission Remarks"
+		},
+		"purchase_invoice_trading": {
+			"ItemAddLess": "Add/Less Item",
+			"creditAccount": "Account (Cr)",
+			"debitToItem": "Debit To Item",
+			"suppAddLess": "Supplier Add/less"
+		},
+		"purchase_order": {
+			"DeliveryStartDate": "Delivery Start Date",
+			"OrderExpiryDate": "Order Expiry Date",
+			"RefNo": "RefNo",
+			"catSerail": "Category Serial",
+			"orderCat": "Order Category ",
+			"termsDescription": "terms Description",
+			"validateDate": "Validate Date"
+		}
+	},
+	"SharedGridCaptions": {
+		"Grid_Message": "Drag a column header here to group by that column",
+		"SR_": "Sr#",
+		"Total_Records": "Total Records",
+		"action": "Action",
+		"noRecordAdded": "No Record Added",
+		"noRecordFound": "No Record Found",
+		"open": "Open",
+		"sum": "sum"
+	},
+	"Stock_Reports": {
+		"Item_ledger": {
+			"Add_Less_weight": "Add Less Weight",
+			"Amount_In": "Amount In",
+			"Amount_Out": "Amount Out",
+			"Balance_Weight": "Balance Weight",
+			"Bill_Weight_Out": "Bill Weight Out",
+			"Bill_Weight_in": "Bill Weight in",
+			"Expense_Amount_in": "Expense Amount In"
+		},
+		"Stock_reports_With_Average_Rates": {
+			"Retail_Rate": "Retail Rate",
+			"Retail_Sale_Value": "Retail Sale Value",
+			"Whole_Sale_Rate": "Whole Sale Rate",
+			"Whole_Sale_Value": "Whole Sale Value"
+		},
+		"Transaction_Stock_Rice": {
+			"Balance_Out": "Balance Out"
+		},
+		"stock_reports": {
+			"Closing": "Closing Weight",
+			"Main_Type": "Main Type",
+			"Report_Type": "Report Type",
+			"Variety_Type": "Variety Type"
+		}
+	},
+	"Titles": {
+		"Purchase_Bill_History_Title": "Purchase Bill",
+		"Purchase_Trading": {
+			"Purchase_Bill_Form_Title": "Purchase Bill Form",
+			"Purchase_Return_form": "Purchase Return Form",
+			"purchaseInvoiceTradingFormTitle": " Purchase Invoice Form",
+			"purchaseOrderHistoryTitle": "Purchase Order",
+			"purchase_Invoice_Trading_History_Title": "Purchase Invoice",
+			"purchase_Order_From": "Purchase Order Form",
+			"purchase_Return_History": "Purchase Return"
+		},
+		"StockReports": {
+			"ItemLedger": "Item Ledger",
+			"Item_Ledger_TradePro": "Item Ledger Trade Pro",
+			"Stock_Report_TradePro": "Stock Report Trade Pro",
+			"Stock_Reports_With_Average_Rates": "Stock Reports With Average Rates",
+			"Transactio_Stock_Rice": "Transaction Stock Rice",
+			"stock_Report": "Stock Reports"
+		}
+	},
+	"sharedBtnsCaptions": {
+		"Clear": "Clear",
+		"Close": "Close",
+		"Go_Back": "Back",
+		"Load": "Load",
+		"Reset": "Reset",
+		"Search": "Search",
+		"add": "Add",
+		"add_new": "Add New",
+		"filter": "Filter",
+		"generate": "Generate",
+		"save": "Save",
+		"show": "Show",
+		"update": "update"
+	},
+	"sharedFormHistoryCaptions": {
+		"Account": "Account",
+		"Amount": "Amount",
+		"Average_Rate": "Average Rate",
+		"Balance": "Balance",
+		"Balance_Qty": "Balance Quantity",
+		"Balance_Weight": "Balance Weight",
+		"Bill_Amount": "Bill Amount",
+		"Bill_Number": "Bill Number",
+		"Branch": "Branch Name",
+		"Closing_Balance": "Closing Balance ",
+		"Comm_Rate": "Commission Rate",
+		"Commission_Amount": "Commission Amount",
+		"Commission_Remarks": "Commission Remarks",
+		"Crop_Year": "Crop Year",
+		"Current_Amount_In": "Current Amount In",
+		"Current_Quantity_In": "Curr Qty In",
+		"Current_Quantity_Out": "Curr Qty Out",
+		"Current_Weight_in": "Curr In",
+		"Current_weight_Out": "Curr Out",
+		"Date": "Date",
+		"DeliveryDays": "Delivery Days",
+		"Delivery_Term": "Delivery Term",
+		"Description": "Description",
+		"Doc_Type": "Doc Type",
+		"DocumentDate": "Doc. Date",
+		"Document_Code": "Doc Code",
+		"Due_Date": "Due Date",
+		"Due_Days": "Due Days",
+		"Due_Percent": "Due %",
+		"From_Date": "From Date",
+		"GP_No": "GP Number",
+		"Gp_Date": "GP Date",
+		"Is_Required": "is Required",
+		"Item_Category": "Item Category",
+		"Item_Code": "Item Code",
+		"Item_Quantity": "Item Quantity",
+		"Item_Type": "Item Type",
+		"Job/Lot": "Job/Lot",
+		"Manual_Bill": "Manual Bill No",
+		"Net_Weight": "Net Weight",
+		"Opening_Balance": "Opening Balance",
+		"Opening_In": "Opening Balance In  ",
+		"Opening_Out": "Opening Balance Out",
+		"Opening_Weight": "Opening Weight",
+		"Order_Category": "Order Category",
+		"Order_Number": "Order #",
+		"Pack_Type": "Pack Type",
+		"Payment_Term": "Payment",
+		"Project_Name": "Project Name",
+		"Qty_In": "Qty In",
+		"Qty_Out": "Qty Out",
+		"Quantity": "Quantity",
+		"Rate": "Rate",
+		"Rate_UOM": "Rate UOM",
+		"Record_Number": "RecNo",
+		"Remarks": "Remarks",
+		"Stock_Price": "Stock Price",
+		"Stock_Quantity": "Stock Quantity",
+		"Stock_Value": "Stock Value",
+		"Stock_Weight": "Stock Weight",
+		"Supplier_Customer": "Supplier/Customer",
+		"Tax": "Tax %",
+		"Tax_Amount": "Tax Amount",
+		"To_Date": "To Date",
+		"Total_Amount": "Total Amount",
+		"Total_Quantity": "Total Quantity",
+		"Type": "Type",
+		"UOM": "Pack UOM",
+		"UOM_Code": "UOM Code",
+		"User_Name": "User Name",
+		"Vehicle_No": "Vehicle#",
+		"Voucher": "Voucher",
+		"Warehouse": "Warehouse",
+		"Weight_In": "Weight in",
+		"Weight_Out": "Weight_Out",
+		"commAgent": "Commission Agent",
+		"commType": "Commission Type",
+		"credit": "Credit",
+		"debit": "Debit",
+		"docNo": "DocNo",
+		"expenseAmount": "Expense Amount",
+		"freightAmount": "Freight Amount",
+		"itemName": "Item Name ",
+		"percentage": "Percentage",
+		"status": "Status",
+		"supplierName": "Supplier Name",
+		"userName": "User Name"
+	}
+}

@@ -1,0 +1,51 @@
+// $background-color: rgb(9, 48, 157);
+.main-layout {
+  width: 400px;
+  padding: 0 20px 50px 20px;
+  .upper-layout {
+    color: aqua;
+    height: 300px;
+    border-radius: 5px;
+    border: 1px solid rgb(9, 48, 157);
+    .header {
+      border-top-right-radius: 5px;
+      padding: 8px 0 5px 10px;
+      border-top-left-radius: 5px;
+      background-color: rgb(9, 48, 157);
+      display: flex;
+      margin-right: -1px;
+      justify-content: space-between;
+      
+    }
+  }
+
+  .lower-layout {
+    background-color: rgb(9, 48, 157);
+    border-radius: 5px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0 5px 10px;
+  }
+}
+
+.Padding75px {
+  margin-left: 75px;
+}
+
+.otherPadding {
+  margin-left: 245px;
+}
+
+.button {
+  background-color: rgb(9, 48, 157);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  margin-top: -20px;
+  border-radius: 5px;
+  padding: 5px 15px;
+  font-size: 18px;
+  color: white;
+}

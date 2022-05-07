@@ -1,0 +1,115 @@
+<div class="d-flex justify-content-between">
+  <div class="">
+    <dx-button id="filter" class="ml-3 mb-3" type="default" text="Add New" icon="plus" (onClick)="ShowForm()"> </dx-button>
+
+    <!-- <dx-button class="ml-3 mb-3" type="default" text="Other Items" routerLink="/inventory-definition/define-other-item"> </dx-button>
+    <dx-button class="ml-3 mb-3" type="default" text="Item Catagory" routerLink="/inventory-definition/item-category"> </dx-button>
+    <dx-button class="ml-3 mb-3" type="default" text="Item Type" routerLink="/inventory-definition/item-type"> </dx-button>
+    <dx-button class="ml-3 mb-3" type="default" text="Uom" routerLink="/inventory-definition/item-uom"> </dx-button>
+    <dx-button class="ml-3 mb-3" type="default" text="Uom Schedule" routerLink="/inventory-definition/item-uom-schedule"> </dx-button>
+    <dx-button class="ml-3 mb-3" type="default" text="Item Group" routerLink="/inventory-definition/item-group"> </dx-button>
+    <dx-button class="ml-3 mb-3" type="default" text="Item Group Schedule" routerLink="/inventory-definition/item-group-schedule"> </dx-button> -->
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12" [ngStyle]="{ height: IsLoadedInPopup == false ? gridColumnHeight : gridColumnHeightInPopupWithGrid }" #stickyGrid [class.sticky]="sticky">
+    <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+      <dx-data-grid
+        id="gridContainer"
+        #defineInventoryItemHistoryGrid
+        [height]="IsLoadedInPopup == false ? gridHeight : gridHeightInPopupWithGrid"
+        [dataSource]="dataSource"
+        [showColumnLines]="false"
+        [showRowLines]="true"
+        [rowAlternationEnabled]="true"
+        [allowColumnReordering]="true"
+        [allowColumnResizing]="true"
+        [columnAutoWidth]="true"
+        [showBorders]="true"
+        (onToolbarPreparing)="onToolPreparingOfHistoryGrid($event)"
+      >
+        <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+        <dxo-group-panel [visible]="true"></dxo-group-panel>
+        <dxo-filter-row [visible]="filter"></dxo-filter-row>
+        <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+        <dxo-header-filter [visible]="filter"></dxo-header-filter>
+        <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+        <dxo-load-panel [enabled]="false"></dxo-load-panel>
+        <dxo-export [enabled]="true" fileName="Item History">
+        </dxo-export>
+        <!-- <dxo-selection mode="multiple" selectAllMode="page" showCheckBoxesMode="always"></dxo-selection> -->
+        <dxo-paging [enabled]="true"></dxo-paging>
+        <!-- <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true"></dxo-pager> -->
+        <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('defineInventoryItemHistoryGrid') }}"></dxo-state-storing>
+        <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+        <dxi-column dataField="" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+        <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+          <div class="d-con-cell-action">
+            <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+          </div>
+        </div>
+
+        <dxi-column dataField="Id" caption="Id" dataType="number" [visible]="false"></dxi-column>
+        <dxi-column dataField="ItemCode" caption="ItemDocNo" dataType="number" alignment="left"></dxi-column>
+        <dxi-column dataField="TypeDescription" caption="Type" dataType="string"></dxi-column>
+        <dxi-column dataField="CategoryDescription" caption="Category" dataType="string"></dxi-column>
+        <dxi-column dataField="ItemName" caption="Item Name" dataType="string"></dxi-column>
+        <dxi-column dataField="ProductNo" caption="Item Code" dataType="string"></dxi-column>
+        <dxi-column dataField="UOMCode" caption="UOM" dataType="string"></dxi-column>
+        <dxi-column dataField="GlStockAccountTitle" caption="Stock Gl A/c" dataType="string"></dxi-column>
+        <dxi-column dataField="GlSaleAccountTitle" caption="Sale Gl A/c" dataType="string"></dxi-column>
+        <dxi-column dataField="GlCgsAccountTitle" caption="CGS Gl A/c" dataType="string"></dxi-column>
+        <!-- <dxi-column dataField="ItemStatus" caption="Status" dataType="bool"></dxi-column> -->
+        <dxi-column
+          dataField="button"
+          [fixed]="true"
+          [fixedPosition]="'right'"
+          [width]="60"
+          alignment="right"
+          caption="Action"
+          [allowEditing]="false"
+          [allowExporting]="false"
+          [allowFiltering]="false"
+          [allowFixing]="false"
+          [allowGrouping]="false"
+          [allowHeaderFiltering]="false"
+          [allowHiding]="false"
+          [allowReordering]="false"
+          [allowResizing]="false"
+          [allowSearch]="false"
+          [allowSorting]="false"
+          cellTemplate="buttonTemplate"
+        ></dxi-column>
+        <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+          <div class="d-con-cell-action">
+            <dx-button type="default" stylingMode="text" (onClick)="onEdit(cellInfo.data)">
+              <i class="ri-edit-2-line"></i>
+            </dx-button>
+          </div>
+        </div>
+        <dxo-summary>
+          <dxi-total-item column="ItemName" summaryType="count" displayFormat="Total Records: {0}"> </dxi-total-item>
+        </dxo-summary>
+        <dxo-scrolling [scrollByContent]="true" [scrollByThumb]="true" [showScrollbar]="'always'" [scrollLeft]="true" mode="infinite"></dxo-scrolling>
+      </dx-data-grid>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+    <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+    <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+  </div>
+  <div class="col-md-12">
+    <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <Invetory-Item-form *ngIf="showItemForm" [itemId]="IdForUpdate" (closeItemFormPopup)="CloseForm($event)"></Invetory-Item-form>
+  </div>
+</div>

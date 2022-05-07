@@ -1,0 +1,194 @@
+<div class="container-fluid">
+  <!-- start page title -->
+  <app-pagetitle title="Item List" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+  <!-- end page title -->
+
+  <div class="row">
+    <div class="col-md-12">
+      <dx-form id="form" [formData]="ItemListFormData" #ItemListForm [showRequiredMark]="false" [colCountByScreen]="{ lg: 6, md: 3, sm: 2, xs: 1 }">
+        <!-- <dxi-item itemType="group" cssClass="second-group" [colCount]="2"> -->
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="ItemCategoryId"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: catagoryList,
+            searchEnabled: true,
+            valueExpr: 'Id',
+            displayExpr: 'CategoryDescription',
+            placeholder: 'Catagory',
+            showClearButton: 'true',
+            stylingMode: 'underlined'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="ItemTypeId"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: itemTypeList,
+            searchEnabled: true,
+            valueExpr: 'Id',
+            displayExpr: 'TypeDescription',
+            placeholder: 'ItemType',
+            showClearButton: 'true',
+            stylingMode: 'underlined'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+        <!-- </dxi-item> -->
+        <!-- <dxi-item itemType="group" cssClass="second-group" [colCount]="2"> -->
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="ItemClassId"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: itemClassList,
+            searchEnabled: true,
+            valueExpr: 'ClassId',
+            displayExpr: 'ClassDescription',
+            placeholder: 'Item Class',
+            showClearButton: 'true',
+            stylingMode: 'underlined'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="PurchaseGLAC"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: purhcaseGlAcList,
+            searchEnabled: true,
+            valueExpr: 'PurchaseGLAC',
+            displayExpr: 'StockGLAccountTitle',
+            placeholder: 'Purchase A/c',
+            showClearButton: 'true',
+            stylingMode: 'underlined'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+        <!-- </dxi-item> -->
+        <!-- <dxi-item itemType="group" cssClass="second-group" [colCount]="2"> -->
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="SaleGLAC"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: saleGlAcList,
+            searchEnabled: true,
+            valueExpr: 'SaleGLAC',
+            displayExpr: 'SalesGLAccountTitle',
+            placeholder: 'Sale A/c',
+            showClearButton: 'true',
+            stylingMode: 'underlined'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="COGSGLAC"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: CgsGlAcList,
+            searchEnabled: true,
+            valueExpr: 'COGSGLAC',
+            displayExpr: 'CgsGLAccountTitle',
+            placeholder: 'CGS A/c',
+            showClearButton: 'true',
+            stylingMode: 'underlined'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+        <!-- </dxi-item> -->
+      </dx-form>
+      <div class="d-flex justify-content-end mt-1">
+        <div class="m-0 p-1">
+          <dx-button type="success" (onClick)="onSubmit()" text="Show"></dx-button>
+        </div>
+        <div class="m-0 p-1">
+          <dx-button type="danger" (onClick)="clear()" text="Clear"></dx-button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-md-12" [ngStyle]="{ height: gridColumnHeight }" #stickyGrid [class.sticky]="sticky">
+      <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+        <dx-data-grid
+          id="gridContainer"
+          #listItemGrid
+          [height]="gridHeight"
+          [dataSource]="dataSource"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [showBorders]="false"
+          [rowAlternationEnabled]="true"
+          [allowColumnReordering]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+          (onToolbarPreparing)="onToolPreparingOfItemHistoryGrid($event)"
+        >
+          <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-filter-row [visible]="filter"></dxo-filter-row>
+          <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+          <dxo-header-filter [visible]="filter"></dxo-header-filter>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-load-panel [enabled]="false"></dxo-load-panel>
+          <dxo-export [enabled]="true" fileName="Estimates" [allowExportSelectedData]="true">
+            <dxo-texts exportAll="Export All Rows"></dxo-texts>
+          </dxo-export>
+          <!-- <dxo-selection mode="multiple" selectAllMode="page" showCheckBoxesMode="always"></dxo-selection> -->
+          <dxo-paging [enabled]="true"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true"></dxo-pager>
+          <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('SaleInvoiceHistoryGrid') }}"></dxo-state-storing>
+          <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+          <dxi-column dataField="" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+          <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+            <div class="d-con-cell-action">
+              <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+            </div>
+          </div>
+
+          <dxi-column dataField="SeqNo" caption="SrNo" dataType="number"></dxi-column>
+          <dxi-column dataField="ItemCode" caption="Item Code" dataType="number" [width]="80"></dxi-column>
+          <dxi-column dataField="ItemName" caption="Item Name" dataType="string"></dxi-column>
+          <dxi-column dataField="UOMCode" caption="UOM" dataType="number"></dxi-column>
+          <dxi-column dataField="CategoryDescription" caption="Category" dataType="string"></dxi-column>
+          <dxi-column dataField="TypeDescription" caption="Item Type" dataType="string"></dxi-column>
+          <dxi-column dataField="ClassDescription" caption="Item Class" dataType="string"></dxi-column>
+          <dxi-column dataField="GlStockAccountTitle" caption="Purchase Ac" dataType="string"></dxi-column>
+          <dxi-column dataField="GlSaleAccountTitle" caption="Sale Ac" dataType="string"></dxi-column>
+          <dxi-column dataField="GlCgsAccountTitle" caption="CGS Ac" dataType="string"></dxi-column>
+          <dxo-export [enabled]="true" [allowExportSelectedData]="true"></dxo-export>
+
+          <dxo-summary>
+            <dxi-total-item column="CategoryDescription" summaryType="count" displayFormat="Total Records: {0}"> </dxi-total-item>
+          </dxo-summary>
+          <dxo-scrolling [scrollByContent]="true" [scrollByThumb]="true" [showScrollbar]="'always'" [scrollLeft]="true" mode="infinite"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+      <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+      <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+    </div>
+  </div>
+</div>
+<!-- container-fluid -->

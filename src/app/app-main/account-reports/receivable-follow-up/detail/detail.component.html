@@ -1,0 +1,47 @@
+<dx-data-grid [dataSource]="dataSource" [showBorders]="true">
+  <dxo-paging [pageSize]="5"></dxo-paging>
+
+  <dxi-column dataField="ManualBillNo" caption="B No" dataType="number" alignment="left"></dxi-column>
+  <dxi-column dataField="VoucherDate" caption="Bill Date" dataType="date" alignment="left" [format]="'dd-MMM-yyyy'"></dxi-column>
+
+  <dxi-column dataField="DueDate" caption="DueDate" dataType="date" alignment="left" [format]="'dd-MMM-yyyy'"></dxi-column>
+  <dxi-column dataField="BillAmount" caption="BillAmount" dataType="number" alignment="left" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="ReceivedPaidTotal" caption="ReceivedPaidTotal" dataType="number" alignment="left" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="BalanceAmount" caption="BalanceAmount" dataType="number" alignment="left" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <!-- <dxi-column
+    dataField="button"
+    [fixed]="true"
+    [fixedPosition]="'right'"
+    [width]="90"
+    alignment="right"
+    caption="Action"
+    [allowEditing]="false"
+    [allowExporting]="false"
+    [allowFiltering]="false"
+    [allowFixing]="false"
+    [allowGrouping]="false"
+    [allowHeaderFiltering]="false"
+    [allowHiding]="false"
+    [allowReordering]="false"
+    [allowResizing]="false"
+    [allowSearch]="false"
+    [allowSorting]="false"
+    cellTemplate="buttonTemplate"
+  ></dxi-column> -->
+
+  <dxo-summary>
+    <dxi-total-item column="BillAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+    <dxi-total-item column="ReceivedPaidTotal" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+    <dxi-total-item column="BalanceAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+  </dxo-summary>
+  <!-- <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+    <div class="d-con-cell-action">
+      <dx-button type="default" stylingMode="text">
+        <i class="ri-edit-2-line"></i>
+      </dx-button>
+      <dx-button type="danger" stylingMode="text" hint="262-DeliveryOrder Slip">
+        <i class="ri-printer-line"></i>
+      </dx-button>
+    </div>
+  </div> -->
+</dx-data-grid>

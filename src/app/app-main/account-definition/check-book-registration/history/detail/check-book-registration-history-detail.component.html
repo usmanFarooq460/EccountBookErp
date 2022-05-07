@@ -1,0 +1,16 @@
+<dx-data-grid
+  id="gridContainer"
+  [dataSource]="detailArray"
+  [showColumnLines]="false"
+  [showRowLines]="true"
+  [rowAlternationEnabled]="true"
+  [allowColumnResizing]="true"
+  [allowColumnReordering]="true"
+  [columnAutoWidth]="true"
+  [showBorders]="true"
+>
+  <dxi-column dataField="CheqNo" caption="Cheque No" dataType="number" alignment="left"></dxi-column>
+  <dxi-column dataField="CheqStatus" caption="Check Status" dataType="date" [format]="'dd-MMM-yyyy'"></dxi-column>
+
+  <dxo-scrolling [scrollByContent]="true" [scrollByThumb]="true" [showScrollbar]="'always'" [scrollLeft]="true" mode="infinite"></dxo-scrolling>
+</dx-data-grid>

@@ -1,0 +1,167 @@
+<div class="container-fluid">
+  <app-pagetitle *ngIf="SomeElementsVisible" title="Define Province" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+
+  <div class="d-flex justify-content-between">
+    <div class="">
+      <dx-button id="filter" class="ml-3 mb-3" type="default" text="Add New" icon="plus" (onClick)="showHideFormPopup()"> </dx-button>
+    </div>
+    <div class="">
+      <dx-button class="ml-3 mb-3" type="danger" text="Go Back" icon="back" [visible]="SomeElementsVisible" routerLink="/inventory-definition/item-history" style="background-color: #ffa100">
+      </dx-button>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- end col -->
+    <div class="col-md-12">
+      <div class="card p-2 rounded">
+        <dx-data-grid
+          id="gridContainer"
+          #defineProvinceGrid
+          [height]="IsLoadedInPopup == false ? gridHeight : gridHeightInPopupWithGrid"
+          [dataSource]="dataSource"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnReordering]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="false"
+          (onToolbarPreparing)="onToolbarPreparing($event)"
+        >
+          <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-filter-row [visible]="filter"></dxo-filter-row>
+          <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+          <dxo-header-filter [visible]="filter"></dxo-header-filter>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('defineProvinceGrid') }}"></dxo-state-storing>
+          <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+          <dxo-load-panel [enabled]="false"></dxo-load-panel>
+          <dxo-export [enabled]="true" fileName="define Province history" [allowExportSelectedData]="true">
+            <dxo-texts exportAll="Export All Rows"></dxo-texts>
+          </dxo-export>
+          <dxo-paging [enabled]="true"></dxo-paging>
+          <!-- <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true"></dxo-pager> -->
+
+          <dxi-column dataField="" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+          <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+            <div class="d-con-cell-action">
+              <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+            </div>
+          </div>
+          <dxi-column dataField="Id" caption="Id" dataType="number" [visible]="false"></dxi-column>
+          <dxi-column dataField="CountryId" caption="CountryId" dataType="number" [visible]="false"></dxi-column>
+          <dxi-column dataField="Code" caption="Code" dataType="string"></dxi-column>
+          <dxi-column dataField="Description" caption="Province Name" dataType="string"></dxi-column>
+          <dxi-column dataField="CountryName" caption="Country Name" dataType="string"></dxi-column>
+
+          <dxi-column
+            dataField="button"
+            [fixed]="true"
+            [fixedPosition]="'right'"
+            [width]="65"
+            alignment="left"
+            caption="Action"
+            [allowEditing]="false"
+            [allowExporting]="false"
+            [allowFiltering]="false"
+            [allowFixing]="false"
+            [allowGrouping]="false"
+            [allowHeaderFiltering]="false"
+            [allowHiding]="false"
+            [allowReordering]="false"
+            [allowResizing]="false"
+            [allowSearch]="false"
+            [allowSorting]="false"
+            cellTemplate="buttonTemplate"
+          ></dxi-column>
+          <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+            <div class="d-con-cell-action">
+              <dx-button type="default" stylingMode="text" (onClick)="editPopup(cellInfo.data)">
+                <i class="ri-edit-2-line"></i>
+              </dx-button>
+            </div>
+          </div>
+
+          <dxo-summary>
+            <dxi-total-item column="Code" summaryType="count" displayFormat="Total Records: {0}"> </dxi-total-item>
+          </dxo-summary>
+
+          <dxo-scrolling [scrollByContent]="true" [scrollByThumb]="true" [showScrollbar]="'always'" [scrollLeft]="true" mode="infinite"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+      <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+      <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+    </div>
+    <div class="col-md-12">
+      <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+    </div>
+  </div>
+</div>
+
+<!-- (onShown)="setFocus()" -->
+<dx-popup
+  [width]="450"
+  [height]="330"
+  [showTitle]="true"
+  title="Define Province"
+  [dragEnabled]="true"
+  [closeOnOutsideClick]="false"
+  [(visible)]="showDefineProvincePopup"
+  [animation]="{ hide: { type: 'slideOut', direction: 'right', duration: 1000 }, show: { type: 'slideIn', direction: 'left', duration: 1500 } }"
+>
+  <div *dxTemplate="let data of 'content'">
+    <dx-form id="form" [formData]="defineProvinceFormData" #defineProvinceForm [showRequiredMark]="false" [colCountByScreen]="{ lg: 1, md: 1, sm: 1 }">
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="CountryId"
+        editorType="dxSelectBox"
+        [editorOptions]="{
+          placeholder: 'Country',
+          items: countriesList,
+          valueExpr: 'Id',
+          displayExpr: 'Description',
+          searchEnabled: true
+        }"
+      >
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        <dxi-validation-rule type="required" message="Country is required"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="Code"
+        editorType="dxTextBox"
+        [editorOptions]="{
+          placeholder: 'Province Code'
+        }"
+      >
+        <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+        <dxi-validation-rule type="required" message="Code is required"></dxi-validation-rule>
+      </dxi-item>
+
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="Description"
+        editorType="dxTextBox"
+        [editorOptions]="{
+          placeholder: 'Province Description'
+        }"
+      >
+        <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+        <dxi-validation-rule type="required" message="Description is required"></dxi-validation-rule>
+      </dxi-item>
+    </dx-form>
+    <div class="mt-4 d-flex justify-content-end">
+      <dx-button text="{{ IdForUpdate > 0 ? 'Update' : 'Save' }}" type="success" (onClick)="onSave()" icon="save"></dx-button>
+      <div class="m-1"></div>
+      <dx-button icon="remove" type="danger" text="Close" (onClick)="showHideFormPopup()"></dx-button>
+    </div>
+  </div>
+</dx-popup>

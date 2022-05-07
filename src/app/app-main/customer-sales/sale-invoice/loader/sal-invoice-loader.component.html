@@ -1,0 +1,80 @@
+<dx-popup
+  [width]="WidthOfPopupWithGrid"
+  [height]="HeightOfPopupWithGrid"
+  [position]="'center'"
+  [showTitle]="true"
+  title="Pending GRN For Purchase Invoice"
+  titleTemplate="titleTemplate"
+  [dragEnabled]="true"
+  [closeOnOutsideClick]="false"
+  [(visible)]="PopupVisibile"
+>
+  <div *dxTemplate="let content of 'titleTemplate'" class="d-flex justify-content-between">
+    <div class="">
+      <h4>Pending GDN For Sale Invoice</h4>
+    </div>
+    <div class="d-flex justify-content-end">
+      <dx-button class="p-0 mr-1 border-0" text="" type="danger" icon="export" (onClick)="loadDatafromLoader()"></dx-button>
+      <dx-button class="p-0 border-0" type="warning" (onClick)="CloseLoaderPopup()" icon="close"></dx-button>
+    </div>
+  </div>
+
+  <div *dxTemplate="let data of 'content'">
+    <dx-scroll-view [showScrollbar]="'always'" [scrollByContent]="true" [scrollByThumb]="true">
+      <div class="row">
+        <div class="col-md-12">
+          <dx-data-grid
+            #SaleInvoiceLoaderGrid
+            id="availableTransactionsForIssuanceGrid"
+            [width]="WidthOfGridInPopupWithGrid"
+            [height]="HeightOfGridInPopupWithGrid"
+            [dataSource]="DataSource"
+            [showColumnLines]="false"
+            [showRowLines]="true"
+            [rowAlternationEnabled]="true"
+            [allowColumnReordering]="true"
+            [allowColumnResizing]="true"
+            [columnAutoWidth]="true"
+            [showBorders]="true"
+            (onToolbarPreparing)="onToolbarPreparing($event)"
+          >
+            <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+            <dxo-group-panel [visible]="true"></dxo-group-panel>
+            <dxo-filter-row [visible]="filter"></dxo-filter-row>
+            <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+            <dxo-header-filter [visible]="filter"></dxo-header-filter>
+            <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+            <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('SaleInvoiceLoaderGrid') }}"></dxo-state-storing>
+            <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+            <dxo-load-panel [enabled]="false"></dxo-load-panel>
+            <dxo-selection mode="multiple" selectAllMode="page" showCheckBoxesMode="always"></dxo-selection>
+            <dxi-column dataField="" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+
+            <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+              <div class="d-con-cell-action">
+                <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+              </div>
+            </div>
+
+            <dxi-column dataField="PurchaseOrderId" caption="PurchaseOrderId" [visible]="false"></dxi-column>
+            <dxi-column dataField="DocDate" caption="DocDate" dataType="date" [format]="'dd-MMM-yyyy'"> </dxi-column>
+            <dxi-column dataField="DocNo" caption="DocNo"></dxi-column>
+            <dxi-column dataField="SupplierCustomerId" caption="SupplierCustomerId" [visible]="false"> </dxi-column>
+            <dxi-column dataField="SupplierCustomer" caption="SupplierCustomer"> </dxi-column>
+            <dxi-column dataField="GpNo" caption="GpNO"></dxi-column>
+            <dxi-column dataField="BiltyNo" caption="BiltyNo"></dxi-column>
+            <dxi-column dataField="VehicleNo" caption="VehicleNo"></dxi-column>
+            <dxi-column dataField="ItemId" caption="Item" [visible]="false"> </dxi-column>
+            <dxi-column dataField="ItemName" caption="Item"></dxi-column>
+            <dxi-column dataField="PurchaseOrder" caption="PurchaseOrder"></dxi-column>
+
+            <dxo-summary>
+              <dxi-total-item column="SupplierCustomerName" summaryType="count" displayFormat="Total Records: {0}"> </dxi-total-item>
+            </dxo-summary>
+            <dxo-scrolling [scrollByContent]="true" [scrollByThumb]="true" [showScrollbar]="'always'" [scrollLeft]="true" mode="infinite"></dxo-scrolling>
+          </dx-data-grid>
+        </div>
+      </div>
+    </dx-scroll-view>
+  </div>
+</dx-popup>

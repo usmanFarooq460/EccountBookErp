@@ -1,0 +1,32 @@
+::ng-deep #orderDetailGrid .dx-rtl .dx-datagrid-rowsview .dx-selection.dx-row > td:not(.dx-focused).dx-datagrid-group-space,
+::ng-deep #orderDetailGrid .dx-rtl .dx-datagrid-rowsview .dx-selection.dx-row:hover > td:not(.dx-focused).dx-datagrid-group-space {
+  border-left-color: #24b546;
+}
+
+::ng-deep #orderDetailGrid .dx-datagrid-rowsview .dx-selection.dx-row:not(.dx-row-lines) > td,
+::ng-deep #orderDetailGrid .dx-datagrid-rowsview .dx-selection.dx-row:hover:not(.dx-row-lines) > td {
+  border-bottom: 1px solid #24b546;
+  border-top: 1px solid #24b546;
+}
+
+::ng-deep #orderDetailGrid .dx-datagrid-rowsview .dx-selection.dx-row > td.dx-datagrid-group-space,
+::ng-deep #orderDetailGrid .dx-datagrid-rowsview .dx-selection.dx-row:hover > td.dx-datagrid-group-space {
+  border-right-color: #24b546;
+}
+
+::ng-deep #orderDetailGrid .dx-datagrid-rowsview .dx-selection.dx-row > td,
+::ng-deep #orderDetailGrid .dx-datagrid-rowsview .dx-selection.dx-row:hover > td {
+  background-color: #24b546;
+  color: #232323;
+}
+
+::ng-deep #orderDetailGrid .dx-datagrid-table .dx-data-row.dx-state-hover:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row) > td:not(.dx-focused) {
+  background-color: #24b546;
+  color: #333;
+}
+
+#abcdedf:hover {
+  transform: scale(1.2);
+  font-weight: bolder;
+  background-color: rgba(180, 252, 255, 0.857);
+}

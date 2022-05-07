@@ -1,0 +1,540 @@
+<div class="container-fluid">
+  <!-- start page title -->
+  <app-pagetitle title="Purchase Order History" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+  <!-- end page title -->
+  <div class="row">
+    <div class="col-md-12">
+      <dx-form id="form" [formData]="purchaseOrderHistoryFormData" #purchaseOrderHistoryForm [showRequiredMark]="false" [colCountByScreen]="{ lg: 6, md: 3, sm: 2, xs: 2 }">
+        <dxi-item
+          dataField="CompanyId"
+          cssClass="px-1 m-0"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: companyList,
+            valueExpr: 'Id',
+            displayExpr: 'CompName',
+            placeholder: 'Company',
+            showClearButton: 'true',
+            stylingMode: 'underlined'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Company is required"></dxi-validation-rule>
+        </dxi-item>
+
+        <dxi-item
+          dataField="branch"
+          cssClass="px-1 m-0"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: branchList,
+            searchEnabled: true,
+            valueExpr: 'Id',
+            displayExpr: 'BranchName',
+            placeholder: 'Branch',
+            showClearButton: 'true',
+            stylingMode: 'underlined'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Branch is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          dataField="project"
+          cssClass="px-1 m-0"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: projectList,
+            searchEnabled: true,
+            valueExpr: 'Id',
+            displayExpr: 'ProjectName',
+            placeholder: 'Project',
+            showClearButton: 'true',
+            stylingMode: 'underlined'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Project is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          dataField="dateType"
+          cssClass="px-1 m-0"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            placeholder: 'Date Type',
+            items: ListOfDates,
+            valueExpr: 'Id',
+            displayExpr: 'name',
+            onValueChanged: HndleChangeOfDateType,
+            showClearButton: 'true',
+            stylingMode: 'underlined'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+        <dxi-item
+          dataField="FromDate"
+          cssClass="px-1 m-0"
+          editorType="dxDateBox"
+          [editorOptions]="{
+            displayFormat: 'dd-MMM-yyyy',
+            placeholder: 'From Date',
+            showClearButton: 'true',
+            stylingMode: 'underlined'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="DateFrom is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          dataField="ToDate"
+          cssClass="px-1 m-0"
+          editorType="dxDateBox"
+          [editorOptions]="{
+            displayFormat: 'dd-MMM-yyyy',
+            placeholder: 'To Date',
+            showClearButton: 'true',
+            stylingMode: 'underlined'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="DateTo is required"></dxi-validation-rule>
+        </dxi-item>
+        
+        <dxi-item
+          dataField="ItemId"
+          [colSpan]="2"
+          cssClass="px-1 m-0"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: itemList,
+            searchEnabled: true,
+            valueExpr: 'Id',
+            displayExpr: 'name',
+            placeholder: 'Item',
+            showClearButton: 'true',
+            stylingMode: 'underlined'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+        <dxi-item
+          dataField="SupplierCustomerId"
+          cssClass="px-1 m-0"
+          [colSpan]="2"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: SupplierList,
+            searchEnabled: true,
+            valueExpr: 'Id',
+            displayExpr: 'name',
+            placeholder: 'Supplier',
+            showClearButton: 'true',
+            stylingMode: 'underlined'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="CityId"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: CityAreaList,
+            valueExpr: 'Id',
+            displayExpr: 'name',
+            placeholder: 'City Area',
+            searchEnabled: true,
+            showClearButton: 'true',
+            stylingMode: 'underlined'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          [colSpan]="1"
+          dataField="Crop"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: batchList,
+            valueExpr: 'CropYear',
+            displayExpr: 'CropYear',
+            placeholder: 'CropYear',
+            searchEnabled: true,
+            showClearButton: 'true',
+            stylingMode: 'underlined'
+          }"
+        >
+          <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+        </dxi-item>
+
+        <dxi-item
+          dataField="Status"
+          cssClass="px-1 m-0"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: statusList,
+            searchEnabled: true,
+            valueExpr: 'name',
+            displayExpr: 'name',
+            placeholder: 'Status',
+            showClearButton: 'true',
+            stylingMode: 'underlined'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+
+        <dxi-item
+          dataField="FilterType"
+          cssClass="px-1 m-0"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: approvedList,
+            searchEnabled: true,
+            valueExpr: 'name',
+            displayExpr: 'name',
+            placeholder: 'Filters',
+            showClearButton: 'true',
+            stylingMode: 'underlined'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+        <dxi-item
+          dataField="InventoryParentCateGory"
+          cssClass="px-1 m-0"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: InventoryParentCategoriesList,
+            searchEnabled: true,
+            valueExpr: 'Id',
+            displayExpr: 'InvParentCateDescription',
+            placeholder: 'Item Category',
+            showClearButton: 'true',
+            stylingMode: 'underlined'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+        <dxi-item
+          dataField="ReportType"
+          cssClass="px-1 m-0"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: reportTypesList,
+            searchEnabled: true,
+            valueExpr: 'Id',
+            displayExpr: 'name',
+            placeholder: 'ReportType',
+            showClearButton: 'true',
+            stylingMode: 'underlined'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Report Type is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item cssClass="mt-2 px-1 "></dxi-item>
+        <dxi-item cssClass="mt-2 px-1 d-flex justify-content-end">
+          <div *dxTemplate>
+            <dx-button id="search" class="mb-3" type="success" text="" (onClick)="GenerateReport()" icon="search"> </dx-button>
+          </div>
+        </dxi-item>
+      </dx-form>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <!-- ------------------------------------------------------------------------------------------- -->
+      <div class="" *ngIf="OutstandingPaddyPurchaseOrderGridVisibility">
+        <dx-data-grid
+          #OutstandingPaddyPurchaseOrdersGrid
+          id="OutstandingPaddyPurchaseOrdersGrid"
+          [dataSource]="HeaderDataForReportAgainstOutstandingPurchaseOrders"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnResizing]="true"
+          [allowColumnReordering]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+          (onToolbarPreparing)="OutstandingPurchaseOrdersRptGridToolbarPreparing($event)"
+          (onRowPrepared)="onRowPrepared($event)"
+        >
+          <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+          <dxo-group-panel emptyPanelText=" " [visible]="true"></dxo-group-panel>
+          <dxo-filter-row [visible]="filter"></dxo-filter-row>
+          <dxo-header-filter [visible]="filter"></dxo-header-filter>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-load-panel [enabled]="true"></dxo-load-panel>
+          <dxo-paging [enabled]="true"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[50, 100, 200]" [showInfo]="true"></dxo-pager>
+          <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ ReportForOutstandingPurchaseOrderGridState }}"></dxo-state-storing>
+
+          <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+          <dxi-column dataField="RowNumber" caption="RowNumber" dataType="number" [visible]="false" alignment="center"></dxi-column>
+          <dxi-column dataField="ItemName" [width]="415" caption="ItemName" dataType="string" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="Crop" caption="Crop" dataType="string" alignment="center"></dxi-column>
+          <dxi-column dataField="itemQty" caption="Quantity" dataType="number" alignment="center" cellTemplate="orderNumberTemplate" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="ItemWeight" caption="Weight" dataType="number" alignment="center" cellTemplate="orderNumberTemplate" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="ItemAmount" caption="Amount" dataType="number" alignment="center" cellTemplate="orderNumberTemplate" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+
+          <dxi-column
+            dataField="MaxRatebyItemCrop"
+            caption="Maximum Rate"
+            dataType="number"
+            alignment="center"
+            cellTemplate="orderNumberTemplate"
+            [format]="{ type: 'fixedPoint', precision: 0 }"
+          ></dxi-column>
+          <dxi-column
+            dataField="MinRateByItemCrop"
+            caption="Minimum Rate"
+            dataType="number"
+            alignment="center"
+            cellTemplate="orderNumberTemplate"
+            [format]="{ type: 'fixedPoint', precision: 0 }"
+          ></dxi-column>
+
+          <dxi-column dataField="ItemAvgRate" caption="AvgRate" dataType="number" alignment="center" cellTemplate="orderNumberTemplate" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+
+          <div *dxTemplate="let cell of 'orderNumberTemplate'">
+            <div id="abcdedf">{{ cell.text }}</div>
+          </div>
+          <dxo-master-detail [enabled]="true" [autoExpandAll]="true" template="masterDetail"></dxo-master-detail>
+          <div *dxTemplate="let masterDetailItem of 'masterDetail'">
+            <purchase-order-register-detail [type]="'DFRAOPO'" [data]="DataForReportAgainstOutstandingPurchaseOrders" [rowData]="masterDetailItem.data"></purchase-order-register-detail>
+          </div>
+          <div *dxTemplate="let data of 'OutstandingPaddyPurchaseOrderCount'">
+            <div class="informer">
+              <h4 class="name" style="font-weight: bold; color: whitesmoke">Outstanding Purchase Order Report</h4>
+              <!-- <h3 class="count">{{ OutstandingPaddyPurchaseOrderDataCount }}</h3> -->
+            </div>
+          </div>
+          <dxo-summary>
+            <dxi-total-item column="itemQty" summaryType="sum" name="SupplierWeight" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="ItemWeight" summaryType="sum" name="FactoryWeight" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="ItemAmount" summaryType="sum" name="DifferenceWeight" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-group-item column="itemQty" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+            <dxi-group-item column="ItemWeight" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+            <dxi-group-item column="ItemAmount" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+          </dxo-summary>
+          <dxo-export [enabled]="true" [allowExportSelectedData]="true"></dxo-export>
+          <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+
+      <!-- ------------------------------------------------------------------------------ -->
+      <div class="" *ngIf="HistoryRegisterVisibility">
+        <dx-data-grid
+          #HistoryRegisterGrid
+          id="HistoryRegisterGrid"
+          [dataSource]="dataSource"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [showBorders]="false"
+          [rowAlternationEnabled]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+          (onToolbarPreparing)="HistoryRegisterGridToolbarPreparing($event)"
+        >
+          <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+          <dxo-group-panel [emptyPanelText]="" [visible]="true"></dxo-group-panel>
+          <dxo-filter-row [visible]="filter"></dxo-filter-row>
+          <dxo-header-filter [visible]="filter"></dxo-header-filter>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-load-panel [enabled]="true"></dxo-load-panel>
+          <!-- <dxo-export [enabled]="true" fileName="Estimates" [allowExportSelectedData]="true">
+            <dxo-texts exportAll="Export All Rows"></dxo-texts>
+          </dxo-export> -->
+          <!-- <dxo-selection mode="multiple" selectAllMode="page" showCheckBoxesMode="always"></dxo-selection> -->
+          <dxo-paging [enabled]="true"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="gridPageSize" [showInfo]="true"></dxo-pager>
+          <dxi-column dataField="Id" caption="Id" [visible]="false"></dxi-column>
+          <dxi-column dataField="DocNo" caption="Doc No" dataType="any" [width]="80"></dxi-column>
+          <dxi-column dataField="DocDate" caption="Doc Date" dataType="date" [format]="'dd-MMM-yyyy'"></dxi-column>
+          <dxi-column dataField="SupplierName" caption="Supplier" dataType="any"></dxi-column>
+          <dxi-column dataField="DeliveryTerm" caption="Delivery" dataType="any"></dxi-column>
+          <dxi-column dataField="ItemName" caption="Item" dataType="any"></dxi-column>
+          <dxi-column dataField="OrderStatus" caption="Status" cellTemplate="orderstatusTemplate"></dxi-column>
+          <dxi-column dataField="Crop" caption="Crop" dataType="any" [width]="70"></dxi-column>
+          <dxi-column dataField="OrderItemQty" caption="Qty" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="BalQty" caption="BalQty" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="OrderItemRate" caption="Rate" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+
+          <dxi-column dataField="BagWeight" caption="Bag Weight" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+
+          <div *dxTemplate="let cellInfo of 'orderstatusTemplate'">
+            <div *ngIf="cellInfo.text == 'Complete'">
+              <span class="badge badge-success">Complete</span>
+            </div>
+            <div *ngIf="cellInfo.text == 'Open'">
+              <span class="badge badge-warning">Open</span>
+            </div>
+            <div *ngIf="cellInfo.text == 'Cancel'">
+              <span class="badge badge-danger">Cancel</span>
+            </div>
+          </div>
+          <dxi-column dataField="IsApproved" caption="Approval" cellTemplate="statusTemplate"></dxi-column>
+
+          <div *dxTemplate="let cellInfo of 'statusTemplate'">
+            <div *ngIf="cellInfo.text == 'Approved'; else falseStatus">
+              <span class="badge badge-success">Approved</span>
+            </div>
+            <ng-template #falseStatus class="badge badge-danger"> <span class="badge badge-danger">Not Approved</span></ng-template>
+          </div>
+          <dxi-column
+            dataField="button"
+            caption="Status"
+            [fixed]="true"
+            [fixedPosition]="'right'"
+            alignment="center"
+            [allowEditing]="false"
+            [allowExporting]="false"
+            [allowFiltering]="false"
+            [allowFixing]="false"
+            [allowGrouping]="false"
+            [allowHeaderFiltering]="false"
+            [allowHiding]="false"
+            [allowReordering]="false"
+            [allowResizing]="false"
+            [allowSearch]="false"
+            [allowSorting]="false"
+            cellTemplate="buttonTemplateAccept"
+          ></dxi-column>
+          <div *dxTemplate="let cellInfo of 'buttonTemplateAccept'">
+            <div class="d-con-cell-action">
+              <dx-button type="default" stylingMode="text" hint="Order Complete" (onClick)="onComplete(cellInfo.data)">
+                <i class="ri-check-double-fill" style="height: 26px; width: 26px; color: rgb(63, 216, 63)"></i>
+              </dx-button>
+              <dx-button type="default" stylingMode="text" hint="Order Cancel" (onClick)="onCancel(cellInfo.data)">
+                <i class="ri-close-line" style="height: 26px; width: 26px; color: rgb(237, 40, 13)"></i>
+              </dx-button>
+              <dx-button type="danger" stylingMode="text" hint="203-Purchase Order" (onClick)="ReportSlip203(cellInfo.data)">
+                <i class="ri-printer-line"></i>
+              </dx-button>
+            </div>
+          </div>
+          <div *dxTemplate="let data of 'HistoryRegisterGridTitleTemplate'">
+            <div class="informer">
+              <h4 class="name" style="font-weight: bold; color: whitesmoke">Purchase Order History Register</h4>
+              <!-- <h3 class="count">{{ OutstandingPaddyPurchaseOrderDataCount }}</h3> -->
+            </div>
+          </div>
+          <dxo-export [enabled]="true" [allowExportSelectedData]="true"></dxo-export>
+
+          <dxo-summary>
+            <dxi-total-item column="OrderItemQty" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+            <dxi-total-item column="BalQty" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+            <dxi-total-item column="OrderItemRate" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+
+            <dxi-total-item column="BagWeight" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+          </dxo-summary>
+          <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <dx-popup
+        width="80%"
+        [height]="ApprovalPopupHeight"
+        [position]="'center'"
+        [showTitle]="true"
+        titleTemplate="titleTemplate"
+        [dragEnabled]="true"
+        [closeOnOutsideClick]="false"
+        [(visible)]="outstandingPaddyPurchaseOrderChartPanelVisibility"
+      >
+        <div *dxTemplate="let content of 'titleTemplate'" class="d-flex justify-content-between">
+          <div class="">
+            <h4>Charts For Outstanding Paddy Purchase Orders</h4>
+          </div>
+          <div class="d-flex justify-content-end">
+            <dx-button class="p-0 border-0" type="warning" (onClick)="showChartForOutstandingPaddyPurchaseOrders()" icon="close"></dx-button>
+          </div>
+        </div>
+        <div *dxTemplate="let data of 'content'">
+          <dx-scroll-view width="100%" height="100%">
+            <!-- <pdf-viewer [src]="pdfSrc" [show-borders]="true" [render-text]="true" style="display: block"></pdf-viewer> -->
+            <div class="row" *ngFor="let item of ChartDataForOutstandingPurchaseOrder">
+              <div class="col-sm-12 m-0 p-1">
+                <div class="row"></div>
+                <dx-chart id="chart" resolveLabelOverlapping="stack" [dataSource]="item">
+                  <dxo-title text="{{ item[0].ItemName }}" subtitle="Total Bags: {{ item[0].TotalItemQuantity }} , Total Weight: {{ item[0].TotalItemWeight }}Kg's"></dxo-title>
+                  <dxi-series valueField="MinRateByItemCropSupplier" name="Max Rate"></dxi-series>
+                  <dxi-series valueField="MaxRatebyItemCropSupplier" name="Min Rate"></dxi-series>
+                  <dxi-series valueField="AvgRate" name="Avg. Rate"></dxi-series>
+                  <dxo-common-series-settings argumentField="Supplier" type="bar" [barPadding]="0.5" hoverMode="allArgumentPoints" selectionMode="allArgumentPoints">
+                    <dxo-label
+                      [visible]="true"
+                      [format]="{
+                        type: 'fixedPoint',
+                        precision: '0'
+                      }"
+                    >
+                    </dxo-label>
+                  </dxo-common-series-settings>
+                  <dxo-zoom-and-pan valueAxis="both" argumentAxis="both" [dragToZoom]="true" [allowMouseWheel]="false" panKey="shift"></dxo-zoom-and-pan>
+                  <dxo-legend verticalAlignment="bottom" horizontalAlignment="center"> </dxo-legend>
+                  <dxo-tooltip [enabled]="true" contentTemplate="content"> </dxo-tooltip>
+
+                  <dxo-export [enabled]="true" fileName="Outstanding  {{ item[0].ItemName }}  Purchase Analysis"></dxo-export>
+                  <div *dxTemplate="let info of 'content'" class="state-tooltip">
+                    <h4 class="state">{{ info.argument }}</h4>
+                    <!-- <div class="capital"><span class="caption">Capital</span>: {{ info.point.data.AvgRate }}</div>
+                    <div class="population"><span class="caption">Population</span>: {{ info.value | number: "3.0-0" }} people</div>
+                    <div>
+                      <span class="caption">Area</span>: <span class="area-km">{{ info.point.data.MaxRatebyItemCropSupplier | number: "3.0-0" }}</span> km<sup>2</sup> (<span class="area-mi">{{
+                        0.3861 * info.point.data.MaxRatebyItemCropSupplier | number: "3.0-0"
+                      }}</span>
+                      mi<sup>2</sup>)
+                    </div> -->
+                  </div>
+                </dx-chart>
+              </div>
+            </div>
+
+            <!-- <pdf-viewer [src]="pdfSrc" [render-text]="true" style="display: block"></pdf-viewer> -->
+          </dx-scroll-view>
+        </div>
+      </dx-popup>
+    </div>
+    <div class="col-md-12">
+      <div class="dx-field">
+        <div class="dx-field-value-static">
+          <dx-popover target="#filter" position="left" [width]="400" [height]="300" [(visible)]="popoverVisible">
+            <dxo-animation>
+              <dxo-show type="pop" [from]="{ scale: 0 }" [to]="{ scale: 1 }"></dxo-show>
+              <dxo-hide type="fade" [from]="1" [to]="0"></dxo-hide>
+            </dxo-animation>
+
+            <div *dxTemplate="let data = model; of: 'content'">
+              <dx-form id="form" [formData]="purchaseOrderHistoryFormData" #purchaseOrderHistoryForm [showRequiredMark]="false">
+                <dxi-item itemType="group" cssClass="second-group" [colCount]="2">
+                  <dxi-item cssClass="mt-2">
+                    <div *dxTemplate>
+                      <dx-button class="ml-3 mb-3" type="default" text="206-PoDetail" (onClick)="ReportRegister206()" icon="print" style="background-color: #c300ff"></dx-button>
+                    </div>
+                  </dxi-item>
+
+                  <dxi-item cssClass="mt-2">
+                    <div *dxTemplate>
+                      <dx-button class="ml-3 mb-3" type="default" text="205-PoDetail Register" (onClick)="ReportRegister205()" icon="print" style="background-color: #c300ff"></dx-button>
+                    </div>
+                  </dxi-item>
+                </dxi-item>
+              </dx-form>
+            </div>
+          </dx-popover>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- container-fluid -->
+<!-- (onPointClick)="onPointClick($event)" -->

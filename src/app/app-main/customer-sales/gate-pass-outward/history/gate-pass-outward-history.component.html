@@ -1,0 +1,136 @@
+<div class="container-fluid">
+  <app-pagetitle title="Gate Pass Outward" ></app-pagetitle>
+  <dx-button id="filter" class="ml-3 mb-3" type="default" text="Add New" icon="plus" (onClick)="gotoForm()"> </dx-button>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card p-2">
+      <dx-data-grid
+        id="gridContainer"
+        #gatePassOutwardHistory
+        [height]="gridHeight"
+        [dataSource]="dataSource"
+        [showColumnLines]="false"
+        [showRowLines]="true"
+        [rowAlternationEnabled]="true"
+        [allowColumnReordering]="true"
+        [allowColumnResizing]="true"
+        [columnAutoWidth]="true"
+        [showBorders]="true"
+        (onToolbarPreparing)="onToolbarPreparing($event)"
+      >
+        <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+        <dxo-group-panel [visible]="true"></dxo-group-panel>
+        <dxo-filter-row [visible]="filter"></dxo-filter-row>
+        <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+        <dxo-header-filter [visible]="filter"></dxo-header-filter>
+        <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+        <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('labItemParamenterGrid') }}"></dxo-state-storing>
+        <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+        <dxo-load-panel [enabled]="false"></dxo-load-panel>
+        <dxo-export [enabled]="true" fileName="lab Item Paramenter" [allowExportSelectedData]="true">
+          <dxo-texts exportAll="Export All Rows"></dxo-texts>
+        </dxo-export>
+        <dxi-column dataField="" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+        <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+          <div class="d-con-cell-action">
+            <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+          </div>
+        </div>
+
+        <dxi-column dataField="Id" caption="Id" [visible]="false"></dxi-column>
+        <dxi-column dataField="GpSrNo" caption="GpSrNo" alignment="left"></dxi-column>
+        <dxi-column dataField="GpDate" caption="GpDate" alignment="center" dataType="date" [format]="'dd-MMM-yyyy'"></dxi-column>
+        <dxi-column dataField="CompanyName" caption="Supplier" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="VehicleType" caption="VehicleType" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="VehicleNo" caption="VehicleNo" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="VarietyName" caption="VarietyName" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="ItemQty" caption="ItemQty" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="InTime" caption="InTime" dataType="date" alignment="center" [format]="'HH:mm'"></dxi-column>
+        <dxi-column dataField="OutTime" caption="OutTime" dataType="date" alignment="center" [format]="'HH:mm'"></dxi-column>
+        <dxi-column dataField="UserName" caption="UserName" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="Description" caption="City" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="Status" caption="Status" dataType="string" alignment="center" cellTemplate="statusTemplate"></dxi-column>
+        <dxi-column dataField="Freight" caption="Freight" alignment="right" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="OrderNo" caption="OrderNo" dataType="number" alignment="right"></dxi-column>
+        <dxi-column dataField="GatepassType" caption="GatepassType" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="isApproved" caption="Approval" [width]="85" dataType="string" [fixed]="true" [fixedPosition]="'right'" cellTemplate="approvalTemplate" alignment="center"></dxi-column>
+
+        <div *dxTemplate="let cellInfo of 'approvalTemplate'">
+          <div *ngIf="cellInfo.value == true">
+            <span class="badge badge-success">Accepted</span>
+          </div>
+          <div *ngIf="cellInfo.value == false">
+            <span class="badge badge-danger">UnApproved</span>
+          </div>
+        </div>
+
+        <div *dxTemplate="let cellInfo of 'statusTemplate'">
+          <div *ngIf="cellInfo.text == 'Open'">
+            <span class="badge badge-warning">Open</span>
+          </div>
+          <div *ngIf="cellInfo.text == 'Accepted'">
+            <span class="badge badge-success">Accepted</span>
+          </div>
+          <div *ngIf="cellInfo.text == 'Rejected'">
+            <span class="badge badge-danger">Rejected</span>
+          </div>
+        </div>
+        <dxi-column dataField="SupplierWeight" alignment="right" caption="SupplierWeight" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="FactoryWeight" alignment="right" caption="FactoryWeight" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="DifferenceWeight" alignment="right" caption="DifferenceWeight" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column
+          dataField="button"
+          [fixed]="true"
+          [fixedPosition]="'right'"
+          [width]="90"
+          alignment="right"
+          caption="Action"
+          [allowEditing]="false"
+          [allowExporting]="false"
+          [allowFiltering]="false"
+          [allowFixing]="false"
+          [allowGrouping]="false"
+          [allowHeaderFiltering]="false"
+          [allowHiding]="false"
+          [allowReordering]="false"
+          [allowResizing]="false"
+          [allowSearch]="false"
+          [allowSorting]="false"
+          cellTemplate="buttonTemplate"
+        ></dxi-column>
+        <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+          <div class="d-con-cell-action">
+            <dx-button type="default" stylingMode="text" (onClick)="onEdit(cellInfo.data)">
+              <i class="ri-edit-2-line"></i>
+            </dx-button>
+            <dx-button type="danger" stylingMode="text" hint="290-GP Outward" (onClick)="onPrint(cellInfo.data)">
+              <i class="ri-printer-line"></i>
+            </dx-button>
+          </div>
+        </div>
+
+        <dxo-summary>
+          <dxi-total-item column="CompanyName" summaryType="count" displayFormat="Total Records: {0}"> </dxi-total-item>
+          <dxi-total-item column="SupplierWeight" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+          <dxi-total-item column="FactoryWeight" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+          <dxi-total-item column="DifferenceWeight" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+          <dxi-total-item column="ItemQty" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+        </dxo-summary>
+        <dxo-scrolling [scrollByContent]="true" [scrollByThumb]="true" [showScrollbar]="'always'" [scrollLeft]="true" mode="infinite"></dxo-scrolling>
+      </dx-data-grid>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+      <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+      <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+    </div>
+    <div class="col-md-12">
+      <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,193 @@
+{
+	"Purchase_Trading": {
+		"Purchase_Bill": {
+			"Atachments": "مرفقات",
+			"Form": {
+				"Calculations": "العمليات الحسابية",
+				"Load_Caption": "تحميل من أمر الشراء",
+				"Loader_Title": "تحميل أمر الشراء",
+				"Payment_Due_Schedule": "جدول استحقاق الدفع"
+			},
+			"Stock_Party": "حزب الأسهم"
+		},
+		"purchase_Trading_Return": {
+			"Comm_Amount": "مبلغ العمولة",
+			"comm_Remarks": "ملاحظات الهيئة"
+		},
+		"purchase_invoice_trading": {
+			"ItemAddLess": "إضافة / أقل عنصر",
+			"creditAccount": "ائتمان الحساب",
+			"debitToItem": "المسؤول عن العنصر",
+			"suppAddLess": "المورد أضف أقل"
+		},
+		"purchase_order": {
+			"DeliveryStartDate": "تاريخ بدء التسليم",
+			"OrderExpiryDate": "تاريخ انتهاء الطلب",
+			"RefNo": "رقم المرجع",
+			"catSerail": "فئة المسلسل",
+			"orderCat": "فئة الطلب",
+			"termsDescription": "الشروط الوصف",
+			"validateDate": "تحقق من التاريخ"
+		}
+	},
+	"SharedGridCaptions": {
+		"Grid_Message": "اسحب رأس العمود هنا للتجميع حسب ذلك العمود",
+		"SR_": "الرقم التسلسلي",
+		"Total_Records": "مجموع السجلات",
+		"action": "عمل",
+		"noRecordAdded": "لا يوجد سجل مضاف",
+		"noRecordFound": "لا يوجد سجلات",
+		"open": "افتح",
+		"sum": "مجموع"
+	},
+	"Stock_Reports": {
+		"Item_ledger": {
+			"Add_Less_weight": "أضف وزنًا أقل",
+			"Amount_In": "Cantidad en",
+			"Amount_Out": "المبلغ خارج",
+			"Balance_Weight": "الوزن التوازن",
+			"Bill_Weight_Out": "فاتورة الوزن خارج",
+			"Bill_Weight_in": "بيل الوزن في",
+			"Expense_Amount_in": "مبلغ المصاريف في"
+		},
+		"Stock_reports_With_Average_Rates": {
+			"Retail_Rate": "سعر التجزئة",
+			"Retail_Sale_Value": "قيمة بيع التجزئة",
+			"Whole_Sale_Rate": "سعر الجملة",
+			"Whole_Sale_Value": "قيمة البيع الكاملة"
+		},
+		"Transaction_Stock_Rice": {
+			"Balance_Out": "التوازن خارج"
+		},
+		"stock_reports": {
+			"Closing": "إغلاق",
+			"Main_Type": "النوع الرئيسي",
+			"Report_Type": "نوع التقرير",
+			"Variety_Type": "نوع التنوع"
+		}
+	},
+	"Titles": {
+		"Purchase_Bill_History_Title": "فاتورة الشراء",
+		"Purchase_Trading": {
+			"Purchase_Bill_Form_Title": "نموذج فاتورة الشراء",
+			"Purchase_Return_form": "نموذج إرجاع الشراء",
+			"purchaseInvoiceTradingFormTitle": "شكل فاتورة الشراء",
+			"purchaseOrderHistoryTitle": "أمر الشراء",
+			"purchase_Invoice_Trading_History_Title": "فاتورة الشراء",
+			"purchase_Order_From": "نموذج طلب الشراء",
+			"purchase_Return_History": "عودة الشراء"
+		},
+		"StockReports": {
+			"ItemLedger": "البند دفتر الأستاذ",
+			"Item_Ledger_TradePro": "البند ليدجر التجارة برو",
+			"Stock_Report_TradePro": "تقرير التجارة المهنية",
+			"Stock_Reports_With_Average_Rates": "تقارير المخزون بمتوسط ​​الأسعار",
+			"Transactio_Stock_Rice": "صفقة مخزون الأرز",
+			"stock_Report": "تقارير المخزون"
+		}
+	},
+	"sharedBtnsCaptions": {
+		"Clear": "صافي",
+		"Close": "قريب",
+		"Go_Back": "عد",
+		"Load": "حمل",
+		"Reset": "إعادة تعيين",
+		"Search": "بحث",
+		"add": "إضافة",
+		"add_new": "اضف جديد",
+		"filter": "منقي",
+		"generate": "انشاء",
+		"save": "حفظ",
+		"show": "يعرض",
+		"update": "تحديث"
+	},
+	"sharedFormHistoryCaptions": {
+		"Account": "الحساب",
+		"Amount": "كمية",
+		"Average_Rate": "المعدل المتوسط",
+		"Balance": "الرصيد",
+		"Balance_Qty": "كمية الاتزان",
+		"Balance_Weight": "الوزن التوازن",
+		"Bill_Amount": "مبلغ الفاتورة",
+		"Bill_Number": "رقم الفاتوره",
+		"Branch": "اسم الفرع",
+		"Closing_Balance": "الرصيد الختامي",
+		"Comm_Rate": "نسبة العمولة",
+		"Commission_Amount": "مبلغ العمولة",
+		"Commission_Remarks": "ملاحظات الهيئة",
+		"Crop_Year": "محصول السنة",
+		"Current_Amount_In": "المبلغ الحالي في",
+		"Current_Quantity_In": "الكمية الحالية في",
+		"Current_Quantity_Out": "الكمية الحالية خارج",
+		"Current_Weight_in": "الوزن الحالي في",
+		"Current_weight_Out": "الوزن الحالي خارج",
+		"Date": "تاريخ",
+		"DeliveryDays": "أيام التسليم",
+		"Delivery_Term": "فريق التوصيل",
+		"Description": "وصف",
+		"Doc_Type": "نوع الوثيقة",
+		"DocumentDate": "تاريخ المستند",
+		"Document_Code": "رمز الوثيقة",
+		"Due_Date": "تاريخ الاستحقاق",
+		"Due_Days": "أيام الاستحقاق",
+		"Due_Percent": "نسبة الاستحقاق",
+		"From_Date": "من التاريخ",
+		"GP_No": "رقم GP",
+		"Gp_Date": "تاريخ GP",
+		"Is_Required": "مطلوب",
+		"Item_Category": "العنصر فئة",
+		"Item_Code": "رمز الصنف",
+		"Item_Quantity": "البند الكمية",
+		"Item_Type": "نوع العنصر",
+		"Job/Lot": "الوظيفة / اللوت",
+		"Manual_Bill": "رقم الفاتورة اليدوية",
+		"Net_Weight": "الوزن الصافي",
+		"Opening_Balance": "الرصيد الافتتاحي",
+		"Opening_In": "فتح الرصيد في",
+		"Opening_Out": "فتح الرصيد",
+		"Opening_Weight": "الوزن الافتتاحي",
+		"Order_Category": "فئة الطلب",
+		"Order_Number": "رقم الطلب",
+		"Pack_Type": "نوع العبوة",
+		"Payment_Term": "دفع",
+		"Project_Name": "اسم المشروع",
+		"Qty_In": "في الكمية",
+		"Qty_Out": "كمية خارج",
+		"Quantity": "كمية",
+		"Rate": "السعر",
+		"Rate_UOM": "معدل وحدة القياس",
+		"Record_Number": "رقم قياسي",
+		"Remarks": "ملاحظات",
+		"Stock_Price": "سعر السهم",
+		"Stock_Quantity": "كمية المخزون",
+		"Stock_Value": "قيمة السهم",
+		"Stock_Weight": "وزن المخزون",
+		"Supplier_Customer": "المورد / العميل",
+		"Tax": "الضريبة ٪",
+		"Tax_Amount": "قيمة الضريبة",
+		"To_Date": "حتى الآن",
+		"Total_Amount": "المبلغ الإجمالي",
+		"Total_Quantity": "الكمية الإجمالية",
+		"Type": "اكتب",
+		"UOM": "وحدة القياس",
+		"UOM_Code": "كود وحدة القياس",
+		"User_Name": "اسم المستخدم",
+		"Vehicle_No": "عدد المركبات",
+		"Voucher": "فاتورة",
+		"Warehouse": "مستودع",
+		"Weight_In": "الوزن في",
+		"Weight_Out": "فاتورة الوزن خارج",
+		"commAgent": "الوسيط التجارى",
+		"commType": "نوع العمولة",
+		"credit": "ائتمان",
+		"debit": "مدين",
+		"docNo": "رقم المستند",
+		"expenseAmount": "مبلغ المصاريف",
+		"freightAmount": "كمية الشحن",
+		"itemName": "اسم العنصر",
+		"percentage": "النسبة المئوية",
+		"status": "الحالة",
+		"supplierName": "اسم المورد",
+		"userName": "اسم المستخدم"
+	}
+}

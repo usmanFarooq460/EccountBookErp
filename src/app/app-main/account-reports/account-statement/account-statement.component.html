@@ -1,0 +1,184 @@
+<div class="container-fluid">
+  <!-- start page title -->
+  <app-pagetitle title="Account Statement" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+  <!-- end page title -->
+  <!-- <div class="d-flex justify-content-end">
+    <dx-button class="ml-3 mb-3" type="default" text="Back" routerLink="/admin-panel/report-panel" icon="back" style="background-color: #ffa100"></dx-button>
+  </div> -->
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card shadow-sm">
+        <dx-form id="form" [formData]="accountStatementFormData" #accountStatementForm [showRequiredMark]="false">
+          <dxi-item cssClass="px-2" itemType="group" [colCountByScreen]="{ lg: 3, md: 2, sm: 2, xs: 1 }">
+            <dxi-item
+              dataField="company"
+              editorType="dxSelectBox"
+              [editorOptions]="{
+                placeholder: 'Company Name',
+                items: companyList,
+                valueExpr: 'Id',
+                displayExpr: 'CompName',
+                showClearButton: 'true',
+                stylingMode: 'underlined'
+              }"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <dxi-validation-rule type="required" message="Company is required"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item
+              dataField="branch"
+              editorType="dxSelectBox"
+              [editorOptions]="{
+                placeholder: 'Branch Name',
+                items: branchList,
+                searchEnabled: true,
+                valueExpr: 'Id',
+                displayExpr: 'BranchName',
+                showClearButton: 'true',
+                stylingMode: 'underlined'
+              }"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <dxi-validation-rule type="required" message="Branch is required"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item
+              dataField="project"
+              editorType="dxSelectBox"
+              [editorOptions]="{
+                placeholder: 'Project Name',
+                items: projectList,
+                searchEnabled: true,
+                valueExpr: 'Id',
+                displayExpr: 'ProjectName',
+                showClearButton: 'true',
+                stylingMode: 'underlined'
+              }"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <dxi-validation-rule type="required" message="Project is required"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item
+              dataField="account"
+              editorType="dxSelectBox"
+              [editorOptions]="{
+                placeholder: 'Account',
+                dataSource: accountList,
+                valueExpr: 'Id',
+                searchEnabled: true,
+                displayExpr: 'AccountTitle',
+                showClearButton: 'true',
+                stylingMode: 'underlined'
+              }"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <dxi-validation-rule type="required" message="account is required"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item dataField="fromDate" editorType="dxDateBox" [editorOptions]="{ placeholder: 'Account', displayFormat: 'dd-MMM-yyyy', showClearButton: 'true', stylingMode: 'underlined' }">
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <dxi-validation-rule type="required" message="Date is required"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item dataField="toDate" editorType="dxDateBox" [editorOptions]="{ displayFormat: 'dd-MMM-yyyy', showClearButton: 'true', stylingMode: 'underlined' }">
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <dxi-validation-rule type="required" message="Company is required"></dxi-validation-rule>
+            </dxi-item>
+          </dxi-item>
+        </dx-form>
+        <div class="d-flex justify-content-end mt-1">
+          <div class="m-0 p-1">
+            <dx-button type="success" (onClick)="onSubmit()" text="Show"></dx-button>
+          </div>
+          <div class="m-0 p-1">
+            <dx-button type="danger" (onClick)="clear()" text="Clear"></dx-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row pt-2">
+    <div class="col-md-12" [ngStyle]="{ height: IsLoadedInPopup == false ? gridColumnHeight : gridColumnHeightInPopupWithGrid }" #stickyGrid [class.sticky]="sticky">
+      <div class="col-md-12 text-left m-0">
+        <h3 style="font-weight: bold; margin: 0">Account: {{ AccountTitle }}</h3>
+      </div>
+      <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+        <dx-data-grid
+          #accountStatmentGrid
+          id="gridContainer"
+          [height]="gridHeight"
+          [dataSource]="dataSource"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnReordering]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+          (onToolbarPreparing)="onToolPreparingOfItemHistoryGrid($event)"
+        >
+          <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-filter-row [visible]="filter"></dxo-filter-row>
+          <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+          <dxo-header-filter [visible]="filter"></dxo-header-filter>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-load-panel [enabled]="false"></dxo-load-panel>
+          <dxo-export [enabled]="true" fileName="Estimates" [allowExportSelectedData]="true">
+            <dxo-texts exportAll="Export All Rows"></dxo-texts>
+          </dxo-export>
+          <!-- <dxo-selection mode="multiple" selectAllMode="page" showCheckBoxesMode="always"></dxo-selection> -->
+          <dxo-paging [enabled]="true"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 100, 500, 1000]" [showInfo]="true"></dxo-pager>
+          <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('accountStatmentGrid') }}"></dxo-state-storing>
+          <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+
+          <dxi-column dataField="" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+          <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+            <div class="d-con-cell-action">
+              <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+            </div>
+          </div>
+          <!-- <dxo-paging [pageSize]="20"> </dxo-paging>
+          <dxo-pager
+            [visible]="true"
+            [allowedPageSizes]="allowedPageSizes"
+            [displayMode]="displayMode"
+            [showPageSizeSelector]="showPageSizeSelector"
+            [showInfo]="showInfo"
+            [showNavigationButtons]="showNavButtons"
+          >
+          </dxo-pager> -->
+
+          <dxi-column dataField="VoucherDate" caption="Voucher Date" dataType="date" [width]="110" [format]="'dd-MMM-yyyy'"></dxi-column>
+          <dxi-column dataField="VoucherCode" caption="Voucher Code" dataType="number" [width]="110" [alignment]="'left'"></dxi-column>
+          <dxi-column dataField="DocumentTypeCode" [width]="80" caption="Doc Type" dataType="string"></dxi-column>
+          <dxi-column dataField="AccountTitle" caption="Account Title" dataType="string"></dxi-column>
+          <dxi-column dataField="Comments" caption="Comments" dataType="string"></dxi-column>
+          <dxi-column dataField="DebitAmount" caption="Dedit" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="CreditAmount" caption="Credit" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+
+          <dxo-export [enabled]="true" [allowExportSelectedData]="true"></dxo-export>
+
+          <dxo-summary>
+            <dxi-total-item column="AccountTitle" summaryType="count" displayFormat="Total Records: {0}"> </dxi-total-item>
+            <dxi-total-item column="DebitAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+
+            <dxi-total-item column="CreditAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+          </dxo-summary>
+
+          <dxo-scrolling [mode]="'infinite'"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+    </div>
+    <div class="col-md-12">
+      <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+      <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+      <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+    </div>
+  </div>
+</div>
+<!-- container-fluid -->

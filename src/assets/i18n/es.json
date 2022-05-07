@@ -1,0 +1,193 @@
+{
+	"Purchase_Trading": {
+		"Purchase_Bill": {
+			"Atachments": "Archivos adjuntos",
+			"Form": {
+				"Calculations": "Cálculos",
+				"Load_Caption": "Cargar desde orden de compra",
+				"Loader_Title": "Carga de orden de compra",
+				"Payment_Due_Schedule": "Cronograma de vencimiento de pago"
+			},
+			"Stock_Party": "fiesta de valores"
+		},
+		"purchase_Trading_Return": {
+			"Comm_Amount": "Importe de la comisión",
+			"comm_Remarks": "Comentarios de la Comisión"
+		},
+		"purchase_invoice_trading": {
+			"ItemAddLess": "Agregar o menos por artículo",
+			"creditAccount": "Cuenta de crédito",
+			"debitToItem": "Cargo a artículo",
+			"suppAddLess": "Proveedor Añadir menos"
+		},
+		"purchase_order": {
+			"DeliveryStartDate": "Fecha de inicio de entrega",
+			"OrderExpiryDate": "Fecha de vencimiento del pedido",
+			"RefNo": "Número de referencia",
+			"catSerail": "Categoría Serie",
+			"orderCat": "Categoría de pedido",
+			"termsDescription": "Términos Descripción",
+			"validateDate": "Validar fecha"
+		}
+	},
+	"SharedGridCaptions": {
+		"Grid_Message": "Arrastre un encabezado de columna aquí para agrupar por esa columna",
+		"SR_": "Número de serie",
+		"Total_Records": "Registros totales",
+		"action": "Acción",
+		"noRecordAdded": "sin registro agregado",
+		"noRecordFound": "Ningún record fue encontrado",
+		"open": "abierto",
+		"sum": "Suma"
+	},
+	"Stock_Reports": {
+		"Item_ledger": {
+			"Add_Less_weight": "Añadir menos peso",
+			"Amount_In": "Cantidad en",
+			"Amount_Out": "Cantidad de salida",
+			"Balance_Weight": "Contrapeso",
+			"Bill_Weight_Out": "Peso de factura fuera",
+			"Bill_Weight_in": "Peso del billete en",
+			"Expense_Amount_in": "Importe del gasto en"
+		},
+		"Stock_reports_With_Average_Rates": {
+			"Retail_Rate": "Tarifa minorista",
+			"Retail_Sale_Value": "Valor de venta minorista",
+			"Whole_Sale_Rate": "Tarifa mayorista",
+			"Whole_Sale_Value": "Valor de venta total"
+		},
+		"Transaction_Stock_Rice": {
+			"Balance_Out": "Fuera de balance"
+		},
+		"stock_reports": {
+			"Closing": "Clausura",
+			"Main_Type": "Tipo principal",
+			"Report_Type": "Tipo de informe",
+			"Variety_Type": "Tipo de variedad"
+		}
+	},
+	"Titles": {
+		"Purchase_Bill_History_Title": "Factura de compra",
+		"Purchase_Trading": {
+			"Purchase_Bill_Form_Title": "Formulario de factura de compra",
+			"Purchase_Return_form": "Formulario de devolución de Compra",
+			"purchaseInvoiceTradingFormTitle": "forma de factura de compra",
+			"purchaseOrderHistoryTitle": "ORDEN DE COMPRA",
+			"purchase_Invoice_Trading_History_Title": "Factura de compra",
+			"purchase_Order_From": "Formulario de orden de compra",
+			"purchase_Return_History": "Devolución de compra"
+		},
+		"StockReports": {
+			"ItemLedger": "Libro mayor de artículos",
+			"Item_Ledger_TradePro": "Libro mayor de artículos Trade Pro",
+			"Stock_Report_TradePro": "Informe de acciones Trade Pro",
+			"Stock_Reports_With_Average_Rates": "Informes de acciones con tasas promedio",
+			"Transactio_Stock_Rice": "Transacción Stock Arroz",
+			"stock_Report": "Informes de existencias"
+		}
+	},
+	"sharedBtnsCaptions": {
+		"Clear": "Clara",
+		"Close": "Cerrar",
+		"Go_Back": "Regresa",
+		"Load": "Carga",
+		"Reset": "Reiniciar",
+		"Search": "Buscar",
+		"add": "Añadir",
+		"add_new": "Añadir nuevo",
+		"filter": "Filtrar",
+		"generate": "Generar",
+		"save": "Salvar",
+		"show": "Show",
+		"update": "Actualizar"
+	},
+	"sharedFormHistoryCaptions": {
+		"Account": "Cuenta",
+		"Amount": "Cantidad",
+		"Average_Rate": "Tasa promedio",
+		"Balance": "Equilibrio",
+		"Balance_Qty": "Cantidad de saldo",
+		"Balance_Weight": "Peso fuera",
+		"Bill_Amount": "Total de la factura",
+		"Bill_Number": "Número de factura",
+		"Branch": "Nombre de la rama",
+		"Closing_Balance": "Balance de cierre",
+		"Comm_Rate": "Porcentaje de comision",
+		"Commission_Amount": "Importe de la comisión",
+		"Commission_Remarks": "Comentarios de la Comisión",
+		"Crop_Year": "Año de cosecha",
+		"Current_Amount_In": "Importe actual en",
+		"Current_Quantity_In": "Cantidad actual en",
+		"Current_Quantity_Out": "Cantidad actual de salida",
+		"Current_Weight_in": "Peso actual en",
+		"Current_weight_Out": "Peso actual fuera",
+		"Date": "Fecha",
+		"DeliveryDays": "Días de entrega",
+		"Delivery_Term": "Plazo de entrega",
+		"Description": "Descripción",
+		"Doc_Type": "Tipo de Documento",
+		"DocumentDate": "Fecha del documento",
+		"Document_Code": "Código de documento",
+		"Due_Date": "Fecha de vencimiento",
+		"Due_Days": "Días de vencimiento",
+		"Due_Percent": "Porcentaje adeudado",
+		"From_Date": "Partir de la fecha",
+		"GP_No": "médico de cabecera no",
+		"Gp_Date": "Fecha del médico de cabecera",
+		"Is_Required": "Es requerida",
+		"Item_Category": "Categoría de artículo",
+		"Item_Code": "Código del objeto",
+		"Item_Quantity": "cantidad de objetos",
+		"Item_Type": "Tipo de artículo",
+		"Job/Lot": "Trabajo/Lote",
+		"Manual_Bill": "factura manual no",
+		"Net_Weight": "Peso neto",
+		"Opening_Balance": "Saldo de apertura",
+		"Opening_In": "Saldo de apertura en",
+		"Opening_Out": "Saldo de apertura",
+		"Opening_Weight": "Peso de apertura",
+		"Order_Category": "Categoría de pedido",
+		"Order_Number": "Número de orden",
+		"Pack_Type": "Tipo de paquete",
+		"Payment_Term": "PAGO",
+		"Project_Name": "Nombre del proyecto",
+		"Qty_In": "en cantidad",
+		"Qty_Out": "Cantidad fuera",
+		"Quantity": "Cantidad",
+		"Rate": "Precio",
+		"Rate_UOM": "tasa de unidad de medida",
+		"Record_Number": "Número de registro",
+		"Remarks": "Observaciones",
+		"Stock_Price": "Precio de mercado",
+		"Stock_Quantity": "Cantidad de stock",
+		"Stock_Value": "Valor de las acciones",
+		"Stock_Weight": "Peso de existencias",
+		"Supplier_Customer": "Proveedor/Cliente",
+		"Tax": "Impuesto%",
+		"Tax_Amount": "Importe del impuesto",
+		"To_Date": "Hasta la fecha",
+		"Total_Amount": "Cantidad total",
+		"Total_Quantity": "Cantidad total",
+		"Type": "Escribe",
+		"UOM": "Unidad de medida",
+		"UOM_Code": "Código de Unidad de medida",
+		"User_Name": "Nombre de usuario",
+		"Vehicle_No": "Número de vehículo",
+		"Voucher": "Vale",
+		"Warehouse": "almacén",
+		"Weight_In": "En peso",
+		"Weight_Out": "Peso de factura fuera",
+		"commAgent": "comisionista",
+		"commType": "Tipo de comisión",
+		"credit": "Crédito",
+		"debit": "Débito",
+		"docNo": "Número del Documento",
+		"expenseAmount": "Monto del gasto",
+		"freightAmount": "Cantidad de carga",
+		"itemName": "Nombre del árticulo",
+		"percentage": "Porcentaje",
+		"status": "Estado",
+		"supplierName": "Nombre del proveedor",
+		"userName": "Nombre de usuario"
+	}
+}

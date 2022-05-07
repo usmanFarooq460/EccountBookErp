@@ -1,0 +1,210 @@
+<dx-popup
+  [width]="WidthOfPopupWithGrid"
+  [height]="HeightOfPopupWithGrid"
+  [position]="'center'"
+  [showTitle]="true"
+  title="Pending GRN For Purchase Invoice"
+  titleTemplate="titleTemplate"
+  [dragEnabled]="true"
+  [closeOnOutsideClick]="false"
+  [(visible)]="visibility"
+>
+  <div *dxTemplate="let content of 'titleTemplate'" class="d-flex justify-content-between">
+    <div class="">
+      <h4>Available Stock Transactions for Issuance</h4>
+    </div>
+    <div class="d-flex justify-content-end">
+      <dx-button class="p-0 mr-1 border-0" text="" type="default" icon="search" (onClick)="getAvailableDataForIssuance()"></dx-button>
+      <dx-button class="p-0 mr-1 border-0" text="" type="danger" icon="export" (onClick)="TransferDataAgainstSelectedRecord()"></dx-button>
+      <dx-button class="p-0 mr-1 border-0" type="success" (onClick)="filtering()" icon="filter"></dx-button>
+      <dx-button class="p-0 border-0" type="warning" (onClick)="loadPopup()" icon="close"></dx-button>
+    </div>
+  </div>
+
+  <div *dxTemplate="let data of 'content'">
+    <dx-scroll-view [showScrollbar]="'always'" [scrollByContent]="true" [scrollByThumb]="true">
+      <div class="row">
+        <div class="col-md-12">
+          <dx-form id="form" [formData]="availableTransactionsForIssuanceFormData" #availableTransactionsForIssuanceForm>
+            <dxi-item itemType="group" [colCount]="6" cssClass="mb-3">
+              <dxi-item dataField="FromDate" editorType="dxDateBox" [editorOptions]="{ placeholder: 'From Date', displayFormat: 'dd-MMM-yyyy' }" cssClass="px-1 m-0">
+                <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              </dxi-item>
+              <dxi-item dataField="ToDate" editorType="dxDateBox" [editorOptions]="{ placeholder: 'To Date', displayFormat: 'dd-MMM-yyyy' }" cssClass="px-1 m-0">
+                <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              </dxi-item>
+              <dxi-item
+                dataField="InventoryParentCategories"
+                editorType="dxSelectBox"
+                [editorOptions]="{
+                  placeholder: 'Parent Category',
+                  items: itemParentCategoryListFromStockEvaluation,
+                  valueExpr: 'Id',
+                  displayExpr: 'InvParentCateCode',
+                  searchEnabled: true
+                }"
+                cssClass="px-1 m-0"
+              >
+                <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              </dxi-item>
+              <dxi-item
+                dataField="RefDocumentTypeId"
+                editorType="dxSelectBox"
+                [editorOptions]="{
+                  placeholder: 'Reference Document',
+                  items: referenceDocumentListFromStockEvaluation,
+                  valueExpr: 'RefDocumentTypeId',
+                  displayExpr: 'DocumentTypeDescription',
+                  searchEnabled: true
+                }"
+                cssClass="px-1 m-0"
+              >
+                <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              </dxi-item>
+              <dxi-item
+                dataField="SupplierCustomerId"
+                editorType="dxSelectBox"
+                [editorOptions]="{
+                  placeholder: 'Supplier/Customer',
+                  items: suppliersListFromStockEvaluation,
+                  valueExpr: 'SupplierCustomerId',
+                  displayExpr: 'CompanyName',
+                  searchEnabled: true
+                }"
+                [colSpan]="2"
+                cssClass="px-1 m-0"
+              >
+                <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" [colCount]="6" cssClass="mb-3">
+              <dxi-item
+                dataField="WarehouseId"
+                editorType="dxSelectBox"
+                [editorOptions]="{
+                  placeholder: 'Warehouse',
+                  items: warehouseListFromStockEvaluation,
+                  valueExpr: 'WarehouseId',
+                  displayExpr: 'WareHouseName',
+                  searchEnabled: true
+                }"
+                [colSpan]="2"
+                cssClass="px-1 m-0"
+              >
+                <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              </dxi-item>
+              <dxi-item
+                dataField="CropYear"
+                editorType="dxSelectBox"
+                [editorOptions]="{
+                  placeholder: 'CropYear',
+                  items: CropYearsListFromStockEvaluation,
+                  valueExpr: 'CropYear',
+                  displayExpr: 'CropYear',
+                  searchEnabled: true
+                }"
+                [colSpan]="1"
+                cssClass="px-1 m-0"
+              >
+                <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              </dxi-item>
+              <dxi-item
+                dataField="JobLotId"
+                editorType="dxSelectBox"
+                [editorOptions]="{
+                  placeholder: 'Job/Lot',
+                  items: jobLotListFromStockEvaluation,
+                  valueExpr: 'JobLotId',
+                  displayExpr: 'JobLotDescription',
+                  searchEnabled: true
+                }"
+                cssClass="px-1 m-0"
+              >
+                <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              </dxi-item>
+
+              <dxi-item
+                dataField="ItemId"
+                editorType="dxSelectBox"
+                [editorOptions]="{
+                  placeholder: 'Item',
+                  items: itemListFromStockEvaluation,
+                  valueExpr: 'ItemId',
+                  displayExpr: 'ItemName',
+                  searchEnabled: true
+                }"
+                [colSpan]="2"
+                cssClass="px-1 m-0"
+              >
+                <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              </dxi-item>
+            </dxi-item>
+          </dx-form>
+        </div>
+        <div class="col-md-12">
+          <dx-data-grid
+            #availableTransactionsForIssuanceGrid
+            id="availableTransactionsForIssuanceGrid"
+            [width]="WidthOfGridInPopupWithGrid"
+            [height]="HeightOfGridInPopupWithGrid"
+            [dataSource]="availableTransactionsForIssuanceDataSource"
+            [showColumnLines]="false"
+            [showRowLines]="true"
+            [rowAlternationEnabled]="true"
+            [allowColumnReordering]="true"
+            [allowColumnResizing]="true"
+            [columnAutoWidth]="true"
+            [showBorders]="true"
+            (onToolbarPreparing)="onToolbarPreparing($event)"
+          >
+            <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+            <dxo-group-panel [visible]="true"></dxo-group-panel>
+            <dxo-filter-row [visible]="filter"></dxo-filter-row>
+            <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+            <dxo-header-filter [visible]="filter"></dxo-header-filter>
+            <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+            <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('availableTransactionsForIssuanceGrid') }}"></dxo-state-storing>
+            <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+            <dxo-load-panel [enabled]="false"></dxo-load-panel>
+            <dxo-selection mode="multiple" selectAllMode="page" showCheckBoxesMode="always"></dxo-selection>
+            <dxi-column dataField="" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+
+            <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+              <div class="d-con-cell-action">
+                <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+              </div>
+            </div>
+
+            <dxi-column dataField="RefDocumentType" caption="RefDocType" dataType="string"></dxi-column>
+            <dxi-column dataField="DocDate" caption="Doc Date" dataType="date" alignment="center" [format]="'dd-MM-yyyy'"></dxi-column>
+            <dxi-column dataField="DocCodeNo" caption="DocCode" dataType="number" alignment="left" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+            <dxi-column dataField="GrnNo" caption="GrnNo" dataType="number" alignment="left" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+            <dxi-column dataField="SupplierCustomerName" caption="Supplier/Customer" dataType="string"></dxi-column>
+            <dxi-column dataField="VehicleNo" caption="VehicleNo" dataType="number" alignment="left" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+            <dxi-column dataField="GpNo" caption="GpNo" dataType="number" alignment="left" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+            <dxi-column dataField="WareHouseCode" caption="WareHouseCode" dataType="number" alignment="left" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+            <dxi-column dataField="ItemName" caption="ItemName" dataType="string"></dxi-column>
+            <dxi-column dataField="CropBatch" caption="CropBatch" dataType="string"></dxi-column>
+            <dxi-column dataField="JobLotCode" caption="JobLotCode" dataType="string"></dxi-column>
+            <dxi-column dataField="PackingType" caption="PackingType" dataType="string"></dxi-column>
+            <dxi-column dataField="PackSize" caption="PackSize" dataType="number" alignment="left" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+            <dxi-column dataField="QtyIn" caption="QtyIn" dataType="number" alignment="left" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+            <dxi-column dataField="QtyOut" caption="QtyOut" dataType="number" alignment="left" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+            <dxi-column dataField="QtyBalance" caption="QtyBalance" dataType="number" alignment="left" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+            <dxi-column dataField="WeightIn" caption="WeightIn" dataType="number" alignment="left" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+            <dxi-column dataField="WeightOut" caption="WeightOut" dataType="number" alignment="left" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+            <dxi-column dataField="WeightBalance" caption="WeightBalance" dataType="number" alignment="left" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+            <dxi-column dataField="AVgRate" caption="AVgRate" dataType="number" alignment="left" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+            <dxi-column dataField="Equivalent" caption="Equivalent" dataType="number" alignment="left" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+            <dxi-column dataField="ItemAmount" caption="ItemAmount" dataType="number" alignment="left" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+
+            <dxo-summary>
+              <dxi-total-item column="SupplierCustomerName" summaryType="count" displayFormat="Total Records: {0}"> </dxi-total-item>
+            </dxo-summary>
+            <dxo-scrolling [scrollByContent]="true" [scrollByThumb]="true" [showScrollbar]="'always'" [scrollLeft]="true" mode="infinite"></dxo-scrolling>
+          </dx-data-grid>
+        </div>
+      </div>
+    </dx-scroll-view>
+  </div>
+</dx-popup>

@@ -1,0 +1,1006 @@
+<!-- Form Design By ==================  Sufian Arshaf
+ Property Of ======================= Synergic Corporate Solution  -->
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="d-flex justify-content-between">
+        <div class="">
+          <app-pagetitle [title]="'Bills Payables'"></app-pagetitle>
+        </div>
+        <div class="">
+          <!-- <dx-switch #switch [value]="true" class="mr-2" hint="Print On Save" (onValueChanged)="printAfterSave($event)"></dx-switch> -->
+          <dx-button class="mr-2" [hint]="'Add New'" type="default" icon="plus" (onClick)="resetForm()"> </dx-button>
+          <dx-button icon="refresh" type="success" [hint]="'Reload Form Fields'" (onClick)="GetData()"></dx-button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-8">
+      <div class="row">
+        <div class="col-md-12">
+          <dx-form [formData]="PurchaseOrderFormData" #PurchaseOrderForm1 [colCountByScreen]="{ lg: 3, md: 3, sm: 3, xs: 3 }" [showRequiredMark]="false">
+            <dxi-item
+              cssClass="px-1 m-0"
+              dataField="DocNo"
+              editorType="dxNumberBox"
+              [editorOptions]="{
+                placeholder: 'Import PO #',
+                readOnly: true
+              }"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <dxi-validation-rule type="required" message="Import Purchase Order No is required"></dxi-validation-rule>
+            </dxi-item>
+
+            <dxi-item
+              cssClass="px-1 m-0"
+              dataField="DocDate"
+              editorType="dxDateBox"
+              [editorOptions]="{
+                placeholder: 'Doc Date',
+                displayFormat: 'dd-MMM-yyyy'
+              }"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <dxi-validation-rule type="required" message="Doc Date is required"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item
+              cssClass="px-1 m-0"
+              dataField="LcPoOrderStatus"
+              editorType="dxSelectBox"
+              [editorOptions]="{
+                items: StatusList,
+                valueExpr: 'name',
+                displayExpr: 'name',
+                placeholder: 'Status',
+                searchEnabled: true
+              }"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <dxi-validation-rule type="required" message="Status is required"></dxi-validation-rule>
+            </dxi-item>
+          </dx-form>
+          <div class="ship-to-buyer shadow mt-2">
+            <div class="header">
+              <dx-form id="form" [formData]="PurchaseOrderFormData" #PurchaseOrderForm2 [showRequiredMark]="false" [colCountByScreen]="{ lg: 2, md: 2, sm: 1, xs: 1 }">
+                <dxi-item
+                  cssClass="px-1 mb-2"
+                  [colSpan]="2"
+                  dataField="SupplierCustomerId"
+                  editorType="dxSelectBox"
+                  [editorOptions]="{
+                    dataSource: SupplierCustomerList,
+                    valueExpr: 'Id',
+                    displayExpr: 'CompanyName',
+                    placeholder: 'Supplier',
+                    searchEnabled: true,
+                    onInitialized: setFocus,
+                    onValueChanged: FilterLcOrderBySupplierId
+                  }"
+                >
+                  <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+                  <dxi-validation-rule type="required" message="Sales Person Ac is required"></dxi-validation-rule>
+                </dxi-item>
+              </dx-form>
+            </div>
+            <app-supp-cust-detail-under-combo
+              #SuppCustDetailUnderComboComponent
+              [ComboValue]="PurchaseOrderFormData?.SupplierCustomerId > 0"
+              [SupplierCustomerFormType]="2"
+            ></app-supp-cust-detail-under-combo>
+          </div>
+
+          <dx-form id="form" [formData]="PurchaseOrderFormData" #PurchaseOrderForm2 [showRequiredMark]="false" [colCountByScreen]="{ lg: 3, md: 3, sm: 3, xs: 3 }">
+            <dxi-item
+              cssClass="px-1 m-0"
+              dataField="ExImLcOrderId"
+              editorType="dxSelectBox"
+              [editorOptions]="{
+                items: LcOrderListBySupplierId,
+                valueExpr: 'Id',
+                displayExpr: 'LcOrderNo',
+                placeholder: 'Contract No',
+                searchEnabled: true,
+                onValueChanged: GetDataOnBaseOfLcOrder
+              }"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <dxi-validation-rule type="required" message="Contract No is required"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item
+              cssClass="px-1 m-0"
+              dataField="DocNoByLcOrder"
+              editorType="dxNumberBox"
+              [editorOptions]="{
+                placeholder: 'Import Order #',
+                readOnly: true
+              }"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <dxi-validation-rule type="required" message="Import Order No is required"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item
+              cssClass="px-1 m-0"
+              dataField="FcyAmount"
+              editorType="dxNumberBox"
+              [editorOptions]="{
+                placeholder: 'Total Fc Amount',
+                readOnly: true
+              }"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <dxi-validation-rule type="required" message="F Currency Amount is required"></dxi-validation-rule>
+            </dxi-item>
+
+            <dxi-item
+              cssClass="px-1 m-0"
+              dataField="ExchangeRate"
+              editorType="dxNumberBox"
+              [editorOptions]="{
+                placeholder: 'ExchangeRate',
+                onValueChanged: homeCurrencyCalculation
+              }"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <dxi-validation-rule type="required" message="Exchange Rate is required"></dxi-validation-rule>
+            </dxi-item>
+
+            <dxi-item
+              cssClass="px-1 m-0"
+              dataField="Amount"
+              editorType="dxNumberBox"
+              [editorOptions]="{
+                placeholder: 'HCY Amount',
+                readOnly: true
+              }"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+            </dxi-item>
+
+            <dxi-item
+              cssClass="px-1 m-0"
+              dataField="Containers"
+              editorType="dxNumberBox"
+              [editorOptions]="{
+                placeholder: 'No Of Containers'
+              }"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+            </dxi-item>
+          </dx-form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mt-2">
+      <!-- ================================================== New =============================  -->
+      <div class="card">
+        <h4 class="title">Contract Info</h4>
+        <div class="Contract-info-wrape">
+          <div class="caption-wrape">
+            <div class="caption">#:23</div>
+            <div class="caption">{{ PurchaseOrderFormData?.ETADate | date }}</div>
+          </div>
+          <div class="caption-wrape">
+            <div class="caption">Payment Terms:</div>
+            <div class="value">Advance</div>
+          </div>
+          <div class="caption-wrape">
+            <div class="caption">Deleivery Terms:</div>
+            <div class="value">FOB</div>
+          </div>
+          <div class="caption-wrape">
+            <div class="caption">FCY Currency:</div>
+            <div class="value">Dollar</div>
+          </div>
+          <div class="caption-wrape">
+            <div class="caption">HCY Currency:</div>
+            <div class="value">Dollar</div>
+          </div>
+          <div class="caption-wrape">
+            <div class="caption">Loading Port:</div>
+            <div class="value">Karachi</div>
+          </div>
+          <div class="caption-wrape">
+            <div class="caption">Destination Port:</div>
+            <div class="value">Gawadar</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr />
+  <div class="row">
+    <div class="col-md-12">
+      <dx-form [formData]="PurchaseOrderDetailFormData" #PurchaseOrderDetailForm [colCountByScreen]="{ lg: 6, md: 4, sm: 3, xs: 2 }" [showRequiredMark]="false">
+        <dxi-item
+          cssClass="px-1 m-0"
+          [colSpan]="2"
+          dataField="ItemId"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            dataSource: ItemList,
+            valueExpr: 'Id',
+            displayExpr: 'ItemName',
+            placeholder: 'Item',
+            onValueChanged: handleItemChange,
+            searchEnabled: true,
+            readOnly: true
+          }"
+        >
+          <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+          <dxi-validation-rule type="required" message="Item Name is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="PackingTypeId"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: PackingTypeList,
+            valueExpr: 'Id',
+            displayExpr: 'Description',
+            placeholder: 'Pack Type',
+            searchEnabled: true,
+            readOnly: true
+          }"
+        >
+          <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+          <dxi-validation-rule type="required" message="Pack Type is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          editorType="dxNumberBox"
+          dataField="Qty"
+          [editorOptions]="{
+            placeholder: 'Qty/M.Ton',
+            format: '#,###.###',
+            onValueChanged: handleWeightAndAmountCalculation
+          }"
+        >
+          <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+          <dxi-validation-rule type="required" message="Qty/M.Ton is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="ItemUomId"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: UomList,
+            valueExpr: 'Id',
+            displayExpr: 'Equivalent',
+            placeholder: 'Pack Size',
+            searchEnabled: true,
+            onValueChanged: handleWeightAndAmountCalculation
+          }"
+        >
+          <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+          <dxi-validation-rule type="required" message="Item Uom is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="NoOfPacks"
+          editorType="dxNumberBox"
+          [editorOptions]="{
+            placeholder: 'NoOfPacks',
+            format: '#,###',
+            readOnly: true
+          }"
+        >
+          <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+          <dxi-validation-rule type="required" message="NoOfBags is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="PackingWeight"
+          editorType="dxNumberBox"
+          [editorOptions]="{
+            placeholder: 'Pack Weight',
+            format: '#,###.###',
+            onValueChanged: handleWeightAndAmountCalculation
+          }"
+        >
+          <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+          <dxi-validation-rule type="required" message="Packing Weight is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="GrossWeight"
+          editorType="dxNumberBox"
+          [editorOptions]="{
+            placeholder: 'Gross Weight',
+            format: '#,###.###',
+            readOnly: true
+          }"
+        >
+          <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+          <dxi-validation-rule type="required" message="Gross Weight is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="ItemRate"
+          editorType="dxNumberBox"
+          [editorOptions]="{
+            placeholder: 'Cost/M.Ton',
+            format: '#,###.###',
+            readOnly: true,
+            onValueChanged: handleWeightAndAmountCalculation
+          }"
+        >
+          <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+          <dxi-validation-rule type="required" message="Rate is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          [colSpan]="2"
+          dataField="RateUomId"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: UomList,
+            valueExpr: 'Id',
+            displayExpr: 'Equivalent',
+            placeholder: 'Cost Uom',
+            searchEnabled: true,
+            onValueChanged: handleWeightAndAmountCalculation
+          }"
+        >
+          <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+          <dxi-validation-rule type="required" message="Rate Uom is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          [colSpan]="1"
+          dataField="ItemAmount"
+          editorType="dxNumberBox"
+          [editorOptions]="{
+            placeholder: 'Amount',
+            format: '#,###.###',
+            readOnly: true
+          }"
+        >
+          <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+          <dxi-validation-rule type="required" message="Total Amount is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          [colSpan]="2"
+          dataField="RemarksDetail"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            placeholder: 'Remarks'
+          }"
+        >
+          <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+        </dxi-item>
+        <dxi-item cssClass="mt-2" [colSpan]="2">
+          <div *dxTemplate>
+            <dx-button type="default" icon="plus" text="{{ detailEditMode ? 'Update' : 'Add' }}" (onClick)="addDetailRecord2Grid()"> </dx-button>
+          </div>
+        </dxi-item>
+      </dx-form>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card mt-4">
+        <dx-data-grid
+          #PurchaseOrderDetailGrid
+          id="dataGrid"
+          [dataSource]="dataSource"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+        >
+          <dxo-load-panel [enabled]="true"></dxo-load-panel>
+          <dxi-column dataField="Id" [visible]="false" caption="Id"></dxi-column>
+          <dxi-column dataField="ExImLcOrderPurchaseOrderId" [visible]="false" caption="ExImLcOrderPurchaseOrderId"></dxi-column>
+          <dxi-column dataField="ItemId" [visible]="false" caption="ItemId"></dxi-column>
+          <dxi-column dataField="ItemUomId" [visible]="false" caption="ItemUomId"></dxi-column>
+          <dxi-column dataField="PackingTypeId" [visible]="false" caption="PackingTypeId"></dxi-column>
+          <dxi-column dataField="RateUomId" [visible]="false" caption="RateUomId"></dxi-column>
+          <dxi-column dataField="ToWarehouseId" [visible]="false" caption="ToWarehouseId"></dxi-column>
+          <dxi-column dataField="JobLotId" [visible]="false" caption="JobLotId  "></dxi-column>
+          <dxi-column dataField="ItemName" caption="Item" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="PackingType" caption="PackingType" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="Qty" caption="Qty" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 3 }"></dxi-column>
+          <dxi-column dataField="ItemUOM" caption="ItemUOM" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="NoOfPacks" caption="NoOfPacks" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="PackingWeight" caption="PackingWeight" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 3 }"></dxi-column>
+          <dxi-column dataField="GrossWeight" caption="GrossWeight" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 3 }"></dxi-column>
+          <dxi-column dataField="ItemRate" caption="ItemRate" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 3 }"></dxi-column>
+          <dxi-column dataField="RateUom" caption="RateUom" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="ItemAmount" caption="ItemAmount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 3 }"></dxi-column>
+          <dxi-column dataField="HomeCurrencyAmount" caption="HomeAmount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 3 }"></dxi-column>
+          <dxi-column dataField="RemarksDetail" caption="RemarksDetail" dataType="string" alignment="left"></dxi-column>
+          <dxo-summary>
+            <dxi-total-item column="Qty" summaryType="sum" name="NoOfUnit" displayFormat="{0}" valueFormat="#,##0.###"> </dxi-total-item>
+            <dxi-total-item column="NoOfPacks" summaryType="sum" name="NetWeight" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="PackingWeight" summaryType="sum" name="RatePrice" displayFormat="{0}" valueFormat="#,##0.###"> </dxi-total-item>
+            <dxi-total-item column="GrossWeight" summaryType="sum" name="GrossWeight" displayFormat="{0}" valueFormat="#,##0.###"> </dxi-total-item>
+            <dxi-total-item column="HomeCurrencyAmount" summaryType="sum" name="HomeCurrencyAmount" displayFormat="{0}" valueFormat="#,##0.###"> </dxi-total-item>
+            <dxi-total-item column="ItemAmount" summaryType="sum" name="TotalAmount" displayFormat="{0}" valueFormat="#,##0.###"> </dxi-total-item>
+          </dxo-summary>
+          <dxi-column
+            dataField="button"
+            [fixed]="true"
+            [fixedPosition]="'right'"
+            [width]="120"
+            alignment="right"
+            caption="Action"
+            [allowEditing]="false"
+            [allowExporting]="false"
+            [allowFiltering]="false"
+            [allowFixing]="false"
+            [allowGrouping]="false"
+            [allowHeaderFiltering]="false"
+            [allowHiding]="false"
+            [allowReordering]="false"
+            [allowResizing]="false"
+            [allowSearch]="false"
+            [allowSorting]="false"
+            cellTemplate="buttonTemplate"
+          ></dxi-column>
+          <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+            <div class="d-con-cell-action">
+              <dx-button type="default" stylingMode="text" icon="plus" hint="Dublicate Row" (onClick)="addDublicateRowDetailRecord2Grid(cellInfo.data)"> </dx-button>
+              <dx-button type="default" stylingMode="text" icon="edit" (onClick)="editDetailRecordRow(cellInfo.data, cellInfo.rowIndex)"> </dx-button>
+              <dx-button type="danger" stylingMode="text" icon="trash" (onClick)="deleteDetailRecordRow(cellInfo.rowIndex)"> </dx-button>
+            </div>
+          </div>
+          <dxo-scrolling columnRenderingMode="virtual" [scrollByContent]="true" [scrollByThumb]="true" [scrollLeft]="true" [showScrollbar]="'always'"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="d-flex justify-content-end fixed-bottom p-4 pb-6">
+        <dx-button icon="save" text="{{ PurchaseOrderParamsId > 0 ? 'Update' : 'Save' }}" type="success" (onClick)="onSave()"></dx-button>
+        <div class="m-1"></div>
+        <dx-button icon="close" text="Close" type="danger" routerLink="/import-definition/purchase-order-history"></dx-button>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+      <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+      <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+    </div>
+    <div class="col-md-12">
+      <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="d-flex justify-content-between">
+        <div class=""><h4>Import Purchase Order</h4></div>
+        <div class="">
+          <dx-button class="mx-1" icon="pulldown" type="info" (onClick)="GetData()"></dx-button>
+          <dx-button class="mx-1" icon="refresh" type="success" (onClick)="resetForm()"></dx-button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <dx-form [formData]="PurchaseOrderFormData" #PurchaseOrderForm [colCountByScreen]="{ lg: 6, md: 4, sm: 3, xs: 2 }" [showRequiredMark]="false">
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="DocNo"
+      editorType="dxNumberBox"
+      [editorOptions]="{
+        placeholder: 'Import PO #',
+        readOnly: true
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Import Purchase Order No is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="DocDate"
+      editorType="dxDateBox"
+      [editorOptions]="{
+        placeholder: 'Doc Date',
+        displayFormat: 'dd-MMM-yyyy'
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Doc Date is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      [colSpan]="2"
+      dataField="SupplierCustomerId"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        dataSource: SupplierCustomerList,
+        valueExpr: 'Id',
+        displayExpr: 'CompanyName',
+        placeholder: 'Supplier',
+        searchEnabled: true,
+        onInitialized: setFocus,
+        onValueChanged: FilterLcOrderBySupplierId
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Sales Person Ac is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      [colSpan]="1"
+      dataField="ExImLcOrderId"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        items: LcOrderListBySupplierId,
+        valueExpr: 'Id',
+        displayExpr: 'LcOrderNo',
+        placeholder: 'Contract No',
+        searchEnabled: true,
+        onValueChanged: GetDataOnBaseOfLcOrder
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Contract No is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="DocNoByLcOrder"
+      editorType="dxNumberBox"
+      [editorOptions]="{
+        placeholder: 'Import Order #',
+        readOnly: true
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Import Order No is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="SupplierOrderDate"
+      editorType="dxDateBox"
+      [editorOptions]="{
+        placeholder: 'Contract Date',
+        displayFormat: 'dd-MMM-yyyy',
+        readOnly: true
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Contract Date is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      [colSpan]="1"
+      dataField="PaymentTermId"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        items: PaymentTermList,
+        valueExpr: 'Id',
+        displayExpr: 'LcOrderTerm',
+        placeholder: 'Payment Term',
+        searchEnabled: true,
+        readOnly: true
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Payment Term is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      [colSpan]="1"
+      dataField="DeliveryTermId"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        items: DeliveryTermList,
+        valueExpr: 'Id',
+        displayExpr: 'Code',
+        placeholder: 'Delivery Term',
+        searchEnabled: true,
+        readOnly: true
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Notify Party is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      [colSpan]="1"
+      dataField="FcyId"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        items: MultiCurrencyList,
+        valueExpr: 'Id',
+        displayExpr: 'CurrencyCode',
+        placeholder: 'Fcy Code',
+        searchEnabled: true,
+        readOnly: true
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Fcy Code is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="FcyAmount"
+      editorType="dxNumberBox"
+      [editorOptions]="{
+        placeholder: 'Total Fc Amount',
+        readOnly: true
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="F Currency Amount is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      [colSpan]="1"
+      dataField="HomeCurrencyId"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        items: MultiCurrencyList,
+        valueExpr: 'Id',
+        displayExpr: 'CurrencyCode',
+        placeholder: 'Home Currency',
+        searchEnabled: true,
+        readOnly: true
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Home Currency is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="ExchangeRate"
+      editorType="dxNumberBox"
+      [editorOptions]="{
+        placeholder: 'ExchangeRate',
+        onValueChanged: homeCurrencyCalculation
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Exchange Rate is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="Amount"
+      editorType="dxNumberBox"
+      [editorOptions]="{
+        placeholder: 'Amount',
+        readOnly: true
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      [colSpan]="1"
+      dataField="LoadingPortId"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        items: LoadingPortList,
+        valueExpr: 'Id',
+        displayExpr: 'PortName',
+        placeholder: 'Loading Port',
+        searchEnabled: true,
+        readOnly: true
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Loading Port is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      [colSpan]="1"
+      dataField="DestinationPortId"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        items: LoadingPortList,
+        valueExpr: 'Id',
+        displayExpr: 'PortName',
+        placeholder: 'Destination Port',
+        searchEnabled: true,
+        readOnly: true
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Destination Port is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="Containers"
+      editorType="dxNumberBox"
+      [editorOptions]="{
+        placeholder: 'No Of Containers'
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      [colSpan]="1"
+      dataField="LcPoOrderStatus"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        items: StatusList,
+        valueExpr: 'name',
+        displayExpr: 'name',
+        placeholder: 'Status',
+        searchEnabled: true
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Status is required"></dxi-validation-rule>
+    </dxi-item>
+  </dx-form>
+
+  <hr />
+  <dx-form [formData]="PurchaseOrderDetailFormData" #PurchaseOrderDetailForm [colCountByScreen]="{ lg: 6, md: 4, sm: 3, xs: 2 }" [showRequiredMark]="false">
+    <dxi-item
+      cssClass="px-1 m-0"
+      [colSpan]="2"
+      dataField="ItemId"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        dataSource: ItemList,
+        valueExpr: 'Id',
+        displayExpr: 'ItemName',
+        placeholder: 'Item',
+        onValueChanged: handleItemChange,
+        searchEnabled: true,
+        readOnly: true
+      }"
+    >
+      <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+      <dxi-validation-rule type="required" message="Item Name is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      [colSpan]="1"
+      dataField="PackingTypeId"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        items: PackingTypeList,
+        valueExpr: 'Id',
+        displayExpr: 'Description',
+        placeholder: 'Pack Type',
+        searchEnabled: true,
+        readOnly: true
+      }"
+    >
+      <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+      <dxi-validation-rule type="required" message="Pack Type is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      [colSpan]="1"
+      editorType="dxNumberBox"
+      dataField="Qty"
+      [editorOptions]="{
+        placeholder: 'Qty/M.Ton',
+        format:'#,###.###',
+        onValueChanged: handleWeightAndAmountCalculation
+      }"
+    >
+      <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+      <dxi-validation-rule type="required" message="Qty/M.Ton is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      [colSpan]="1"
+      dataField="ItemUomId"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        items: UomList,
+        valueExpr: 'Id',
+        displayExpr: 'Equivalent',
+        placeholder: 'Pack Size',
+        searchEnabled: true,
+        onValueChanged: handleWeightAndAmountCalculation
+      }"
+    >
+      <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+      <dxi-validation-rule type="required" message="Item Uom is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      [colSpan]="1"
+      dataField="NoOfPacks"
+      editorType="dxNumberBox"
+      [editorOptions]="{
+        placeholder: 'NoOfPacks',
+        format:'#,###',
+        readOnly: true
+      }"
+    >
+      <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+      <dxi-validation-rule type="required" message="NoOfBags is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      [colSpan]="1"
+      dataField="PackingWeight"
+      editorType="dxNumberBox"
+      [editorOptions]="{
+        placeholder: 'Pack Weight',
+        format:'#,###.###',
+        onValueChanged: handleWeightAndAmountCalculation
+      }"
+    >
+      <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+      <dxi-validation-rule type="required" message="Packing Weight is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      [colSpan]="1"
+      dataField="GrossWeight"
+      editorType="dxNumberBox"
+      [editorOptions]="{
+        placeholder: 'Gross Weight',
+        format:'#,###.###',
+        readOnly: true
+      }"
+    >
+      <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+      <dxi-validation-rule type="required" message="Gross Weight is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      [colSpan]="1"
+      dataField="ItemRate"
+      editorType="dxNumberBox"
+      [editorOptions]="{
+        placeholder: 'Cost/M.Ton',
+        format:'#,###.###',
+        readOnly: true,
+        onValueChanged: handleWeightAndAmountCalculation
+      }"
+    >
+      <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+      <dxi-validation-rule type="required" message="Rate is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      [colSpan]="1"
+      dataField="RateUomId"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        items: UomList,
+        valueExpr: 'Id',
+        displayExpr: 'Equivalent',
+        placeholder: 'Cost Uom',
+        searchEnabled: true,
+        onValueChanged: handleWeightAndAmountCalculation
+      }"
+    >
+      <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+      <dxi-validation-rule type="required" message="Rate Uom is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      [colSpan]="1"
+      dataField="ItemAmount"
+      editorType="dxNumberBox"
+      [editorOptions]="{
+        placeholder: 'Amount',
+        format:'#,###.###',
+        readOnly: true
+      }"
+    >
+      <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+      <dxi-validation-rule type="required" message="Total Amount is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      [colSpan]="6"
+      dataField="RemarksDetail"
+      editorType="dxTextBox"
+      [editorOptions]="{
+        placeholder: 'Remarks'
+      }"
+    >
+      <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+    </dxi-item>
+    <dxi-item cssClass="mt-2" [colSpan]="2">
+      <div *dxTemplate>
+        <dx-button type="default" icon="plus" text="{{ detailEditMode ? 'Update' : 'Add' }}" (onClick)="addDetailRecord2Grid()"> </dx-button>
+      </div>
+    </dxi-item>
+  </dx-form>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card mt-4">
+        <dx-data-grid
+          #PurchaseOrderDetailGrid
+          id="dataGrid"
+          [dataSource]="dataSource"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+        >
+          <dxo-load-panel [enabled]="true"></dxo-load-panel>
+          <dxi-column dataField="Id" [visible]="false" caption="Id"></dxi-column>
+          <dxi-column dataField="ExImLcOrderPurchaseOrderId" [visible]="false" caption="ExImLcOrderPurchaseOrderId"></dxi-column>
+          <dxi-column dataField="ItemId" [visible]="false" caption="ItemId"></dxi-column>
+          <dxi-column dataField="ItemUomId" [visible]="false" caption="ItemUomId"></dxi-column>
+          <dxi-column dataField="PackingTypeId" [visible]="false" caption="PackingTypeId"></dxi-column>
+          <dxi-column dataField="RateUomId" [visible]="false" caption="RateUomId"></dxi-column>
+          <dxi-column dataField="ToWarehouseId" [visible]="false" caption="ToWarehouseId"></dxi-column>
+          <dxi-column dataField="JobLotId" [visible]="false" caption="JobLotId  "></dxi-column>
+          <dxi-column dataField="ItemName" caption="Item" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="PackingType" caption="PackingType" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="Qty" caption="Qty" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 3 }"></dxi-column>
+          <dxi-column dataField="ItemUOM" caption="ItemUOM" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="NoOfPacks" caption="NoOfPacks" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="PackingWeight" caption="PackingWeight" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 3 }"></dxi-column>
+          <dxi-column dataField="GrossWeight" caption="GrossWeight" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 3 }"></dxi-column>
+          <dxi-column dataField="ItemRate" caption="ItemRate" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 3 }"></dxi-column>
+          <dxi-column dataField="RateUom" caption="RateUom" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="ItemAmount" caption="ItemAmount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 3 }"></dxi-column>
+          <dxi-column dataField="HomeCurrencyAmount" caption="HomeAmount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 3 }"></dxi-column>
+          <dxi-column dataField="RemarksDetail" caption="RemarksDetail" dataType="string" alignment="left"></dxi-column>
+          <dxo-summary>
+            <dxi-total-item column="Qty" summaryType="sum" name="NoOfUnit" displayFormat="{0}" valueFormat="#,##0.###"> </dxi-total-item>
+            <dxi-total-item column="NoOfPacks" summaryType="sum" name="NetWeight" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="PackingWeight" summaryType="sum" name="RatePrice" displayFormat="{0}" valueFormat="#,##0.###"> </dxi-total-item>
+            <dxi-total-item column="GrossWeight" summaryType="sum" name="GrossWeight" displayFormat="{0}" valueFormat="#,##0.###"> </dxi-total-item>
+            <dxi-total-item column="HomeCurrencyAmount" summaryType="sum" name="HomeCurrencyAmount" displayFormat="{0}" valueFormat="#,##0.###"> </dxi-total-item>
+            <dxi-total-item column="ItemAmount" summaryType="sum" name="TotalAmount" displayFormat="{0}" valueFormat="#,##0.###"> </dxi-total-item>
+          </dxo-summary>
+          <dxi-column
+            dataField="button"
+            [fixed]="true"
+            [fixedPosition]="'right'"
+            [width]="120"
+            alignment="right"
+            caption="Action"
+            [allowEditing]="false"
+            [allowExporting]="false"
+            [allowFiltering]="false"
+            [allowFixing]="false"
+            [allowGrouping]="false"
+            [allowHeaderFiltering]="false"
+            [allowHiding]="false"
+            [allowReordering]="false"
+            [allowResizing]="false"
+            [allowSearch]="false"
+            [allowSorting]="false"
+            cellTemplate="buttonTemplate"
+          ></dxi-column>
+          <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+            <div class="d-con-cell-action">
+              <dx-button type="default" stylingMode="text" icon="plus" hint="Dublicate Row" (onClick)="addDublicateRowDetailRecord2Grid(cellInfo.data)"> </dx-button>
+              <dx-button type="default" stylingMode="text" icon="edit" (onClick)="editDetailRecordRow(cellInfo.data, cellInfo.rowIndex)"> </dx-button>
+              <dx-button type="danger" stylingMode="text" icon="trash" (onClick)="deleteDetailRecordRow(cellInfo.rowIndex)"> </dx-button>
+            </div>
+          </div>
+          <dxo-scrolling columnRenderingMode="virtual" [scrollByContent]="true" [scrollByThumb]="true" [scrollLeft]="true" [showScrollbar]="'always'"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="d-flex justify-content-end fixed-bottom p-4 pb-6">
+        <dx-button icon="save" text="{{ PurchaseOrderParamsId > 0 ? 'Update' : 'Save' }}" type="success" (onClick)="onSave()"></dx-button>
+        <div class="m-1"></div>
+        <dx-button icon="close" text="Close" type="danger" routerLink="/import-definition/purchase-order-history"></dx-button>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+      <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+      <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+    </div>
+    <div class="col-md-12">
+      <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+    </div>
+  </div>
+</div> -->

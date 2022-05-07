@@ -1,0 +1,264 @@
+<h4 class="ml-2">Pending Working</h4>
+<div class="content-wrapper m-0 p-0">
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-6">
+          <!-- Odd Card Here: like Card#1 , Card#3 , Card#5 , ......-->
+          <!-- Card#1 Pending GatePass For Export Forwarding -->
+          <div class="card  " style="background: #d56032">
+            <div class="card-header">
+              <h3 class="card-title">Pending GatePass For Export Forwarding</h3>
+    
+              <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                
+                <span title="{{ pendingTaskForExportForwarding }} Pending Tasks!" class="badge bg-dark">{{ pendingTaskForExportForwarding }}</span>
+                <button type="button" class="btn btn-tool">
+                  <!-- <i class="fas fa-minus"></i> -->
+                </button>
+              </div>
+              <!-- /.card-tools -->
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body" style="margin: 0; padding: 0">
+              <dx-data-grid
+                style="height: 250px"
+                id="gridContainer"
+                [dataSource]="pendingGatepassForExportDispatchForwardingData"
+                [showColumnLines]="true"
+                [showRowLines]="true"
+                [rowAlternationEnabled]="true"
+                [allowColumnResizing]="true"
+                [columnAutoWidth]="true"
+                [showBorders]="false"
+                [wordWrapEnabled]="true"
+              >
+                <dxo-load-panel [enabled]="true"></dxo-load-panel>
+                <dxi-column dataField="Sr_No" caption="Sr#" [width]="40"></dxi-column>
+                <dxi-column dataField="Gp_Date" caption="Gp Date" dataType="date" [format]="'dd-MMM-yyyy'"></dxi-column>
+                <dxi-column dataField="Gp_No" caption="Gp No"></dxi-column>
+                <dxi-column dataField="Supplier_Name" caption="Supplier Name" [width]="240"></dxi-column>
+                <dxi-column dataField="Qty" caption="Qunatity"></dxi-column>
+                <dxi-column dataField="NetWeight" caption="Weight"></dxi-column>
+                <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+              </dx-data-grid>
+            </div>
+            <!-- /.card-body -->
+          </div>
+
+          <!-- Card#3  -->
+          <div class="card  " style="background: #e1e459">
+            <div class="card-header">
+              <h3 class="card-title">Pending GatePass For GRN</h3>
+    
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                <span title="{{ pendingTaskForGatePassGrn }} Pending Tasks!" class="badge bg-dark">{{ pendingTaskForGatePassGrn }}</span>
+                <button type="button" class="btn btn-tool">
+                  <!-- <i class="fas fa-minus"></i> -->
+                </button>
+              </div>
+              <!-- /.card-tools -->
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body" style="margin: 0; padding: 0">
+              <dx-data-grid
+                style="height: 250px"
+                id="gridContainer"
+                [dataSource]="pendingGatePassForGrnData"
+                [showColumnLines]="true"
+                [showRowLines]="true"
+                [rowAlternationEnabled]="true"
+                [allowColumnResizing]="true"
+                [columnAutoWidth]="true"
+                [showBorders]="false"
+                [wordWrapEnabled]="true"
+              >
+                <dxo-load-panel [enabled]="true"></dxo-load-panel>
+    
+                <dxi-column dataField="Sr_No" caption="Sr#" [width]="40"></dxi-column>
+                <dxi-column dataField="Gp_Date" caption="Gp Date" dataType="date" [format]="'dd-MMM-yyyy'"></dxi-column>
+                <dxi-column dataField="Gp_No" caption="Gp No"></dxi-column>
+                <dxi-column dataField="Supplier_Name" caption="Supplier Name" [width]="240"></dxi-column>
+                <dxi-column dataField="Qty" caption="Qunatity"></dxi-column>
+                <dxi-column dataField="NetWeight" caption="Weight"></dxi-column>
+                <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+              </dx-data-grid>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- Card#5 -->
+          <div class="card  " style="background: #39cccc">
+            <div class="card-header">
+              <h3 class="card-title">Pending GatePass For GDN</h3>
+    
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                <span title="{{ pendingTaskForGatePassGdn }} Pending Tasks!" class="badge bg-dark">{{ pendingTaskForGatePassGdn }}</span>
+                <button type="button" class="btn btn-tool">
+                  <!-- <i class="fas fa-minus"></i> -->
+                </button>
+              </div>
+              <!-- /.card-tools -->
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body" style="margin: 0; padding: 0">
+              <dx-data-grid
+                style="height: 250px"
+                id="gridContainer"
+                [dataSource]="pendingGatePassForGdnData"
+                [showColumnLines]="true"
+                [showRowLines]="true"
+                [rowAlternationEnabled]="true"
+                [allowColumnResizing]="true"
+                [columnAutoWidth]="true"
+                [showBorders]="false"
+                [wordWrapEnabled]="true"
+              >
+                <dxo-load-panel [enabled]="true"></dxo-load-panel>
+    
+                <dxi-column dataField="Sr_No" caption="Sr#" [width]="40"></dxi-column>
+                <dxi-column dataField="Gp_Date" caption="Gp Date" dataType="date" [format]="'dd-MMM-yyyy'"></dxi-column>
+                <dxi-column dataField="Gp_No" caption="Gp No"></dxi-column>
+                <dxi-column dataField="Supplier_Name" caption="Supplier Name" [width]="240"></dxi-column>
+                <dxi-column dataField="Qty" caption="Qunatity"></dxi-column>
+                <dxi-column dataField="NetWeight" caption="Weight"></dxi-column>
+                <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+              </dx-data-grid>
+            </div>
+            <!-- /.card-body -->
+          </div>
+        </div>
+        <div class="col-md-6">
+          <!-- Even Cards Here: like Card#2 , Card#4, Card#6 , ...... -->
+          <!-- Card #2 :  -->
+          <div class="card  " style="background: #0ee050">
+            <div class="card-header">
+              <h3 class="card-title">Pending DO For Stock Transfer</h3>
+    
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                <span title="{{ pendingTaskForStockTransfer }} Pending Tasks!" class="badge bg-dark">{{ pendingTaskForStockTransfer }}</span>
+                <button type="button" class="btn btn-tool">
+                  <!-- <i class="fas fa-minus"></i> -->
+                </button>
+              </div>
+              <!-- /.card-tools -->
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body" style="margin: 0; padding: 0">
+              <dx-data-grid
+                style="height: 250px"
+                id="gridContainer"
+                [dataSource]="pendingDeliveryOrderForStockTransferData"
+                [showColumnLines]="true"
+                [showRowLines]="true"
+                [rowAlternationEnabled]="true"
+                [allowColumnResizing]="true"
+                [columnAutoWidth]="true"
+                [showBorders]="false"
+                [wordWrapEnabled]="true"
+              >
+                <dxo-load-panel [enabled]="true"></dxo-load-panel>
+    
+                <dxi-column dataField="Sr_No" caption="Sr#" [width]="40"></dxi-column>
+                <dxi-column dataField="Gp_Date" caption="Gp Date" dataType="date" [format]="'dd-MMM-yyyy'"></dxi-column>
+                <dxi-column dataField="Gp_No" caption="Gp No"></dxi-column>
+                <dxi-column dataField="Supplier_Name" caption="Supplier Name" [width]="240"></dxi-column>
+                <dxi-column dataField="Qty" caption="Qunatity"></dxi-column>
+                <dxi-column dataField="NetWeight" caption="Weight"></dxi-column>
+                <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+              </dx-data-grid>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- Card# 4: -->
+          <div class="card  " style="background: #e24876">
+            <div class="card-header">
+              <h3 class="card-title">Pending GRN For Purchase Bill</h3>
+    
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                <span title="{{ pendingTaskForPurchaseBill }} Pending Tasks!" class="badge bg-dark">{{ pendingTaskForPurchaseBill }}</span>
+                <button type="button" class="btn btn-tool">
+                  <!-- <i class="fas fa-minus"></i> -->
+                </button>
+              </div>
+              <!-- /.card-tools -->
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body" style="margin: 0; padding: 0">
+              <dx-data-grid
+                style="height: 250px"
+                id="gridContainer"
+                [dataSource]="pendingGrnForPurchaseBillData"
+                [showColumnLines]="true"
+                [showRowLines]="true"
+                [rowAlternationEnabled]="true"
+                [allowColumnResizing]="true"
+                [columnAutoWidth]="true"
+                [showBorders]="false"
+                [wordWrapEnabled]="true"
+              >
+                <dxo-load-panel [enabled]="true"></dxo-load-panel>
+    
+                <dxi-column dataField="Sr_No" caption="Sr#" [width]="40"></dxi-column>
+                <dxi-column dataField="Gp_Date" caption="Gp Date" dataType="date" [format]="'dd-MMM-yyyy'"></dxi-column>
+                <dxi-column dataField="Gp_No" caption="Gp No"></dxi-column>
+                <dxi-column dataField="Supplier_Name" caption="Supplier Name" [width]="240"></dxi-column>
+                <dxi-column dataField="Qty" caption="Qunatity"></dxi-column>
+                <dxi-column dataField="NetWeight" caption="Weight"></dxi-column>
+                <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+              </dx-data-grid>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- Card# 6: -->
+          <div class="card  " style="background: #ac54e7">
+            <div class="card-header">
+              <h3 class="card-title">Pending GDN For Sales Bill</h3>
+    
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                <span title="{{ pendingTaskForSaleBill }} Pending Tasks!" class="badge bg-dark">{{ pendingTaskForSaleBill }}</span>
+                <button type="button" class="btn btn-tool">
+                  <!-- <i class="fas fa-minus"></i> -->
+                </button>
+              </div>
+              <!-- /.card-tools -->
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body" style="margin: 0; padding: 0">
+              <dx-data-grid
+                style="height: 250px"
+                id="gridContainer"
+                [dataSource]="pendingGdnForSaleBillData"
+                [showColumnLines]="true"
+                [showRowLines]="true"
+                [rowAlternationEnabled]="true"
+                [allowColumnResizing]="true"
+                [columnAutoWidth]="true"
+                [showBorders]="false"
+                [wordWrapEnabled]="true"
+              >
+                <dxo-load-panel [enabled]="true"></dxo-load-panel>
+    
+                <dxi-column dataField="Sr_No" caption="Sr#" [width]="40"></dxi-column>
+                <dxi-column dataField="Gp_Date" caption="Gp Date" dataType="date" [format]="'dd-MMM-yyyy'"></dxi-column>
+                <dxi-column dataField="Gp_No" caption="Gp No"></dxi-column>
+                <dxi-column dataField="Supplier_Name" caption="Supplier Name" [width]="240"></dxi-column>
+                <dxi-column dataField="Qty" caption="Qunatity"></dxi-column>
+                <dxi-column dataField="NetWeight" caption="Weight"></dxi-column>
+                <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+              </dx-data-grid>
+            </div>
+            <!-- /.card-body -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+

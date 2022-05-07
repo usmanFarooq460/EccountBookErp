@@ -1,0 +1,392 @@
+<div class="container-fluid">
+  <div class="row" style="margin-bottom: 0">
+    <div class="col-md-12">
+      <dx-form id="form" [formData]="InventoryDashboardFormData" #InventoryDashboardForm [showRequiredMark]="false">
+        <dxi-item itemType="group" cssClass="second-group" [colCount]="6">
+          <dxi-item [colSpan]="2"> <h4 class="ml-2">Inventory Dashboard</h4> </dxi-item>
+
+          <dxi-item
+            dataField="dateType"
+            editorType="dxSelectBox"
+            [editorOptions]="{
+              placeholder: 'Date Type',
+              items: ListOfDates,
+              valueExpr: 'Id',
+              displayExpr: 'name',
+              onInitialized: setFocus,
+              onValueChanged: HndleChangeOfDateType,
+              stylingMode: 'underlined'
+            }"
+          >
+            <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          </dxi-item>
+          <dxi-item
+            cssClass="px-1 m-0 "
+            dataField="FromDate"
+            editorType="dxDateBox"
+            [editorOptions]="{
+              placeholder: 'From Date',
+              displayFormat: 'dd-MMM-yyyy',
+              onValueChanged: getDates,
+              stylingMode: 'underlined'
+            }"
+          >
+            <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+            <dxi-validation-rule type="required" message="Document Date is required"></dxi-validation-rule>
+          </dxi-item>
+
+          <dxi-item
+            cssClass="px-1 m-0"
+            dataField="ToDate"
+            editorType="dxDateBox"
+            [editorOptions]="{
+              placeholder: 'To Date',
+              displayFormat: 'dd-MMM-yyyy',
+              onValueChanged: getDates,
+              stylingMode: 'underlined'
+            }"
+          >
+            <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+            <dxi-validation-rule type="required" message="To Date is required"></dxi-validation-rule>
+          </dxi-item>
+          <dxi-item>
+            <dx-button class="mt-2" text="Show" type="success" (onClick)="getFromDate()"></dx-button>
+          </dxi-item>
+        </dxi-item>
+      </dx-form>
+    </div>
+  </div>
+  <div class="row">
+    <inventory-dasboard-grids
+      [popupVisible]="detailReportForOrdersByParentCategoryVisible"
+      [detailDataSourceForOrdersByParentCategory]="detailReportDataSourceForOrdersByParentCategory"
+      (dataForDetailReport)="OrderDetailByParentCategory($event)"
+      (popupVisiblity)="closeDetailRportForOrdersByParentCategory($event)"
+    ></inventory-dasboard-grids>
+  </div>
+  <!-- ------------------------------------------------------------------------ -->
+  <div class="content-wrapper" style="margin-top: 0">
+    <section class="content">
+      <div class="row">
+        <!-- ------------------------------Card#1 Start-------------------------------------- -->
+        <!-- <div id="card1" class="col-md-12">
+          <div class="card">
+            <div class="card-header" style="background: #eb76cd">
+              <h3 class="card-title">Outstanding Purchase Orders</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i id="purchasesGrid3" (click)="DataForPurchasesGrid3()" class="fas fa-minus"></i></button>
+
+                <span title="{{ outstandingPurchaseOrdersList.length }} Records!" class="badge bg-dark">{{ outstandingPurchaseOrdersList.length }}</span>
+                <button type="button" class="btn btn-tool">
+            
+                </button>
+              </div>
+              
+            </div>
+
+            <div class="card-body" style="margin: 0; padding: 0">
+              <dx-data-grid
+                id="gridContainer"
+                [dataSource]="outstandingPurchaseOrdersList"
+                [showColumnLines]="true"
+                [showRowLines]="true"
+                [rowAlternationEnabled]="true"
+                [allowColumnResizing]="true"
+                [columnAutoWidth]="true"
+                [showBorders]="false"
+                [wordWrapEnabled]="true"
+              >
+                <dxo-load-panel [enabled]="true"></dxo-load-panel>
+                <dxi-column dataField="DocDate" [width]="110" caption="Date" dataType="date" [format]="'dd-MMM-yyyy'" alignment="left"></dxi-column>
+                <dxi-column dataField="DocNo" [width]="60" caption="Doc#" alignment="left" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="SupplierName" dataType="string" alignment="left" caption="Party"></dxi-column>
+                <dxi-column dataField="ItemName" caption="Item" alignment="left" dataType="string"></dxi-column>
+                <dxi-column dataField="Crop" caption="Crop" dataType="string" alignment="left"></dxi-column>
+                <dxi-column dataField="OrderItemQty" caption="Qty" alignment="right" [width]="100" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="NetWeight" caption="Weight" alignment="right" [width]="100" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="ReceivedQty" caption="Recieved Qty" alignment="right" [width]="120" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="OrderStatus" [width]="70" caption="Status" alignment="right" cellTemplate="statusTemplate"></dxi-column>
+                <div *dxTemplate="let cellInfo of 'statusTemplate'">
+                  <span class="badge badge-info">Open</span>
+                </div>
+               
+                <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+              </dx-data-grid>
+            </div>
+
+          </div>
+        </div> -->
+
+        <!-- <div class="col-md-12">
+          <div class="card">
+            <div class="card-header" style="background: #eeeb4c">
+              <h3 class="card-title">Outstanding Sale Orders</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i id="salesGrid3" (click)="DataForOutstandingSaleOrder()" class="fas fa-minus"></i></button>
+
+                <span title="{{ outstandingSaleOrdersList.length }} Records!" class="badge bg-dark">{{ outstandingSaleOrdersList.length }}</span>
+                <button type="button" class="btn btn-tool">
+                
+                </button>
+              </div>
+       
+            </div>
+       
+            <div class="card-body" style="margin: 0; padding: 0">
+              <dx-data-grid
+                id="gridContainer"
+                [dataSource]="outstandingSaleOrdersList"
+                [showColumnLines]="true"
+                [showRowLines]="true"
+                [rowAlternationEnabled]="true"
+                [allowColumnResizing]="true"
+                [columnAutoWidth]="true"
+                [showBorders]="false"
+                [wordWrapEnabled]="true"
+              >
+                <dxo-load-panel [enabled]="true"></dxo-load-panel>
+                <dxi-column dataField="DocDate" caption="Date" [width]="110" dataType="date" [format]="'dd-MMM-yyyy'" alignment="left"></dxi-column>
+                <dxi-column dataField="DocNo" caption="Doc#" [width]="60" alignment="left" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="SupplierName" dataType="string" alignment="left" caption="Party"></dxi-column>
+                <dxi-column dataField="ItemName" caption="Item" alignment="left" dataType="string"></dxi-column>
+                <dxi-column dataField="Crop" caption="Crop" [width]="100" dataType="string" alignment="left"></dxi-column>
+                <dxi-column dataField="OrderItemQty" caption="Qty" alignment="right" [width]="100" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="NetWeight" caption="Weight" alignment="right" [width]="100" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="DispatchWeight" caption="Dispatched Weight" alignment="right" [width]="120" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="OrderStatus" [width]="70" caption="Status" alignment="right" cellTemplate="statusTemplate"></dxi-column>
+                <div *dxTemplate="let cellInfo of 'statusTemplate'">
+                  <span class="badge badge-info">Open</span>
+                </div>
+                
+                <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+              </dx-data-grid>
+            </div>
+
+          </div>
+        </div> -->
+
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header" style="background: #62e9e9">
+              <h3 class="card-title">Purchases From: {{ fromDateFull }} ToDate:{{ toDateFull }}</h3>
+              <div class="card-tools d-flex justify-content-between">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i id="purchasesGrid1" (click)="DataForPurchasesGrid1()" class="fas fa-minus"></i></button>
+                <span title="{{ purchasesGrid1DataList.length }} Records!" class="badge bg-dark">{{ purchasesGrid1DataList.length }}</span>
+                <button type="button" class="btn btn-tool"></button>
+              </div>
+            </div>
+
+            <div class="card-body" style="margin: 0; padding: 0">
+              <dx-data-grid
+                id="gridContainer"
+                [dataSource]="purchasesGrid1DataList"
+                [showColumnLines]="true"
+                [showRowLines]="true"
+                [rowAlternationEnabled]="true"
+                [allowColumnResizing]="true"
+                [columnAutoWidth]="true"
+                [showBorders]="false"
+                [wordWrapEnabled]="true"
+              >
+                <dxo-load-panel [enabled]="true"></dxo-load-panel>
+                <dxi-column dataField="ItemName" caption="Item" dataType="string" alignment="left"></dxi-column>
+                <dxi-column dataField="ItemQty" caption="Qty" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="TotalWeightByItem" dataType="number" [width]="90" alignment="right" caption="Weight" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="ItemAmount" caption="Amount" [width]="120" alignment="right" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="AvgRate" caption="Rate" [width]="90" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="TotalExpense" caption="Expense Amount" alignment="right" [width]="100" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="Exp40Kg" caption="Expense 40kg" alignment="left" alignment="right" [width]="100" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="ItemExpAmount" caption="Amount" [width]="120" alignment="right" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="AvgRateExp" caption="Avg. Rate" [width]="90" alignment="right" dataType="number" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+                <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+              </dx-data-grid>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header" style="background: #6d97f1">
+              <h3 class="card-title">Sales By Item From: {{ fromDateFull }} ToDate:{{ toDateFull }}</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i id="salesGrid1" (click)="SalesSummaryByItem()" class="fas fa-minus"></i></button>
+
+                <span title="{{ salesSummaryByItemDataList.length }} Records!" class="badge bg-dark">{{ salesSummaryByItemDataList.length }}</span>
+                <button type="button" class="btn btn-tool"></button>
+              </div>
+            </div>
+
+            <div class="card-body" style="margin: 0; padding: 0">
+              <dx-data-grid
+                id="gridContainer"
+                [dataSource]="salesSummaryByItemDataList"
+                [showColumnLines]="true"
+                [showRowLines]="true"
+                [rowAlternationEnabled]="true"
+                [allowColumnResizing]="true"
+                [columnAutoWidth]="true"
+                [showBorders]="false"
+                [wordWrapEnabled]="true"
+              >
+                <dxo-paging [enabled]="true"></dxo-paging>
+                <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="gridPageSize" [showInfo]="true"></dxo-pager>
+                <dxo-load-panel [enabled]="true"></dxo-load-panel>
+                <dxi-column dataField="ItemName" caption="Item Name" dataType="string" alignment="left"></dxi-column>
+
+                <dxi-column dataField="WeightKgs" caption="Weight Kgs" alignment="right" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="AvgRate" caption="Avg. Rate" alignment="right" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="ItemAmount" caption="Item Amount" alignment="right" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column
+                ><!-- <dxi-column dataField="" caption="Avg. Rate" alignment="right" [width]="70" dataType="number" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column> -->
+                <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+              </dx-data-grid>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header" style="background: #f39056">
+              <h3 class="card-title">Sales By Customer From: {{ fromDateFull }} ToDate:{{ toDateFull }}</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i id="salesGrid2" (click)="SalesSummaryByCustomer()" class="fas fa-minus"></i></button>
+
+                <span title="{{ salesSummaryByCustomerDataList.length }} Records!" class="badge bg-dark">{{ salesSummaryByCustomerDataList.length }}</span>
+                <button type="button" class="btn btn-tool"></button>
+              </div>
+            </div>
+
+            <div class="card-body" style="margin: 0; padding: 0">
+              <dx-data-grid
+                id="gridContainer"
+                [dataSource]="salesSummaryByCustomerDataList"
+                [showColumnLines]="true"
+                [showRowLines]="true"
+                [rowAlternationEnabled]="true"
+                [allowColumnResizing]="true"
+                [columnAutoWidth]="true"
+                [showBorders]="false"
+                [wordWrapEnabled]="true"
+              >
+                <dxo-paging [enabled]="true"></dxo-paging>
+                <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="gridPageSize" [showInfo]="true"></dxo-pager>
+                <dxo-load-panel [enabled]="true"></dxo-load-panel>
+
+                <dxi-column dataField="CustomerName" dataType="string" alignment="left" caption="Customer Name"></dxi-column>
+                <dxi-column dataField="WeightKgs" caption="Weight" alignment="right" [width]="100" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="AvgRate" caption="Avg. Rate" alignment="right" [width]="100" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="ItemAmount" caption="Amount" alignment="right" [width]="120" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+
+                <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+              </dx-data-grid>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header" style="background: #d059ee">
+              <h3 class="card-title">Stock By Item From: {{ fromDateFull }} ToDate:{{ toDateFull }}</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i id="stockByItemGrid" (click)="DataForStockByItemGrid()" class="fas fa-minus"></i></button>
+
+                <span title="{{ stockByItemGridList.length }} Records!" class="badge bg-dark">{{ stockByItemGridList.length }}</span>
+                <button type="button" class="btn btn-tool"></button>
+              </div>
+            </div>
+
+            <div class="card-body" style="margin: 0; padding: 0">
+              <dx-data-grid
+                id="gridContainer"
+                [dataSource]="stockByItemGridList"
+                [showColumnLines]="true"
+                [showRowLines]="true"
+                [rowAlternationEnabled]="true"
+                [allowColumnResizing]="true"
+                [columnAutoWidth]="true"
+                [showBorders]="false"
+                [wordWrapEnabled]="true"
+              >
+                <dxo-paging [enabled]="true"></dxo-paging>
+                <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="gridPageSize" [showInfo]="true"></dxo-pager>
+                <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+                <dxo-group-panel [visible]="false"></dxo-group-panel>
+                <dxo-load-panel [enabled]="true"></dxo-load-panel>
+                <dxi-column dataField="ItemName" caption="" dataType="string"></dxi-column>
+
+                <dxi-column dataField="Op_Balance" caption="Opeining Balance" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="CurrIn" caption="Curr In" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="CurrOut" caption="Curr Out" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="Cl_Balance" caption="Closing Balance" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+
+                <dxo-summary>
+                  <dxi-total-item column="CurrIn" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+                  <dxi-total-item column="CurrOut" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+                  <dxi-total-item column="Op_Balance" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+                  <dxi-total-item column="Cl_Balance" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+                </dxo-summary>
+
+                <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+              </dx-data-grid>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header" style="background: #f16845">
+              <h3 class="card-title">Stock By Warehouse From: {{ fromDateFull }} ToDate:{{ toDateFull }}</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i id="stockByWarehouseGrid" (click)="DataForStockByWarehouseGrid()" class="fas fa-minus"></i></button>
+
+                <span title="{{ stockByWarehouseList.length }} Records!" class="badge bg-dark">{{ stockByWarehouseList.length }}</span>
+                <button type="button" class="btn btn-tool"></button>
+              </div>
+            </div>
+
+            <div class="card-body" style="margin: 0; padding: 0">
+              <dx-data-grid
+                id="gridContainer"
+                [dataSource]="stockByWarehouseList"
+                [showColumnLines]="true"
+                [showRowLines]="true"
+                [rowAlternationEnabled]="false"
+                [allowColumnResizing]="true"
+                [columnAutoWidth]="true"
+                [showBorders]="false"
+                [wordWrapEnabled]="true"
+              >
+                <dxo-grouping [autoExpandAll]="false" [contextMenuEnabled]="true"></dxo-grouping>
+                <dxo-group-panel [visible]="false"></dxo-group-panel>
+                <dxo-load-panel [enabled]="true"></dxo-load-panel>
+                <dxo-paging [enabled]="true"></dxo-paging>
+                <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="gridPageSize" [showInfo]="true"></dxo-pager>
+                <dxi-column dataField="ItemName" caption="" dataType="string"></dxi-column>
+
+                <dxi-column dataField="WareHouseCode" caption="" [groupIndex]="0" dataType="string" alignment="left" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="Op_Balance" caption="Opeining Balance" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="CurrIn" caption="Curr In" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="CurrOut" caption="Curr Out" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="Cl_Balance" caption="Closing Balance" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+
+                <dxo-summary>
+                  <dxi-group-item column="CurrIn" summaryType="sum" displayFormat="{0}" [alignByColumn]="true" [showInGroupFooter]="true" valueFormat="#,##0.##"> </dxi-group-item>
+                  <dxi-group-item column="CurrOut" summaryType="sum" displayFormat="{0}" [alignByColumn]="true" [showInGroupFooter]="true" valueFormat="#,##0.##"> </dxi-group-item>
+                  <dxi-group-item column="Op_Balance" summaryType="sum" displayFormat="{0}" [alignByColumn]="true" [showInGroupFooter]="true" valueFormat="#,##0.##"> </dxi-group-item>
+                  <dxi-group-item column="Cl_Balance" summaryType="sum" displayFormat="{0}" [alignByColumn]="true" [showInGroupFooter]="true" valueFormat="#,##0.##"> </dxi-group-item>
+                </dxo-summary>
+
+                <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+              </dx-data-grid>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

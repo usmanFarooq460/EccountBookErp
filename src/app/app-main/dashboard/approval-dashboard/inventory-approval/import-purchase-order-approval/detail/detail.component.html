@@ -1,0 +1,25 @@
+<dx-data-grid
+  id="gridContainer"
+  [dataSource]="detailDataSource"
+  [showColumnLines]="false"
+  [showRowLines]="true"
+  [allowColumnReordering]="true"
+  [rowAlternationEnabled]="true"
+  [allowColumnResizing]="true"
+  [columnAutoWidth]="true"
+  [showBorders]="true"
+>
+  <dxi-column dataField="ItemName" caption="Item Name" dataType="string"></dxi-column>
+  <dxi-column dataField="PackingType" caption="Packing Type" dataType="string"></dxi-column>
+  <dxi-column dataField="UOMCode" caption="Item UOM" dataType="string"></dxi-column>
+  <dxi-column dataField="Qty" caption="Qty" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="ItemRate" caption="Rate" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="NetWeightDetail" caption="Net Weight" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="ItemAmount" caption="Item Amount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxo-summary>
+    <dxi-total-item column="Qty" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+    <dxi-total-item column="NetWeightDetail" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+    <dxi-total-item column="ItemAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+  </dxo-summary>
+  <dxo-scrolling [mode]="'virtual'" [columnRenderingMode]="'virtaul'"></dxo-scrolling>
+</dx-data-grid>

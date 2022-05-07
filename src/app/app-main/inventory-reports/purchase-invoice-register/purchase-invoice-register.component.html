@@ -1,0 +1,508 @@
+<div class="container-fluid">
+  <!-- start page title -->
+  <app-pagetitle title="Purchase Invoice Register" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+
+  <!-- end page title -->
+
+  <div class="row">
+    <div class="col-md-12">
+      <dx-form id="form" [formData]="purchaseInvoiceHistoryFormData" #purchaseInvoiceHistoryForm [showRequiredMark]="false" [colCountByScreen]="{ lg: 6, md: 3, sm: 2, xs: 1 }">
+        <dxi-item
+          dataField="FromDate"
+          cssClass="px-1 m-0"
+          editorType="dxDateBox"
+          [editorOptions]="{
+            displayFormat: 'dd-MMM-yyyy',
+            showClearButton: 'true',
+            placeholder: 'DateFrom',
+            stylingMode: 'underlined'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Date From is required"></dxi-validation-rule>
+        </dxi-item>
+
+        <dxi-item
+          dataField="ToDate"
+          cssClass="px-1 m-0"
+          editorType="dxDateBox"
+          [editorOptions]="{
+            displayFormat: 'dd-MMM-yyyy',
+            showClearButton: 'true',
+            placeholder: 'DateTo',
+            stylingMode: 'underlined'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Date To is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          dataField="FromDocNo"
+          cssClass="px-1 m-0"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            placeholder: 'Doc # From',
+            showClearButton: 'true',
+            stylingMode: 'underlined'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+        <dxi-item
+          dataField="ToDocNo"
+          cssClass="px-1 m-0"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            placeholder: 'Doc # To',
+            showClearButton: 'true',
+            stylingMode: 'underlined'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+        <dxi-item
+          dataField="SupplierCustomerId"
+          [colSpan]="2"
+          cssClass="px-1 m-0"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            dataSource: SupplierList,
+            searchEnabled: true,
+            valueExpr: 'Id',
+            displayExpr: 'CompanyName',
+            placeholder: 'Supplier Name',
+            showClearButton: 'true',
+            stylingMode: 'underlined'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+
+        <dxi-item
+          dataField="ItemId"
+          [colSpan]="2"
+          editorType="dxSelectBox"
+          cssClass="px-1 m-0"
+          [editorOptions]="{
+            dataSource: itemList,
+            searchEnabled: true,
+            valueExpr: 'Id',
+            displayExpr: 'ItemName',
+            placeholder: 'Variety',
+            showClearButton: 'true',
+            stylingMode: 'underlined'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          [colSpan]="1"
+          dataField="Crop"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: batchList,
+            valueExpr: 'CropYear',
+            displayExpr: 'CropYear',
+            placeholder: 'CropYear',
+            searchEnabled: true,
+            showClearButton: 'true',
+            stylingMode: 'underlined'
+          }"
+        >
+          <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+        </dxi-item>
+        <dxi-item
+          dataField="InventoryParentCateGory"
+          cssClass="px-1 m-0"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: InventoryParentCategoriesList,
+            searchEnabled: true,
+            valueExpr: 'Id',
+            displayExpr: 'InvParentCateDescription',
+            placeholder: 'Inventory Parent Category',
+            showClearButton: 'true',
+            stylingMode: 'underlined'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+        <dxi-item
+          dataField="reportType"
+          cssClass="px-1 m-0"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: reportType,
+            searchEnabled: true,
+            valueExpr: 'Id',
+            displayExpr: 'type',
+            placeholder: 'Report Type',
+            onValueChanged: getReportType,
+            showClearButton: 'true',
+            stylingMode: 'underlined'
+          }"
+        >
+          <dxi-validation-rule type="required" message="Rport Type is required"></dxi-validation-rule>
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+
+        <dxi-item cssClass="mt-2 px-1 d-flex justify-content-end">
+          <div *dxTemplate>
+            <dx-button id="search" class="mb-3" type="success" text="" (onClick)="onSubmit()" icon="search"> </dx-button>
+          </div>
+        </dxi-item>
+      </dx-form>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="showAvgRateByItemGrid">
+    <div class="col-md-12">
+      <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+        <dx-data-grid
+          #AverageRateByItemGrid
+          id="GridWithHeading"
+          [dataSource]="detailOnBasisOfAvgRateByItem"
+          [showColumnLines]="false"
+          [height]="gridHeight"
+          [showRowLines]="true"
+          [showBorders]="false"
+          [rowAlternationEnabled]="true"
+          [allowColumnReordering]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+          (onToolbarPreparing)="AverageRateByItemToolbarPreparing($event)"
+        >
+          <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+          <dxo-group-panel emptyPanelText=" " [visible]="true"></dxo-group-panel>
+          <dxo-filter-row [visible]="filter"></dxo-filter-row>
+          <dxo-header-filter [visible]="filter"></dxo-header-filter>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-load-panel [enabled]="false"></dxo-load-panel>
+          <dxo-export [enabled]="true" fileName="Purchase Average Rate by Item Summary" [allowExportSelectedData]="true">
+            <dxo-texts exportAll="Export All Rows"></dxo-texts>
+          </dxo-export>
+         
+          <dxo-paging [enabled]="true"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 300, 500, 1000, 2500, detailOnBasisOfAvgRateByItem.length]" [showInfo]="true"></dxo-pager>
+<dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('AverageRateByItemGridStateInPurchaseRegister') }}"></dxo-state-storing>
+        <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+        <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+              <dxi-column dataField="" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+          <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+            <div class="d-con-cell-action">
+              <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+            </div>
+          </div>
+          <dxi-column dataField="ItemName" [width]="415" caption="Item Name" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="CropYear" caption="CropYear" dataType="string" alignment="center"></dxi-column>
+          <dxi-column dataField="ItemQty" caption="Qunatity" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="TotalWeightByItem" caption="Weight(kgs)" alignment="right" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="ItemAmount" caption="Amount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+          <dxi-column dataField="TotalExpense" caption="Avg. Exp" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+          <dxi-column dataField="AvgRate" caption="Avg. Rate" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+          <dxi-column dataField="TotPurPrcnt" caption="Percent%" alignment="right" dataType="number"></dxi-column>
+          <div *dxTemplate="let data of 'AverageRateByItemGridTitleTemplate'">
+            <div class="informer">
+              <h4 class="name" style="font-weight: bold; color: whitesmoke">Average Rate By Item</h4>
+              <!-- <h3 class="count">{{ OutstandingPaddyPurchaseOrderDataCount }}</h3> -->
+            </div>
+          </div>
+          <dxo-export [enabled]="true" [allowExportSelectedData]="true"></dxo-export>
+
+          <dxo-scrolling [mode]="'infinite'" [scrollByContent]="true" [scrollByThumb]="true" [scrollLeft]="true" [showScrollbar]="'always'"></dxo-scrolling>
+          <dxo-summary>
+           
+            <dxi-total-item column="ItemName" summaryType="count" displayFormat="Total Records: {0}"> </dxi-total-item>
+
+            <dxi-total-item column="ItemQty" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="TotalWeightByItem" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="ItemAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="ExpenseAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-group-item column="ItemQty" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+            <dxi-group-item column="TotalWeightByItem" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+            <dxi-group-item column="ItemAmount" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+            <dxi-group-item column="ExpenseAmount" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+          </dxo-summary>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="showPurchseInvoiceHistoryGrid">
+    <div class="col-md-12 text-center m-0">
+      <h3 style="font-weight: bold; margin: 0">Detail: Purchase</h3>
+    </div>
+    <div class="col-md-12">
+      <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+        <dx-data-grid
+          #PurchaseHistoryGrid
+          id="GridWithHeading"
+          [dataSource]="detailOnBasisOFPurchseDetail"
+          [showColumnLines]="false"
+          [height]="gridHeight"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+          (onToolbarPreparing)="PurchaseHistorGridToolbarPreparing($event)"
+        >
+          <!-- <dxo-paging [enabled]="true"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 300, 500, 1000, 2500, detailOnBasisOFPurchseDetail.length]" [showInfo]="true"></dxo-pager> -->
+          <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-filter-row [visible]="filter"></dxo-filter-row>
+          <dxo-header-filter [visible]="filter"></dxo-header-filter>
+          <dxo-load-panel [enabled]="true"></dxo-load-panel>
+          <dxo-export [enabled]="true" fileName="Purchase Detail Register" [allowExportSelectedData]="true">
+            <dxo-texts exportAll="Export All Rows"></dxo-texts>
+          </dxo-export>
+          <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('PurchaseHistoryGridStateInPuchaseRegister') }}"></dxo-state-storing>
+        <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+        <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+          <!-- <dxo-selection mode="multiple" selectAllMode="page" showCheckBoxesMode="always"></dxo-selection> -->
+              <dxi-column dataField="" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+          <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+            <div class="d-con-cell-action">
+              <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+            </div>
+          </div>
+          <dxi-column dataField="DocNo" caption="DocNo" dataType="number"></dxi-column>
+          <dxi-column dataField="DocDate" caption="DocDate" dataType="date" [format]="'dd-MMM-yyyy'"></dxi-column>
+          <dxi-column dataField="SupplierName" caption="Supplier" dataType="string"></dxi-column>
+          <dxi-column dataField="DueDays" caption="DueDays" dataType="number"></dxi-column>
+          <dxi-column dataField="DueDate" caption="DueDate" dataType="date" [format]="'dd-MMM-yyyy'"></dxi-column>
+          <dxi-column dataField="CommissionAgent" caption="Comm Agent" dataType="string"></dxi-column>
+          <dxi-column dataField="CommissionType" caption="Comm Type" dataType="string"></dxi-column>
+          <dxi-column dataField="CommRate" caption="CommRate" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+          <dxi-column dataField="CommAmount" caption="CommAmount" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="CommissionRemarks" caption="Comm Remarks" dataType="string"></dxi-column>
+          <dxi-column dataField="UserName" caption="Entry User" dataType="string"></dxi-column>
+          <dxi-column dataField="ModifyUserName" caption="Modify User" dataType="string"></dxi-column>
+          <dxi-column dataField="GrnNo" caption="GrnNo" dataType="number"></dxi-column>
+          <dxi-column dataField="GrnDate" caption="GrnDate" dataType="date" [format]="'dd-MMM-yyyy'"></dxi-column>
+          <dxi-column dataField="GpNo" caption="GpNo" dataType="number"></dxi-column>
+          <dxi-column dataField="VehicleNo" caption="VehicleNo" dataType="string"></dxi-column>
+          <dxi-column dataField="BiltyNo" caption="BiltyNo" dataType="string"></dxi-column>
+          <dxi-column dataField="ItemName" caption="Item Name" dataType="string"></dxi-column>
+          <dxi-column dataField="CropYear" caption="CropYear" dataType="string"></dxi-column>
+          <dxi-column dataField="GrossWeight" caption="Weight(kgs)" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+          <dxi-column dataField="EBWPerUnit" caption="EBWPerUnit" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+          <dxi-column dataField="EBWTotal" caption="EBWTotal" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="WtCut" caption="WtCut" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+          <dxi-column dataField="WtCutTotal" caption="WtCutTotal" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="ItemQty" caption="Qunatity" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+          <dxi-column dataField="PoNo" caption="PoNo" dataType="number"></dxi-column>
+          <dxi-column dataField="PoDate" caption="PoDate" dataType="date" [format]="'dd-MMM-yyyy'"></dxi-column>
+          <dxi-column dataField="NetBillWeight" caption="NetBillWeight" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+          <dxi-column dataField="ItemRate" caption="Item Rate" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+          <dxi-column dataField="Equivalent" caption="Equivalent" dataType="number"></dxi-column>
+          <dxi-column dataField="RateCut" caption="RateCut" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+          <dxi-column dataField="NetRate" caption="NetRate" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+          <dxi-column dataField="RateCutAmount" caption="RateCutAmount" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+          <dxi-column dataField="JournalAmount" caption="JournalAmount" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+          <dxi-column dataField="ExpenseAmount" caption="ExpenseAmount" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+          <dxi-column dataField="ItemAmount" caption="Amount" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+          
+         
+          <dxi-column dataField="DeliveryTerm" caption="DeliveryTerm" dataType="string"></dxi-column>
+          <div *dxTemplate="let data of 'PurchaseHistoryGridTemplate'">
+            <div class="informer">
+              <h4 class="name" style="font-weight: bold; color: whitesmoke">Purchase History Register</h4>
+              <!-- <h3 class="count">{{ OutstandingPaddyPurchaseOrderDataCount }}</h3> -->
+            </div>
+          </div>
+
+          <dxo-export [enabled]="true" [allowExportSelectedData]="true"></dxo-export>
+
+          <dxo-summary>
+            <dxi-total-item column="SupplierName" summaryType="count" displayFormat="Total Records: {0}"> </dxi-total-item>
+          </dxo-summary>
+          <dxo-scrolling mode="infinite" [scrollByContent]="true" [scrollByThumb]="true" [showScrollbar]="'always'"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+
+  <!-- --------------------- -->
+  <div class="row" *ngIf="RiceAndPaddyPurchaseReport">
+    <div class="col-md-12">
+      <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+        <dx-data-grid
+          #RiceAndPaddyPurchaseReportGrid
+          id="GridWithHeading"
+          [dataSource]="PurchaseOfRiceAndPaddyReportList"
+          [showColumnLines]="true"
+          [height]="gridHeight"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [allowColumnReordering]="true"
+          [showBorders]="true"
+          (onToolbarPreparing)="RiceAndPaddyReportGridToolbarPreparing($event)"
+          (onRowPrepared)="RiceAndPaddyPurchaseReportRowPrepared($event)"
+        >
+          <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+          <dxo-group-panel emptyPanelText=" " [visible]="true"></dxo-group-panel>
+          <dxo-filter-row [visible]="filter"></dxo-filter-row>
+          <dxo-header-filter [visible]="filter"></dxo-header-filter>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-load-panel [enabled]="true"></dxo-load-panel>
+          <dxo-export [enabled]="true" fileName="Rice Paddy Purchase Report" [allowExportSelectedData]="true">
+            <dxo-texts exportAll="Export All Rows"></dxo-texts>
+          </dxo-export>
+          <dxo-paging [enabled]="true"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 300, 500, 1000, 2500, PurchaseOfRiceAndPaddyReportList.length]" [showInfo]="true"></dxo-pager>
+          <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('RiceAndPaddyPurchaseReportGridStateInPurchaseRegiser') }}"></dxo-state-storing>
+        <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+        <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+     <dxi-column dataField="" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+          <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+            <div class="d-con-cell-action">
+              <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+            </div>
+          </div>
+          <dxi-column dataField="ItemName" caption="Item Name" dataType="string" alignment="left" [width]="415"></dxi-column>
+          <dxi-column dataField="Crop" caption="Crop" dataType="string" groupIndex="0" alignment="center"></dxi-column>
+          <dxi-column caption="Current Purchases" alignment="center">
+            <dxi-column dataField="Cur_Qty" caption="Qunatity" alignment="right" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+            <dxi-column dataField="Cur_Weight" caption="Weight(kgs)" alignment="right" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+            <dxi-column dataField="Cur_Rate" caption="Rate" alignment="right" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+            <dxi-column dataField="Cur_Exp" caption="Expenses" alignment="right" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+            <dxi-column dataField="Cur_Amount" caption="Amount" alignment="right" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          </dxi-column>
+          <dxi-column caption="Total Purchases" alignment="center">
+            <dxi-column dataField="Cl_Qty" caption="Qunatity" alignment="right" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+            <dxi-column dataField="Cl_Weight" caption="Weight(kgs)" alignment="right" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+            <dxi-column dataField="Cl_Rate" caption="Rate" alignment="right" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+            <dxi-column dataField="Cl_Exp" caption="Expenses" alignment="right" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+            <dxi-column dataField="Cl_Amount" caption="Amount" alignment="right" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          </dxi-column>
+
+          <div *dxTemplate="let data of 'RicePaddyPurchaseReportGridTitle'">
+            <div class="informer">
+              <h4 class="name" style="font-weight: bold; color: whitesmoke">Rice And Paddy Purchase Report</h4>
+              <!-- <h3 class="count">{{ OutstandingPaddyPurchaseOrderDataCount }}</h3> -->
+            </div>
+          </div>
+
+          
+
+          <dxo-summary>
+           
+            <dxi-total-item column="ItemName" summaryType="count" displayFormat="Total Records: {0}"> </dxi-total-item>
+     
+            <dxi-total-item column="Cur_Qty" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="Cl_Qty" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+
+            <dxi-total-item column="Cur_Weight" summaryType="sum" displayFormat="{0}" valueFormat="#,##00"> </dxi-total-item>
+            <dxi-total-item column="Cl_Weight" summaryType="sum" displayFormat="{0}" valueFormat="#,##00"> </dxi-total-item>
+
+            <dxi-total-item column="Cur_Amount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="Cl_Amount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-group-item column="Cur_Qty" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+            <dxi-group-item column="Cl_Qty" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+            <dxi-group-item column="Cur_Weight" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+            <dxi-group-item column="Cl_Weight" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+            <dxi-group-item column="Cur_Amount" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+            <dxi-group-item column="Cl_Amount" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+          </dxo-summary>
+          <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="showAvgRateBySupplierGrid">
+    <div class="col-md-12">
+      <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+        <dx-data-grid
+        [height]="gridHeight"
+          #AverageRateBySupplierGrid
+          id="GridWithHeading"
+          [dataSource]="detailOnBasisOfAvgRateBySupplier"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnResizing]="true"
+          [allowColumnReordering]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+          (onToolbarPreparing)="AverageRateBySupplierGridToolbarPreparing($event)"
+        >
+          <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+          <dxo-group-panel emptyPanelText=" " [visible]="true"></dxo-group-panel>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-filter-row [visible]="filter"></dxo-filter-row>
+          <dxo-header-filter [visible]="filter"></dxo-header-filter>
+          <dxo-load-panel [enabled]="true"></dxo-load-panel>
+          <dxo-export [enabled]="true" fileName="Purchase Average Rate by Supplier" [allowExportSelectedData]="true">
+            <dxo-texts exportAll="Export All Rows"></dxo-texts>
+          </dxo-export>
+          <dxo-paging [enabled]="true"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="AverageRateBySupplierReportGridPageSize" [showInfo]="true"></dxo-pager>
+          <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('AverageRateBySupplierGridStateInPurchaseRegister') }}"></dxo-state-storing>
+        <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+        <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+         <dxi-column dataField="" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+          <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+            <div class="d-con-cell-action">
+              <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+            </div>
+          </div>
+          <dxi-column dataField="CompanyName" caption="Supplier" alignment="left" [width]="350" dataType="string"></dxi-column>
+          <dxi-column dataField="ItemName" caption="Item Name" alignment="left" [width]="400" dataType="string"></dxi-column>
+          <dxi-column dataField="CropYear" caption="CropYear" alignment="center" dataType="string"></dxi-column>
+          <dxi-column dataField="ItemQty" caption="Qty" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="NetBillWeight" caption="Weight(kgs)" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="AvgRate" caption="Item Rate" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="Exp40Kg" caption="Exp/40Kg" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="TotalExpense" caption="Total Expense" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="AvgRateExp" caption="Avg Rate(Exp)" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="ItemAmount" caption="Amount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="ItemExpAmount" caption="Amount(Exp)" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <div *dxTemplate="let data of 'AverageRateBySupplierGridTitleTemplate'">
+            <div class="informer">
+              <h4 class="name" style="font-weight: bold; color: whitesmoke">Average Rate By Supplier</h4>
+              <!-- <h3 class="count">{{ OutstandingPaddyPurchaseOrderDataCount }}</h3> -->
+            </div>
+          </div>
+
+          
+
+          <dxo-summary>
+            
+            <dxi-total-item column="CompanyName" summaryType="count" displayFormat="Total Records: {0}"> </dxi-total-item>
+    
+            <dxi-total-item column="ItemQty" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="NetBillWeight" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+
+            <dxi-total-item column="ItemAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="ItemExpAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+
+            <dxi-group-item column="ItemQty" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+            <dxi-group-item column="NetBillWeight" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+            <dxi-group-item column="ItemAmount" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+            <dxi-group-item column="ItemExpAmount" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+          </dxo-summary>
+          <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+      <div class="col-md-12">
+      <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+    </div>
+        <div class="col-md-12">
+      <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+      <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+      <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+    </div>
+  </div>
+</div>
+<!-- container-fluid -->

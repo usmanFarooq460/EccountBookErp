@@ -1,0 +1,130 @@
+<div class="container-fluid">
+  <!-- start page title -->
+  <div class="d-flex justify-content-between">
+    <h4>Accounts Budget</h4>
+    <dx-button icon="refresh" type="normal" (onClick)="reset()"></dx-button>
+  </div>
+  <!-- end page title -->
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="p-1 mt-2">
+        <dx-form [formData]="ABD" #ABF [showRequiredMark]="false">
+          <dxi-item itemType="group" [colCount]="5" cssClass="py-0 my-0">
+            <dxi-item
+              dataField="CompanyId"
+              editorType="dxSelectBox"
+              [editorOptions]="{ placeholder: 'Company', items: companyList, valueExpr: 'Id', displayExpr: 'CompName', searchEnabled: true }"
+              cssClass="px-1 m-0"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <dxi-validation-rule type="required" message="Company is required"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item
+              dataField="BranchId"
+              editorType="dxSelectBox"
+              [editorOptions]="{ placeholder: 'Branch', items: branchList, valueExpr: 'Id', displayExpr: 'BranchName', searchEnabled: true }"
+              cssClass="px-1 m-0"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <dxi-validation-rule type="required" message="Branch is required"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item
+              dataField="ProjectId"
+              editorType="dxSelectBox"
+              [editorOptions]="{ placeholder: 'Project', items: projectList, valueExpr: 'Id', displayExpr: 'ProjectName', searchEnabled: true }"
+              cssClass="px-1 m-0"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <dxi-validation-rule type="required" message="Project is required"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item dataField="DocNo" editorType="dxNumberBox" [editorOptions]="{ placeholder: 'Document No.', readOnly: true }" cssClass="px-1 m-0">
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+            </dxi-item>
+            <dxi-item dataField="DocDate" editorType="dxDateBox" [editorOptions]="{ placeholder: 'Document Date', displayFormat: 'dd-MMM-yyyy' }" cssClass="px-1 m-0">
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <dxi-validation-rule type="required" message="Document Date is required"></dxi-validation-rule>
+            </dxi-item>
+          </dxi-item>
+          <dxi-item itemType="group" [colCount]="5" cssClass="py-0 my-0">
+            <dxi-item dataField="FnFromMonth" editorType="dxDateBox" [editorOptions]="{ placeholder: 'Start Month', displayFormat: 'dd-MMM-yyyy' }" cssClass="px-1 m-0">
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <dxi-validation-rule type="required" message="Start Month is required"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item dataField="FnToMonth" editorType="dxDateBox" [editorOptions]="{ placeholder: 'End Month', displayFormat: 'dd-MMM-yyyy' }" cssClass="px-1 m-0">
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <dxi-validation-rule type="required" message="End Month is required"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item
+              dataField="ExpenseGLAcId"
+              editorType="dxSelectBox"
+              [editorOptions]="{ placeholder: 'Expense Account', searchEnabled: true, items: expenseAccountList, valueExpr: 'Id', displayExpr: 'AccountTitle', onInitialized: setFocus }"
+              cssClass="px-1 m-0"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <dxi-validation-rule type="required" message="Expense Account is required"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item dataField="BudgetTotalAmount" editorType="dxNumberBox" [editorOptions]="{ placeholder: ' Budget Amount' }" cssClass="px-1 m-0">
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <dxi-validation-rule type="required" message="Budget Amount is required"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item>
+              <div *dxTemplate class="mt-2">
+                <dx-button text="Generate" type="danger" (onClick)="generate()"></dx-button>
+              </div>
+            </dxi-item>
+          </dxi-item>
+        </dx-form>
+        <div class="mt-3">
+          <dx-data-grid
+            id="gridContainer"
+            [dataSource]="dataSource"
+            [showColumnLines]="false"
+            [showRowLines]="true"
+            [rowAlternationEnabled]="true"
+            [allowColumnResizing]="true"
+            [columnAutoWidth]="true"
+            [showBorders]="true"
+            (onCellPrepared)="onCellPrepared($event)"
+          >
+            <dxo-load-panel [enabled]="true"></dxo-load-panel>
+            <dxi-column dataField="BudgetMonth" caption="Budget Month"> </dxi-column>
+            <dxi-column dataField="BudgetPrcnt" caption="Budget Percentage" [width]="300" format="#,##0.00" cellTemplate="budgetPrcntTemplate"> </dxi-column>
+            <div *dxTemplate="let cellInfo of 'budgetPrcntTemplate'">
+              <dx-number-box
+                class="d-grid-editor"
+                [(value)]="cellInfo.data.BudgetPrcnt"
+                format="#,##0"
+                [showSpinButtons]="false"
+                (onValueChanged)="handleBudgetPercentChange($event, cellInfo.rowIndex)"
+              >
+              </dx-number-box>
+            </div>
+            <dxi-column dataField="BudgetAmount" caption="Budget Amount" [width]="300" format="#,##0.00" cellTemplate="budgetAmountTemplate"> </dxi-column>
+            <div *dxTemplate="let cellInfo of 'budgetAmountTemplate'">
+              <div>
+                <dx-number-box
+                  class="d-grid-editor"
+                  [(value)]="cellInfo.data.BudgetAmount"
+                  displayFormat="{0}"
+                  valueFormat="#,##0"
+                  [showSpinButtons]="false"
+                  (onValueChanged)="handleBudgetAmountChange($event, cellInfo.rowIndex)"
+                >
+                </dx-number-box>
+              </div>
+            </div>
+            <dxi-column dataField="AccountsBudgetHeaderId" [visible]="false"> </dxi-column>
+            <dxi-column dataField="Id" caption="" [visible]="false"> </dxi-column>
+            <dxo-summary [recalculateWhileEditing]="true">
+              <dxi-total-item column="BudgetAmount" summaryType="sum" name="BudgetAmount" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+              <dxi-total-item column="BudgetPrcnt" summaryType="sum" name="BudgetPrcnt" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            </dxo-summary>
+            <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+          </dx-data-grid>
+        </div>
+      </div>
+    </div>
+    <dx-speed-dial-action cssClass="text-primary" icon="save" label="Save" type="success" [index]="1" (onClick)="handleSave()"></dx-speed-dial-action>
+  </div>
+</div>

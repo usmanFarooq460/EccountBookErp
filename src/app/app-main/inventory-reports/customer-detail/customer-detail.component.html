@@ -1,0 +1,34 @@
+
+
+<dx-popup [width]="370" [height]="270" [showTitle]="true" titleTemplate="titleTemplate"  [dragEnabled]="true" [closeOnOutsideClick]="true"  [showCloseButton]="true" [visible]="true">
+  <div *dxTemplate="let content of 'titleTemplate'" class="d-flex justify-content-between">
+    <div class="">
+      <div class="text-center">
+        <h5 style="font-weight: bold; font-family: cursive">Customer Info</h5>
+      </div>
+    </div>
+    <div class="d-flex justify-content-end">
+      <dx-button class="p-0 border-0" type="transparent" (onClick)="handlePopupClosed()" icon="close"></dx-button>
+    </div>
+  </div>
+  <div *dxTemplate="let data of 'content'" class="d-flex justify-content-center align-items-center">
+    <div class="container-fluid">
+      <div class="image-Name">
+        <div class="image"></div>
+        <h5 class="text-center">{{SupplierCustomerData?.CompanyName}}</h5>
+        <div class="detail">
+          <h6 class="text-center font-weight-bold">{{SupplierCustomerData?.MobilePersonal}}</h6>
+          <p class="text-center">{{SupplierCustomerData?.DescriptionCity}}</p>
+          <p class="text-center">{{SupplierCustomerData?.Address1}}</p>
+          <p class="text-center">{{SupplierCustomerData?.Email}}</p>
+        </div>
+      </div>
+      <div class="d-flex justify-content-center" *ngIf="FolowupButtonVisible==true">
+       
+        <div class="">
+          <dx-button cssClass="p-0 m-0" type="success" hint="Add Followup" stylingMode="text" icon="rename" (onClick)="SendAccountIdForFollowup()"> </dx-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</dx-popup>

@@ -1,0 +1,1050 @@
+<!-- Designed By Sufian Arshad -->
+<div class="container-fluid">
+  <dx-popup
+    [width]="WidthOfPopupWithGrid"
+    [height]="HeightOfPopupWithGrid"
+    [position]="'center'"
+    [showTitle]="true"
+    titleTemplate="titleTemplate"
+    [dragEnabled]="true"
+    [closeOnOutsideClick]="false"
+    [(visible)]="purchaseinvoiceStatus"
+  >
+    <div *dxTemplate="let content of 'titleTemplate'" class="d-flex justify-content-between">
+      <div class="">
+        <h4>Pending Purchase Invoice For Approval</h4>
+      </div>
+      <div class="d-flex justify-content-end">
+        <dx-button class="p-0 mr-1 border-0" type="transparent" (onClick)="filtering()" icon="filter"></dx-button>
+        <dx-button class="p-0 border-0" type="transparent" (onClick)="closePurchaseInvoicePopupGrid()" icon="close"></dx-button>
+      </div>
+    </div>
+    <div *dxTemplate="let data of 'content'">
+      <dx-data-grid
+        #popupGrid
+        [height]="gridHeightInPopupWithGrid"
+        id="gridContainer"
+        [dataSource]="purchaseInvoiceDataSource"
+        [showColumnLines]="false"
+        [showRowLines]="true"
+        [rowAlternationEnabled]="true"
+        [allowColumnResizing]="true"
+        [columnAutoWidth]="true"
+        [showBorders]="true"
+      >
+        <dxo-filter-row [visible]="filter"></dxo-filter-row>
+        <dxo-header-filter [visible]="filter"></dxo-header-filter>
+        <dxo-paging [enabled]="true"></dxo-paging>
+        <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="purchaseInvoiceApprovalGridPageSize" [showInfo]="true"></dxo-pager>
+        <dxo-load-panel [enabled]="true"></dxo-load-panel>
+        <!-- <dxo-selection mode="multiple" selectAllMode="page" showCheckBoxesMode="always"></dxo-selection> -->
+        <dxi-column dataField="Id" caption="Id" [visible]="false"></dxi-column>
+        <dxi-column dataField="InvoiceDate" caption="Invoice Date" dataType="date" [width]="110" alignment="center" [format]="'dd-MMM-yyyy'"></dxi-column>
+        <dxi-column dataField="InvoiceNo" caption="InvoiceNo" dataType="number" alignment="right"></dxi-column>
+        <!-- <dxi-column dataField="ManualBillNo" caption="ManualBillNo"></dxi-column> -->
+        <dxi-column dataField="SupplierName" caption="SupplierName" dataType="string" alignment="left"></dxi-column>
+
+        <dxi-column dataField="CommissionAgent" caption="Comm Agent" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="CommType" caption="Comm Type" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="CommRate" caption="Comm Rate" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+        <dxi-column dataField="CommAmount" caption="Comm Amount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="BillAmount" caption="Bill Amount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="IsApproved" caption="Status" cellTemplate="statusTemplate"></dxi-column>
+        <div *dxTemplate="let cellInfo of 'statusTemplate'">
+          <div *ngIf="cellInfo.value == true; else falseStatus">
+            <span class="badge badge-success">Approved</span>
+          </div>
+          <ng-template #falseStatus class="badge badge-danger"> <span class="badge badge-danger">Not Approved</span></ng-template>
+        </div>
+
+        <dxi-column dataField="UserName" caption="User Name" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="RemarksHeader" caption="Remarks" dataType="string" alignment="left"></dxi-column>
+        <dxi-column
+          dataField="button"
+          [fixed]="true"
+          [fixedPosition]="'right'"
+          [width]="100"
+          alignment="right"
+          caption="Action"
+          [allowEditing]="false"
+          [allowExporting]="false"
+          [allowFiltering]="false"
+          [allowFixing]="false"
+          [allowGrouping]="false"
+          [allowHeaderFiltering]="false"
+          [allowHiding]="false"
+          [allowReordering]="false"
+          [allowResizing]="false"
+          [allowSearch]="false"
+          [allowSorting]="false"
+          cellTemplate="buttonTemplate"
+        ></dxi-column>
+        <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+          <div class="d-con-cell-action">
+            <dx-button type="default" stylingMode="text" hint="Approved Purchase Invoice" (onClick)="PIeditClick(cellInfo.data)">
+              <i class="ri-checkbox-fill" style="height: 24px; width: 24px"></i>
+            </dx-button>
+
+            <dx-button type="danger" stylingMode="text" hint="Purhcase-Invoice Slip" (onClick)="onPurchasInvoicepdfReportPrint(cellInfo.data)">
+              <i class="ri-printer-line"></i>
+            </dx-button>
+            <dx-button type="danger" hint="103-Voucher " stylingMode="text" (onClick)="onPurchasInvoiceVoucherpdfReportPrint(cellInfo.data)">
+              <i class="ri-printer-line"></i>
+            </dx-button>
+          </div>
+        </div>
+        <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+      </dx-data-grid>
+    </div>
+  </dx-popup>
+  <dx-popup
+    [width]="WidthOfPopupWithGrid"
+    id="confimationButton"
+    [height]="HeightOfPopupWithGrid"
+    [position]="'center'"
+    [showTitle]="true"
+    titleTemplate="titleTemplate"
+    [dragEnabled]="true"
+    [closeOnOutsideClick]="false"
+    [(visible)]="DeliveryOrderStatus"
+  >
+    <div *dxTemplate="let content of 'titleTemplate'" class="d-flex justify-content-between">
+      <div class="">
+        <h4>Pending Delivery Order For Approval</h4>
+      </div>
+      <div class="d-flex justify-content-end">
+        <dx-button class="p-0 mr-1 border-0" type="transparent" (onClick)="filtering()" icon="filter"></dx-button>
+        <dx-button class="p-0 border-0" type="transparent" (onClick)="closeDeleiveryOrderPopupGrid()" icon="close"></dx-button>
+      </div>
+    </div>
+
+    <div *dxTemplate="let data of 'content'">
+      <dx-data-grid
+        #UnApprovedDeliveryOrderGrid
+        [height]="gridHeightInPopupWithGrid"
+        id="gridContainer"
+        [dataSource]="deliveryOrderApprovalHeaderArray"
+        [showColumnLines]="false"
+        [showRowLines]="true"
+        [rowAlternationEnabled]="true"
+        [allowColumnResizing]="true"
+        [columnAutoWidth]="true"
+        [showBorders]="true"
+      >
+        <dxo-filter-row [visible]="filter"></dxo-filter-row>
+        <dxo-header-filter [visible]="filter"></dxo-header-filter>
+        <dxo-paging [enabled]="true"></dxo-paging>
+        <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="DeleiveryOrderApprovalGridPageSize" [showInfo]="true"></dxo-pager>
+        <dxo-load-panel [enabled]="true"></dxo-load-panel>
+        <dxo-selection mode="multiple" selectAllMode="page" showCheckBoxesMode="always"></dxo-selection>
+        <dxi-column dataField="Id" caption="Id" [visible]="false"></dxi-column>
+
+        <dxi-column dataField="DocDate" caption="Doc Date" dataType="date" alignment="center" [format]="'dd-MMM-yyyy'"></dxi-column>
+        <dxi-column dataField="DocNo" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="DeliveryOrderType" caption="DO Type" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="TSaleOrders" caption="T. SO" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="DoQty" caption="Qty" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="DoWeight" caption="Weight" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="Remarks" caption="Remarks" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="IsApproved" caption="Status" cellTemplate="statusTemplate" [fixed]="true" [fixedPosition]="'right'"></dxi-column>
+
+        <dxo-master-detail [enabled]="true" template="masterDetail"></dxo-master-detail>
+        <div *dxTemplate="let masterDetailItem of 'masterDetail'">
+          <Approval-Dashboard-Detail [type]="'DeliveryOrderDetail'" [key]="masterDetailItem.Id" [detaildataSource]="DeliveryOrderList" [rowData]="masterDetailItem.data"></Approval-Dashboard-Detail>
+        </div>
+        <dxo-summary>
+          <dxi-total-item column="DoQty" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+          <dxi-total-item column="DoWeight" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+          <dxi-total-item column="LoadingQty" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+          <dxi-total-item column="LoadingWeight" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+        </dxo-summary>
+
+        <div *dxTemplate="let cellInfo of 'statusTemplate'">
+          <div *ngIf="cellInfo.value == true; else falseStatus">
+            <span class="badge badge-success">Approved</span>
+          </div>
+          <ng-template #falseStatus class="badge badge-danger"> <span class="badge badge-danger">UnApproved</span></ng-template>
+        </div>
+
+        <dxi-column
+          dataField="button"
+          [fixed]="true"
+          [fixedPosition]="'right'"
+          [width]="100"
+          alignment="right"
+          caption="Action"
+          [allowEditing]="false"
+          [allowExporting]="false"
+          [allowFiltering]="false"
+          [allowFixing]="false"
+          [allowGrouping]="false"
+          [allowHeaderFiltering]="false"
+          [allowHiding]="false"
+          [allowReordering]="false"
+          [allowResizing]="false"
+          [allowSearch]="false"
+          [allowSorting]="false"
+          cellTemplate="buttonTemplate"
+        ></dxi-column>
+        <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+          <div class="d-con-cell-action">
+            <dx-button type="default" stylingMode="text" hint="Approve Delivery Order" (onClick)="DOeditClick(cellInfo.data)">
+              <i class="ri-checkbox-fill" style="height: 24px; width: 24px"></i>
+            </dx-button>
+            <dx-button type="danger" stylingMode="text" hint="262-Delivery Order Slip" (onClick)="DeliveryOrderSlip_262(cellInfo.data)">
+              <i class="ri-printer-line"></i>
+            </dx-button>
+          </div>
+        </div>
+        <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+      </dx-data-grid>
+    </div>
+  </dx-popup>
+  <!-- End Delivery Order Popup Here -->
+
+  <!-- Start of GatePassOutwardPopup -->
+  <dx-popup
+    [width]="WidthOfPopupWithGrid"
+    id="confimationButton"
+    [height]="HeightOfPopupWithGrid"
+    [position]="'center'"
+    [showTitle]="true"
+    titleTemplate="titleTemplate"
+    [dragEnabled]="true"
+    [closeOnOutsideClick]="false"
+    [(visible)]="GatePassOutwardApprovalPopupVisible"
+  >
+    <div *dxTemplate="let content of 'titleTemplate'" class="d-flex justify-content-between">
+      <div class="">
+        <h4>Gate Pass Outward For Approval</h4>
+      </div>
+      <div class="d-flex justify-content-end">
+        <dx-button class="p-0 mr-1 border-0" type="transparent" (onClick)="filtering()" icon="filter"></dx-button>
+        <dx-button class="p-0 border-0" type="transparent" (onClick)="closeGatePassOutwardPopupGrid()" icon="close"></dx-button>
+      </div>
+    </div>
+
+    <div *dxTemplate="let data of 'content'">
+      <dx-data-grid
+        #UnApprovedDeliveryOrderGrid
+        [height]="gridHeightInPopupWithGrid"
+        id="gridContainer"
+        [dataSource]="GatePassOutwardDataPendingForApproval"
+        [showColumnLines]="false"
+        [showRowLines]="true"
+        [rowAlternationEnabled]="true"
+        [allowColumnResizing]="true"
+        [columnAutoWidth]="true"
+        [showBorders]="true"
+      >
+        <dxo-filter-row [visible]="filter"></dxo-filter-row>
+        <dxo-header-filter [visible]="filter"></dxo-header-filter>
+        <dxo-paging [enabled]="true"></dxo-paging>
+        <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="GatePassOutwardApprovalGridPageSize" [showInfo]="true"></dxo-pager>
+        <dxo-load-panel [enabled]="true"></dxo-load-panel>
+        <dxi-column dataField="Id" caption="Id" [visible]="false"></dxi-column>
+        <dxi-column dataField="GpSrNo" caption="GpSrNo" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="GpDate" caption="GP Date" dataType="date" alignment="center" [format]="'dd-MMM-yyyy'"></dxi-column>
+        <dxi-column dataField="CustomerName" caption="Customer Name" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="OrderType" caption="Order Type" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="ItemName" caption="Item Name" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="VehicleType" caption="Vehicle Type" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="VehicleNo" caption="Vehicle #" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="BiltyNo" caption="Bilty #" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="NoOfBags" caption="No. of Bags" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="InDateTimeStamp" caption="InDateTime" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="IsApproved" caption="Status" [width]="90" cellTemplate="statusTemplate" [fixed]="true" [fixedPosition]="'right'"></dxi-column>
+        <dxi-column dataField="EntryDate" caption="EntryDate" dataType="date" [format]="'HH-mm'" alignment="center"></dxi-column>
+        <dxi-column dataField="UserName" caption="UserName" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="Freight" caption="Freight" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="NetPaid" caption="NetPaid" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="SupplierWeight" caption="SupplierWeight" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="FactoryWeight" caption="FactoryWeight" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="DifferenceWeight" caption="DifferenceWeight" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="WareHouseName" caption="Warehouse" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="Container" caption="Container" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="Container1" caption="Container1" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="JobLotDescription" caption="JobLot" dataType="string" alignment="left"></dxi-column>
+
+        <dxo-summary>
+          <dxi-total-item column="NoOfBags" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+          <dxi-total-item column="SupplierWeight" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+          <dxi-total-item column="FactoryWeight" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+          <dxi-total-item column="DifferenceWeight" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+        </dxo-summary>
+
+        <div *dxTemplate="let cellInfo of 'statusTemplate'">
+          <div *ngIf="cellInfo.text == 'Approved'; else falseStatus">
+            <span class="badge badge-success">Approved</span>
+          </div>
+          <ng-template #falseStatus class="badge badge-danger"> <span class="badge badge-danger">UnApproved</span></ng-template>
+        </div>
+
+        <dxi-column
+          dataField="button"
+          [fixed]="true"
+          [fixedPosition]="'right'"
+          [width]="100"
+          alignment="right"
+          caption="Action"
+          [allowEditing]="false"
+          [allowExporting]="false"
+          [allowFiltering]="false"
+          [allowFixing]="false"
+          [allowGrouping]="false"
+          [allowHeaderFiltering]="false"
+          [allowHiding]="false"
+          [allowReordering]="false"
+          [allowResizing]="false"
+          [allowSearch]="false"
+          [allowSorting]="false"
+          cellTemplate="buttonTemplate"
+        ></dxi-column>
+        <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+          <div class="d-con-cell-action">
+            <dx-button type="default" stylingMode="text" hint="Approve Delivery Order" (onClick)="OGPeditClick(cellInfo.data)">
+              <i class="ri-checkbox-fill" style="height: 24px; width: 24px"></i>
+            </dx-button>
+            <dx-button type="danger" stylingMode="text" hint="262-Delivery Order Slip" (onClick)="GatePassOutwardSlipPdfReport(cellInfo.data)">
+              <i class="ri-printer-line"></i>
+            </dx-button>
+          </div>
+        </div>
+        <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+      </dx-data-grid>
+    </div>
+  </dx-popup>
+
+  <!-- End of GatePassOutwardPupup -->
+  <!-- OGPG START -->
+  <dx-popup
+    [width]="WidthOfPopupWithGrid"
+    id="confimationButton"
+    [height]="HeightOfPopupWithGrid"
+    [position]="'center'"
+    [showTitle]="true"
+    titleTemplate="titleTemplate"
+    [dragEnabled]="true"
+    [closeOnOutsideClick]="false"
+    [(visible)]="GatePassOutwardGeneralApprovalPopupVisible"
+  >
+    <div *dxTemplate="let content of 'titleTemplate'" class="d-flex justify-content-between">
+      <div class="">
+        <h4>Gate Pass Outward General For Approval</h4>
+      </div>
+      <div class="d-flex justify-content-end">
+        <dx-button class="p-0 mr-1 border-0" type="transparent" (onClick)="filtering()" icon="filter"></dx-button>
+        <dx-button class="p-0 border-0" type="transparent" (onClick)="closeGatePassOutwardGeneralPopupGrid()" icon="close"></dx-button>
+      </div>
+    </div>
+
+    <div *dxTemplate="let data of 'content'">
+      <dx-data-grid
+        #UnApprovedDeliveryOrderGrid
+        [height]="gridHeightInPopupWithGrid"
+        id="gridContainer"
+        [dataSource]="GatePassOutwardGeneraDataPendingForApproval"
+        [showColumnLines]="false"
+        [showRowLines]="true"
+        [rowAlternationEnabled]="true"
+        [allowColumnResizing]="true"
+        [columnAutoWidth]="true"
+        [showBorders]="true"
+      >
+        <dxo-filter-row [visible]="filter"></dxo-filter-row>
+        <dxo-header-filter [visible]="filter"></dxo-header-filter>
+        <dxo-paging [enabled]="true"></dxo-paging>
+        <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="GatePassOutwardGeneralApprovalPopupGridPageSize" [showInfo]="true"></dxo-pager>
+        <dxo-load-panel [enabled]="true"></dxo-load-panel>
+        <dxi-column dataField="Id" caption="Id" [visible]="false"></dxi-column>
+        <dxi-column dataField="GpSrNo" caption="GpSrNo" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="GpDate" caption="GP Date" dataType="date" alignment="center" [format]="'dd-MMM-yyyy'"></dxi-column>
+        <dxi-column dataField="GatepassType" caption="GP Type" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="GpTypeSrNo" caption="GP Type Sr#" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="VehicleType" caption="VehicleType" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="VehicleNo" caption="Vehicle No" dataType="string" alignment="left"></dxi-column>
+
+        <dxi-column dataField="NoOfPackages" caption="No. of Packages" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="OtherRemarks" caption="Remarks" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="EntryDate" caption="EntryDate" dataType="date" [format]="'HH-mm'" alignment="center"></dxi-column>
+        <dxi-column dataField="Freight" caption="Freight" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="Status" caption="Status" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="NetPaid" caption="NetPaid" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="SupplierWeight" caption="SupplierWeight" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="FactoryWeight" caption="FactoryWeight" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="DifferenceWeight" caption="DifferenceWeight" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="OtherSupCust" caption="Other Supp/Cus" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="WareHouseName" caption="Warehouse" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="IsApproved" caption="IsApproved" [width]="90" cellTemplate="statusTemplate" [fixed]="true" [fixedPosition]="'right'"></dxi-column>
+        <dxi-column dataField="UserName" caption="UserName" dataType="string" alignment="left"></dxi-column>
+        <dxo-summary>
+          <dxi-total-item column="NoOfPackages" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+          <dxi-total-item column="FactoryWeight" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+          <!-- <dxi-total-item column="" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+            <dxi-total-item column="" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item> -->
+        </dxo-summary>
+
+        <div *dxTemplate="let cellInfo of 'statusTemplate'">
+          <div *ngIf="cellInfo.text == 'Approved'; else falseStatus">
+            <span class="badge badge-success">Approved</span>
+          </div>
+          <ng-template #falseStatus class="badge badge-danger"> <span class="badge badge-danger">UnApproved</span></ng-template>
+        </div>
+
+        <dxi-column
+          dataField="button"
+          [fixed]="true"
+          [fixedPosition]="'right'"
+          [width]="100"
+          alignment="right"
+          caption="Action"
+          [allowEditing]="false"
+          [allowExporting]="false"
+          [allowFiltering]="false"
+          [allowFixing]="false"
+          [allowGrouping]="false"
+          [allowHeaderFiltering]="false"
+          [allowHiding]="false"
+          [allowReordering]="false"
+          [allowResizing]="false"
+          [allowSearch]="false"
+          [allowSorting]="false"
+          cellTemplate="buttonTemplate"
+        ></dxi-column>
+        <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+          <div class="d-con-cell-action">
+            <dx-button type="default" stylingMode="text" hint="Approve Delivery Order" (onClick)="OGPGeditClick(cellInfo.data)">
+              <i class="ri-checkbox-fill" style="height: 24px; width: 24px"></i>
+            </dx-button>
+            <dx-button type="danger" stylingMode="text" hint="262-Delivery Order Slip" (onClick)="RptInwardGatePassSlipGeneral_254(cellInfo.data)">
+              <i class="ri-printer-line"></i>
+            </dx-button>
+          </div>
+        </div>
+        <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+      </dx-data-grid>
+    </div>
+  </dx-popup>
+  <!-- OGPG END -->
+  <!-- Start Aproval Cards Here -->
+  <div class="card approval-wrape py-5">
+    <div class="card-header d-flex justify-content-between">
+      <div class="" *ngIf="IsLoadedInOtherComponent">
+        <h4 style="font-family: cursive; font-weight: bold">{{ ApprovalPopupHeading }}</h4>
+      </div>
+      <div class="" *ngIf="!IsLoadedInOtherComponent">
+        <h4 style="font-family: cursive; font-weight: bold">Approval Dashboard</h4>
+      </div>
+      <div class="">
+        <div class="col-md-12 d-flex justify-content-center text-center">
+          <dx-button type="success" icon="refresh" text="" (onClick)="RefrehDashboard()"></dx-button>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-lg-6 pb-5 approval-cards-wrape">
+          <div class="title">
+            <h3 class="Dashboard-title">Accounts</h3>
+            <div class="search-wrape">
+              <div class="Search-field mr-3">
+                <input class="form-control" type="text" name="" placeholder="search item" (keyup)="accountsSearch($event)" />
+                <a class="Search_icon"><i class="fas fa-search"></i></a>
+              </div>
+            </div>
+          </div>
+          <dx-scroll-view [showScrollbar]="'always'" [scrollByContent]="true" [scrollByThumb]="true">
+            <div class="row">
+              <div class="col-xl-4 col-6 my-3" *ngFor="let item of FilteredArrayOfAccounts">
+                <div class="box" (click)="AccountsEdit(item)">
+                  <div class="Title">{{ item?.Count }}</div>
+                  <div class="content text-center">
+                    <h5>{{ item?.VoucherType }}</h5>
+                    <a href="javascript:void(0)"><i class="ri-eye-fill"></i></a>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 no-record-found" *ngIf="FilteredArrayOfAccounts?.length <= 0">No Record Found</div>
+            </div>
+          </dx-scroll-view>
+        </div>
+
+        <div class="col-lg-6 pb-5 approval-cards-wrape" style="border-left: 1px solid grey">
+          <div class="title">
+            <h3 class="Dashboard-title">Inventory</h3>
+            <div class="search-wrape">
+              <div class="Search-field mr-3">
+                <input class="form-control" type="text" name="" placeholder="search item" (keyup)="InventorySearch($event)" />
+                <a class="Search_icon"><i class="fas fa-search"></i></a>
+              </div>
+            </div>
+          </div>
+          <dx-scroll-view [showScrollbar]="'always'" [scrollByContent]="true" [scrollByThumb]="true">
+            <div class="row">
+              <div class="col-xl-4 col-6 my-3" *ngFor="let item of FilteredArrayOfInventory">
+                <div class="box" (click)="InventoryEdit(item)">
+                  <div class="Title">{{ item?.Count }}</div>
+                  <div class="content text-center">
+                    <h5>{{ item?.Description }}</h5>
+                    <a href="javascript:void(0)"><i class="ri-eye-fill"></i></a>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 no-record-found" *ngIf="FilteredArrayOfInventory?.length <= 0">No Record Found</div>
+            </div>
+          </dx-scroll-view>
+        </div>
+      </div>
+    </div>
+    <!-- ENd Aproval Cards Here -->
+    <!-- <div class="card-footer center"></div> -->
+  </div>
+</div>
+<!-- Pending Purchase Order Approval Popup Grid Here : Start -->
+<dx-popup
+  [width]="WidthOfPopupWithGrid"
+  [height]="HeightOfPopupWithGrid"
+  [position]="'center'"
+  [showTitle]="true"
+  titleTemplate="titleTemplate"
+  [dragEnabled]="true"
+  [closeOnOutsideClick]="false"
+  [(visible)]="purchaseorderStatus"
+>
+  <div *dxTemplate="let content of 'titleTemplate'" class="d-flex justify-content-between">
+    <div class="">
+      <h4>Pending Purchase Orders For Approval</h4>
+    </div>
+    <div class="d-flex justify-content-end">
+      <dx-button class="p-0 mr-1 border-0" type="transparent" (onClick)="filtering()" icon="filter"></dx-button>
+      <dx-button class="p-0 border-0" type="transparent" (onClick)="closePurchaseOrderPopupGrid()" icon="close"></dx-button>
+    </div>
+  </div>
+  <div *dxTemplate="let data of 'content'">
+    <dx-data-grid
+      #popupGrid
+      [width]="gridHeightInPopupWithGrid"
+      height="100%"
+      id="gridContainer"
+      [dataSource]="unApprovedPurchaseOrderList"
+      [showColumnLines]="false"
+      [showRowLines]="true"
+      [rowAlternationEnabled]="true"
+      [allowColumnResizing]="true"
+      [columnAutoWidth]="true"
+      [showBorders]="true"
+    >
+      <dxo-filter-row [visible]="filter"></dxo-filter-row>
+      <dxo-header-filter [visible]="filter"></dxo-header-filter>
+      <dxo-paging [enabled]="true"></dxo-paging>
+      <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="purchaseOrderApprovalGridPageSize" [showInfo]="true"></dxo-pager>
+      <dxo-load-panel [enabled]="true"></dxo-load-panel>
+      <dxi-column dataField="Id" caption="Id" [visible]="false"></dxi-column>
+      <dxi-column dataField="DocNo" caption="Doc No" dataType="number" [fixed]="true" [fixedPosition]="'left'" [width]="80"></dxi-column>
+      <dxi-column dataField="DocDate" caption="Doc Date" dataType="date" [format]="'dd-MMM-yyyy'"></dxi-column>
+      <dxi-column dataField="SupplierName" caption="Supplier" dataType="any"></dxi-column>
+      <dxi-column dataField="CommAmount" caption="Commission" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+      <dxi-column dataField="DeliveryTerm" caption="Delivery" dataType="any"></dxi-column>
+      <dxi-column dataField="ItemName" caption="Item" dataType="any"></dxi-column>
+      <dxi-column dataField="OrderItemQty" caption="Qty" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+      <dxi-column dataField="ReceivedQty" caption="Recieved Qty" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+      <dxi-column dataField="RejQty" caption="Rejected Qty" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+      <dxi-column dataField="BalQty" caption="BalQty" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+      <dxi-column dataField="OrderItemRate" caption="Rate" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+      <dxi-column dataField="Crop" caption="Crop" dataType="any" [width]="70"></dxi-column>
+      <dxi-column dataField="BagPrice" caption="B.Price" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+      <dxi-column dataField="BagWeight" caption="Bag Weight" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+      <dxi-column dataField="IsApproved" caption="Status" cellTemplate="statusTemplate"></dxi-column>
+
+      <div *dxTemplate="let cellInfo of 'statusTemplate'">
+        <div *ngIf="cellInfo.text == 'Approved'; else falseStatus">
+          <span class="badge badge-success">Approved</span>
+        </div>
+        <ng-template #falseStatus class="badge badge-danger"> <span class="badge badge-danger">Not Approved</span></ng-template>
+      </div>
+      <dxi-column
+        dataField="button"
+        [fixed]="true"
+        [fixedPosition]="'right'"
+        [width]="90"
+        alignment="center"
+        caption="Approved"
+        [allowEditing]="false"
+        [allowExporting]="false"
+        [allowFiltering]="false"
+        [allowFixing]="false"
+        [allowGrouping]="false"
+        [allowHeaderFiltering]="false"
+        [allowHiding]="false"
+        [allowReordering]="false"
+        [allowResizing]="false"
+        [allowSearch]="false"
+        [allowSorting]="false"
+        cellTemplate="buttonTemplate"
+      ></dxi-column>
+      <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+        <div class="d-con-cell-action">
+          <dx-button type="default" stylingMode="text" hint="Approved" (onClick)="POeditClick(cellInfo.data)">
+            <i class="ri-checkbox-fill" style="height: 24px; width: 24px"></i>
+            <!-- <i class="ri-check-double-line"></i> -->
+          </dx-button>
+          <dx-button type="danger" stylingMode="text" hint="203-Purchase Order" (onClick)="ReportSlip203(cellInfo.data)">
+            <i class="ri-printer-line"></i>
+          </dx-button>
+        </div>
+      </div>
+      <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+    </dx-data-grid>
+  </div>
+</dx-popup>
+
+<!-- Pending Purchase Order Approval Popup Grid Here : Start -->
+
+<!-- Pending SupplyOrder Approval Popup Grid Here : Start -->
+<dx-popup
+  [width]="WidthOfPopupWithGrid"
+  [height]="HeightOfPopupWithGrid"
+  [position]="'center'"
+  [showTitle]="true"
+  titleTemplate="titleTemplate"
+  [dragEnabled]="true"
+  [closeOnOutsideClick]="false"
+  [(visible)]="SupplyOrderApprovalPopupVisible"
+>
+  <div *dxTemplate="let content of 'titleTemplate'" class="d-flex justify-content-between">
+    <div class="">
+      <h4>Pending Supply Order For Approval</h4>
+    </div>
+    <div class="d-flex justify-content-end">
+      <dx-button class="p-0 mr-1 border-0" type="transparent" (onClick)="filtering()" icon="filter"></dx-button>
+      <dx-button class="p-0 border-0" type="transparent" (onClick)="closeSupplyOrderApprovalPopup()" icon="close"></dx-button>
+    </div>
+  </div>
+  <div *dxTemplate="let data of 'content'">
+    <dx-data-grid
+      #popupGrid
+      [height]="gridHeightInPopupWithGrid"
+      id="gridContainer"
+      [dataSource]="UnApprovedSupplyOrderList"
+      [showColumnLines]="false"
+      [showRowLines]="true"
+      [rowAlternationEnabled]="true"
+      [allowColumnResizing]="true"
+      [columnAutoWidth]="true"
+      [showBorders]="true"
+    >
+      <dxo-filter-row [visible]="filter"></dxo-filter-row>
+      <dxo-header-filter [visible]="filter"></dxo-header-filter>
+      <dxo-paging [enabled]="true"></dxo-paging>
+      <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="supplyOrderApprovalPopupGirdPageSize" [showInfo]="true"></dxo-pager>
+      <dxo-load-panel [enabled]="true"></dxo-load-panel>
+      <dxi-column dataField="Id" caption="Id" dataType="number" [width]="90" [visible]="false" alignment="left"></dxi-column>
+      <dxi-column dataField="RecordNo" caption="Sr#" dataType="number" [width]="60" alignment="left"></dxi-column>
+      <dxi-column dataField="DocNo" caption="Doc#." dataType="number" [width]="90" alignment="left"></dxi-column>
+
+      <dxi-column dataField="DocDate" caption="Doc Date" alignment="center" dataType="date" [format]="'dd-MMM-yyyy'" [width]="110"></dxi-column>
+      <dxi-column dataField="ManualRefNo" caption="ManualRefNo" dataType="string"></dxi-column>
+      <dxi-column dataField="BiltyNos" caption="BiltyNo" dataType="string" alignment="left"></dxi-column>
+      <dxi-column dataField="VehicleNos" caption="Vehicle No" dataType="string" alignment="left"></dxi-column>
+      <dxi-column dataField="TotalQuantity" caption="Total Bags" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+      <dxi-column dataField="TotalNetWeight" caption="Total NetWeight" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+      <dxi-column dataField="DestinationsLocation" caption="Destination Location" dataType="string"></dxi-column>
+      <dxi-column dataField="RemarksHeader" caption="Remarks" [visible]="false" dataType="string"></dxi-column>
+      <dxo-master-detail [enabled]="true" template="masterDetail"></dxo-master-detail>
+      <div *dxTemplate="let masterDetailItem of 'masterDetail'">
+        <Approval-Dashboard-Detail [type]="'SupplyOrderDetail'" [key]="masterDetailItem.Id" [rowData]="masterDetailItem.data"></Approval-Dashboard-Detail>
+      </div>
+      <dxi-column
+        dataField="IsApproved"
+        caption="Status"
+        [width]="100"
+        cellTemplate="SupplyOrderApprovalTemplate"
+        alignment="center"
+        [fixed]="true"
+        [fixedPosition]="'right'"
+        dataType="number"
+      ></dxi-column>
+      <div *dxTemplate="let cellInfo of 'SupplyOrderApprovalTemplate'">
+        <div *ngIf="cellInfo.value == 0; else falseStatus">
+          <span class="badge badge-danger">Not Approved</span>
+        </div>
+        <ng-template #falseStatus class="badge badge-success"> <span class="badge badge-success">Approved</span></ng-template>
+      </div>
+
+      <dxi-column
+        dataField="button"
+        [fixed]="true"
+        [fixedPosition]="'right'"
+        [width]="80"
+        alignment="center"
+        caption="Action"
+        [allowEditing]="false"
+        [allowExporting]="false"
+        [allowFiltering]="false"
+        [allowFixing]="false"
+        [allowGrouping]="false"
+        [allowHeaderFiltering]="false"
+        [allowHiding]="false"
+        [allowReordering]="false"
+        [allowResizing]="false"
+        [allowSearch]="false"
+        [allowSorting]="false"
+        cellTemplate="buttonTemplate"
+      ></dxi-column>
+      <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+        <div class="d-con-cell-action">
+          <dx-button type="default" stylingMode="text" hint="Approved" (onClick)="SupplyOrderEditClick(cellInfo.data)">
+            <i class="ri-checkbox-fill" style="height: 24px; width: 24px"></i>
+            <!-- <i class="ri-check-double-line"></i> -->
+          </dx-button>
+          <dx-button type="danger" stylingMode="text" hint="203-Purchase Order" (onClick)="SupplyOrderReportSlip330(cellInfo.data)">
+            <i class="ri-printer-line"></i>
+          </dx-button>
+        </div>
+      </div>
+      <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+    </dx-data-grid>
+  </div>
+</dx-popup>
+<!-- Pending SupplyOrder Approval Popup Grid Here : End -->
+<!-- container-fluid -->
+
+<!-- 
+<dx-popover
+    target="#confimationButton"
+    [visible]="confirmationForVoucher"
+    position="bottom"
+    [height]="300"
+    [width]="300"
+    [closeOnOutsideClick]="false"
+    titleTemplate="titleTemplate"
+    >
+    <div *dxTemplate="let data of 'titleTemplate'">
+      <h4>Approving Deleivery Order</h4>
+    </div>
+    <div *dxTemplate="let data of 'content'">
+        <p>Popover content</p>
+    </div>
+</dx-popover> -->
+
+<!-- showEvent="dxhoverstart"
+    hideEvent="dxhoverend" -->
+
+<!-- POPUP FOR DELEIVERY ORDER APPROVAL: Start -->
+
+<dx-popup
+  [width]="300"
+  [height]="250"
+  [showTitle]="true"
+  position="center"
+  [dragEnabled]="false"
+  [closeOnOutsideClick]="false"
+  titleTemplate="titleTemplate"
+  [(visible)]="deleiveryOrderApprovalConfirmationVisisble"
+>
+  <div *dxTemplate="let data of 'titleTemplate'" class="d-flex text-center justify-content-center">
+    <h4 class="text-dark">Deleivery Order Approval</h4>
+  </div>
+  <div *dxTemplate="let data of 'content'">
+    <div style="text-align: center">
+      <h1 style="color: red; font-size: 60px"><i class="fas fa-question-circle"></i></h1>
+      <h5>Are you sure to Approve ?</h5>
+      <div class="mt-3 d-flex justify-content-center">
+        <dx-button text="Yes" type="success" (onClick)="DOaccepted()"></dx-button>
+        <div class="m-1"></div>
+        <dx-button text="No" type="danger" (onClick)="DOrejected()"></dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>
+<!-- POPUP FOR DELEIVERY ORDER APPROVAL: End -->
+<!-- POPUP FOR Purchase ORDER APPROVAL: Start -->
+<dx-popup
+  [width]="300"
+  [height]="250"
+  [showTitle]="true"
+  position="center"
+  [dragEnabled]="false"
+  [closeOnOutsideClick]="false"
+  titleTemplate="titleTemplate"
+  [(visible)]="PurchaseOrderConfirmationVisible"
+>
+  <div *dxTemplate="let data of 'titleTemplate'" class="d-flex text-center justify-content-center">
+    <h4 class="text-dark">Purchase Order Approval</h4>
+  </div>
+  <div *dxTemplate="let data of 'content'">
+    <div style="text-align: center">
+      <h1 style="color: red; font-size: 60px"><i class="fas fa-question-circle"></i></h1>
+      <h5>Are you sure to Approve ?</h5>
+      <div class="mt-3 d-flex justify-content-center">
+        <dx-button text="Yes" type="success" (onClick)="POaccepted()"></dx-button>
+        <div class="m-1"></div>
+        <dx-button text="No" type="danger" (onClick)="POrejected()"></dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>
+<!-- POPUP FOR Purchase ORDER APPROVAL: End -->
+
+<!-- POPUP FOR Purchase Invoice APPROVAL: Start -->
+<dx-popup
+  [width]="300"
+  [height]="250"
+  [showTitle]="true"
+  position="center"
+  [dragEnabled]="false"
+  [closeOnOutsideClick]="false"
+  titleTemplate="titleTemplate"
+  [(visible)]="PurchaseInvoiceConfirmationVisible"
+>
+  <div *dxTemplate="let data of 'titleTemplate'" class="d-flex text-center justify-content-center">
+    <h4 class="text-dark">Purchase Invoice Approval</h4>
+  </div>
+  <div *dxTemplate="let data of 'content'">
+    <div style="text-align: center">
+      <h1 style="color: red; font-size: 60px"><i class="fas fa-question-circle"></i></h1>
+      <h5>Are you sure to Approve ?</h5>
+      <div class="mt-3 d-flex justify-content-center">
+        <dx-button text="Yes" type="success" (onClick)="PIaccepted()"></dx-button>
+        <div class="m-1"></div>
+        <dx-button text="No" type="danger" (onClick)="PIrejected()"></dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>
+
+<dx-popup
+  [width]="300"
+  [height]="250"
+  [showTitle]="true"
+  position="center"
+  [dragEnabled]="false"
+  [closeOnOutsideClick]="false"
+  titleTemplate="titleTemplate"
+  [(visible)]="SaleOrderConfirmationVisible"
+>
+  <div *dxTemplate="let data of 'titleTemplate'" class="d-flex text-center justify-content-center">
+    <h4 class="text-dark">Sale Order Approval</h4>
+  </div>
+  <div *dxTemplate="let data of 'content'">
+    <div style="text-align: center">
+      <h1 style="color: red; font-size: 60px"><i class="fas fa-question-circle"></i></h1>
+      <h5>Are you sure to Approve ?</h5>
+      <div class="mt-3 d-flex justify-content-center">
+        <dx-button text="Yes" type="success" (onClick)="SOaccepted()"></dx-button>
+        <div class="m-1"></div>
+        <dx-button text="No" type="danger" (onClick)="SOrejected()"></dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>
+
+<!-- POPUP FOR Sale Order APPROVAL: End -->
+<!-- POPUP FOR Outward Gate Pass APPROVAL: Start -->
+<dx-popup
+  [width]="300"
+  [height]="250"
+  [showTitle]="true"
+  position="center"
+  [dragEnabled]="false"
+  [closeOnOutsideClick]="false"
+  titleTemplate="titleTemplate"
+  [(visible)]="OutwardGatePassConfirmationVisible"
+>
+  <div *dxTemplate="let data of 'titleTemplate'" class="d-flex text-center justify-content-center">
+    <h4 class="text-dark">Outward Gate Pass Approval</h4>
+  </div>
+  <div *dxTemplate="let data of 'content'">
+    <div style="text-align: center">
+      <h1 style="color: red; font-size: 60px"><i class="fas fa-question-circle"></i></h1>
+      <h5>Are you sure to Approve ?</h5>
+      <div class="mt-3 d-flex justify-content-center">
+        <dx-button text="Yes" type="success" (onClick)="OGPaccepted()"></dx-button>
+        <div class="m-1"></div>
+        <dx-button text="No" type="danger" (onClick)="OGPrejected()"></dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>
+
+<!-- POPUP FOR Outward Gate Pass APPROVAL: End -->
+<!-- POPUP FOR Outward Gate Pass General APPROVAL: Start -->
+
+<dx-popup
+  [width]="300"
+  [height]="250"
+  [showTitle]="true"
+  position="center"
+  [dragEnabled]="false"
+  [closeOnOutsideClick]="false"
+  titleTemplate="titleTemplate"
+  [(visible)]="OutwardGatePassGeneralConfirmationVisible"
+>
+  <div *dxTemplate="let data of 'titleTemplate'" class="d-flex text-center justify-content-center">
+    <h4 class="text-dark">Outward Gate Pass General Approval</h4>
+  </div>
+  <div *dxTemplate="let data of 'content'">
+    <div style="text-align: center">
+      <h1 style="color: red; font-size: 60px"><i class="fas fa-question-circle"></i></h1>
+      <h5>Are you sure to Approve ?</h5>
+      <div class="mt-3 d-flex justify-content-center">
+        <dx-button text="Yes" type="success" (onClick)="OGPGaccepted()"></dx-button>
+        <div class="m-1"></div>
+        <dx-button text="No" type="danger" (onClick)="OGPGrejected()"></dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>
+<!-- POPUP FOR Outward Gate Pass General APPROVAL: End -->
+
+<!-- Supply Order Approval Confirmation Popup : Start -->
+<dx-popup
+  [width]="300"
+  [height]="250"
+  [showTitle]="true"
+  position="center"
+  [dragEnabled]="false"
+  [closeOnOutsideClick]="false"
+  titleTemplate="titleTemplate"
+  [(visible)]="SupplyOrderApprovalConfirmationPopupVisibility"
+>
+  <div *dxTemplate="let data of 'titleTemplate'" class="d-flex text-center justify-content-center">
+    <h4 class="text-dark">Supply Order Approval</h4>
+  </div>
+  <div *dxTemplate="let data of 'content'">
+    <div style="text-align: center">
+      <h1 style="color: red; font-size: 60px"><i class="fas fa-question-circle"></i></h1>
+      <h5>Are you sure to Approve ?</h5>
+      <div class="mt-3 d-flex justify-content-center">
+        <dx-button text="Yes" type="success" (onClick)="SupplyOrderAccepted()"></dx-button>
+        <div class="m-1"></div>
+        <dx-button text="No" type="danger" (onClick)="SupplyOrderRejected()"></dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>
+
+<!-- Supply Order Approval Confirmation Popup: End -->
+<!-- ======================================================================================================= -->
+
+<app-wsrm-requisition-order-approval
+  #WsrmRequisitionOrderApprovalComponent
+  (closeWsrmRequisitionOrderApprovalPopup)="handleWsrmRequisitionOrderPopupVisibility($event)"
+  [WsrmRequisitioOrderApprovalPopupVisible]="WsrmRequisitionOrdePopupVisible"
+  (recordApproved)="refreshInventoryApprovalData($event)"
+></app-wsrm-requisition-order-approval>
+
+<app-sale-order-approval
+  #SaleOrderApprovalComponent
+  [ApprovalPopupVisible]="SaleOrderApprovalPopupVisible"
+  (ClosePopup)="handleSaleOrderApprovalPopupVisibility($event)"
+  (onApproval)="handleInventoryApproval($event)"
+></app-sale-order-approval>
+<app-sale-invoice-approval
+  #SaleInoviceApprovalComponent
+  [ApprovalPopupVisible]="SaleInvoiceApprovalPopupVisible"
+  (onApproval)="handleInventoryApproval($event)"
+  (ClosePopup)="handleSaleInvoiceApporvalPopupVisibility($event)"
+></app-sale-invoice-approval>
+
+<app-sale-return-trading-approval
+  #SaleReturnTradingApprovalComponent
+  [ApprovalPopupVisible]="SaleReturnTradingApprovalPopupVisible"
+  (onApproval)="handleInventoryApproval($event)"
+  (ClosePopup)="handleSaleReturnTradingApprovalPopupVisibility($event)"
+>
+</app-sale-return-trading-approval>
+
+<!-- ======================================================================================================= -->
+
+<notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+<notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+<notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+
+<load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+<dx-popup
+  [width]="WidthOfPopupWithGrid"
+  [height]="HeightOfPopupWithGrid"
+  [position]="'center'"
+  [showTitle]="true"
+  titleTemplate="titleTemplate"
+  [dragEnabled]="true"
+  [showCloseButton]="true"
+  [closeOnOutsideClick]="false"
+  [(visible)]="ApprovalPopupVisible"
+  [animation]="{ hide: { type: 'slideOut', direction: 'right', duration: 1000 }, show: { type: 'slideIn', direction: 'left', duration: 1500 } }"
+>
+  <div *dxTemplate="let content of 'titleTemplate'" class="d-flex justify-content-between">
+    <div class="">
+      <div class="text-center">
+        <h4 style="font-weight: bold; font-family: cursive"></h4>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-end">
+      <!-- <dx-button class="p-0 mr-1 border-0" type="transparent" (onClick)="filtering()" icon="filter"></dx-button> -->
+      <dx-button class="p-0 border-0" type="transparent" (onClick)="handleApprovalPopupVisibility(100)" icon="close"></dx-button>
+    </div>
+  </div>
+  <div *dxTemplate="let data of 'content'">
+    <app-accounts-approval-popup
+      *ngIf="ApprovalPopupCompnentList[0].Status"
+      [CompanyId]="CompanyId"
+      [DocTypeId]="AccountsApprovalDocumetnTypeId"
+      #AccountsApprovalComponent
+      [AccountsApprovalName]="AccountsApprovalPopupHeading"
+      (RecordApproved)="handleAccountsRecordApproved($event)"
+    >
+    </app-accounts-approval-popup>
+    <app-wsrm-sale-invoice-approval
+      [ApprovalPopupHeading]="ApprovalPopupCompnentList[1].Label"
+      [CompanyId]="CompanyId"
+      *ngIf="ApprovalPopupCompnentList[1].Status"
+      (onApproval)="handleInventoryApproval($event)"
+    ></app-wsrm-sale-invoice-approval>
+    <app-purchase-invoice-trading-approval
+      *ngIf="ApprovalPopupCompnentList[2].Status"
+      (onApproval)="handleInventoryApproval($event)"
+      [ApprovalPopupHeading]="ApprovalPopupCompnentList[2].Label"
+      [CompanyId]="CompanyId"
+    ></app-purchase-invoice-trading-approval>
+    <app-wsrm-sale-order-approval
+      *ngIf="ApprovalPopupCompnentList[3].Status"
+      (onApproval)="handleInventoryApproval($event)"
+      [ApprovalPopupHeading]="ApprovalPopupCompnentList[3].Label"
+      [CompanyId]="CompanyId"
+    ></app-wsrm-sale-order-approval>
+    <!-- <app-purchase-order-trading-approval>
+  #PurchaseOrderTradingApprovalComponent 
+  *ngIf="ApprovalPopupCompnentList[4].Status"
+  [ApprovalPopupHeading]="ApprovalPopupCompnentList[4].Label"
+  (onApproval)="handleInventoryApproval($event)"
+  [CompanyId]="CompanyId"
+</app-purchase-order-trading-approval> -->
+    <app-import-contract-approval
+      *ngIf="ApprovalPopupCompnentList[5].Status"
+      [ApprovalPopupHeading]="ApprovalPopupCompnentList[5].Label"
+      (onApproval)="handleInventoryApproval($event)"
+      [CompanyId]="CompanyId"
+    >
+    </app-import-contract-approval>
+    <app-import-purchase-order-approval
+      *ngIf="ApprovalPopupCompnentList[6].Status"
+      [ApprovalPopupHeading]="ApprovalPopupCompnentList[6].Label"
+      (onApproval)="handleInventoryApproval($event)"
+      [CompanyId]="CompanyId"
+    ></app-import-purchase-order-approval>
+    <app-import-invoice-approval
+      *ngIf="ApprovalPopupCompnentList[7].Status"
+      [ApprovalPopupHeading]="ApprovalPopupCompnentList[7].Label"
+      (onApproval)="handleInventoryApproval($event)"
+      [CompanyId]="CompanyId"
+    ></app-import-invoice-approval>
+    <app-purchase-return-trading-approval
+      *ngIf="ApprovalPopupCompnentList[8].Status"
+      [ApprovalPopupHeading]="ApprovalPopupCompnentList[8].Label"
+      (onApproval)="handleInventoryApproval($event)"
+      [CompanyId]="CompanyId"
+    ></app-purchase-return-trading-approval>
+  </div>
+</dx-popup>

@@ -1,0 +1,66 @@
+<div class="container-fluid">
+  <!-- start page title -->
+  <div class="d-flex justify-content-between">
+    <h4>SMS Template</h4>
+  </div>
+  <div class="row">
+    <div class="col-md-12 mt-4">
+      <dx-form [formData]="smsData" #smsForm [showRequiredMark]="false">
+        <dxi-item itemType="group" [colCount]="4">
+          <dxi-item
+            dataField="ScreenName"
+            editorType="dxSelectBox"
+            [editorOptions]="{
+              placeholder: 'Screen Name',
+              items: screenNameList,
+              valueExpr: 'screenDefinitionName',
+              displayExpr: 'ScreenName',
+              searchEnabled: true,
+              onValueChanged: onScreenNameChange
+            }"
+            [colSpan]="1"
+            cssClass="px-1 m-0"
+          >
+            <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          </dxi-item>
+          <dxi-item
+            dataField="GroupId"
+            editorType="dxSelectBox"
+            [editorOptions]="{
+              placeholder: 'Groups',
+              items: groupList,
+              valueExpr: 'Id',
+              displayExpr: 'GroupName',
+              searchEnabled: true
+            }"
+            [colSpan]="1"
+            cssClass="px-1 m-0"
+          >
+            <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          </dxi-item>
+          <dxi-item>
+            <div *dxTemplate>
+              <dx-button text="Save" icon="save" type="success" (onClick)="onSave()"></dx-button>
+            </div>
+          </dxi-item>
+        </dxi-item>
+        <dxi-item>
+          <div *dxTemplate="let data of 'content'">
+            <span style="font-size: large">Template</span>
+            <dx-html-editor #htmlEditor valueType="markdown" style="background-color: #fff; max-width: 800px; height: 330px; margin-top: 5px">
+              <dxi-mention [dataSource]="templateDataSource" valueExpr="text" displayExpr="text" searchExpr="text"></dxi-mention>
+              <p>{{ templateBody }}</p>
+            </dx-html-editor>
+            <div>
+              <!-- <div class="d-flex m-2 justify-content-end">
+                <dx-button text="Save" icon="save" type="success" (onClick)="test()"></dx-button>
+                <div class="m-1"></div>
+                <dx-button text="Cancel" icon="close" type="danger"></dx-button>
+              </div> -->
+            </div>
+          </div>
+        </dxi-item>
+      </dx-form>
+    </div>
+  </div>
+</div>

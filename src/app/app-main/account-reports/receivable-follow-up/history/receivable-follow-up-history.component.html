@@ -1,0 +1,301 @@
+<div class="container-fluid">
+  <!-- start page title -->
+  <app-pagetitle title="Receivable Follow Up" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+  <!-- end page title -->
+  <div class="d-flex justify-content-between">
+    <div>
+      <dx-button id="filter" class="ml-3 mb-3" type="default" text="Add New" icon="plus" (onClick)="gotoForm()"> </dx-button>
+    </div>
+    <div>
+      <dx-button class="ml-3 mb-3" type="default" text="Back" routerLink="/admin-panel/report-panel" icon="back" style="background-color: #ffa100"></dx-button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card shadow-sm">
+        <dx-form [formData]="ReceivableFollowUpHistoryData" #ReceivableFollowUpHistory [showRequiredMark]="false" [colCountByScreen]="{ lg: 3, md: 2, sm: 2, xs: 1 }">
+          <dxi-item dataField="FromDate" editorType="dxDateBox" [editorOptions]="{ displayFormat: 'dd-MMM-yyyy', placeholder: 'From Date', showClearButton: 'true', stylingMode: 'underlined' }">
+            <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+            <dxi-validation-rule type="required" message="From Date is required"></dxi-validation-rule>
+          </dxi-item>
+
+          <dxi-item dataField="ToDate" editorType="dxDateBox" [editorOptions]="{ displayFormat: 'dd-MMM-yyyy', placeholder: 'To Date', showClearButton: 'true', stylingMode: 'underlined' }">
+            <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+            <dxi-validation-rule type="required" message="To Date is required"></dxi-validation-rule>
+          </dxi-item>
+          <dxi-item
+            dataField="accountType"
+            editorType="dxSelectBox"
+            [editorOptions]="{
+              items: accountsList,
+              valueExpr: 'Id',
+              displayExpr: 'AccountType',
+              searchEnabled: true,
+              placeholder: 'Account Type',
+              showClearButton: 'true',
+              stylingMode: 'underlined'
+            }"
+          >
+            <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+            <dxi-validation-rule type="required" message="Account Type is required"></dxi-validation-rule>
+          </dxi-item>
+
+          <dxi-item>
+            <dx-drop-down-box
+              [(value)]="treeBoxValue"
+              valueExpr="AccountCode"
+              displayExpr="AccountTitle"
+              placeholder="Select Accounts..."
+              [showClearButton]="true"
+              [dataSource]="thirdLevleAccountsWithType3"
+              (onValueChanged)="onDropDownBoxValueChanged($event)"
+              [showClearButton]="true"
+              stylingMode="underlined"
+            >
+              <div *dxTemplate="let data of 'content'">
+                <dx-tree-view
+                  [dataSource]="thirdLevleAccountsWithType3"
+                  dataStructure="plain"
+                  keyExpr="AccountCode"
+                  selectionMode="multiple"
+                  showCheckBoxesMode="normal"
+                  [selectNodesRecursive]="false"
+                  displayExpr="AccountTitle"
+                  [selectByClick]="true"
+                  (onContentReady)="onTreeViewReady($event)"
+                  (onItemSelectionChanged)="onTreeViewSelectionChanged($event)"
+                >
+                </dx-tree-view>
+              </div>
+            </dx-drop-down-box>
+            <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          </dxi-item>
+
+          <dxi-item dataField="fromBalance" editorType="dxNumberBox" [editorOptions]="{ placeholder: 'From Balance', showClearButton: 'true', stylingMode: 'underlined' }">
+            <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          </dxi-item>
+          <dxi-item dataField="toBalance" editorType="dxNumberBox" [editorOptions]="{ placeholder: 'To Balance', showClearButton: 'true', stylingMode: 'underlined' }">
+            <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          </dxi-item>
+        </dx-form>
+        <div class="d-flex justify-content-end mt-1">
+          <div class="m-0 p-1">
+            <dx-button type="success" (onClick)="onSubmit()" text="Show"></dx-button>
+          </div>
+          <div class="m-0 p-1">
+            <dx-button type="danger" (onClick)="clear()" text="Clear"></dx-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row pt-2">
+    <div class="col-md-12" [ngStyle]="{ height: IsLoadedInPopup == false ? gridColumnHeight : gridColumnHeightInPopupWithGrid }" #stickyGrid [class.sticky]="sticky">
+      <div class="card">
+        <dx-data-grid
+          id="gridContainer"
+          #ReceiveAbleFollowUpGrid
+          [dataSource]="dataSource"
+          [height]="gridHeight"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnReordering]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [wordWrapEnabled]="true"
+          [showBorders]="true"
+          (onToolbarPreparing)="onToolPreparingOfItemHistoryGrid($event)"
+        >
+          <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-filter-row [visible]="filter"></dxo-filter-row>
+          <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+          <dxo-header-filter [visible]="filter"></dxo-header-filter>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-load-panel [enabled]="false"></dxo-load-panel>
+          <dxo-paging [enabled]="true"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="girdPageSize" [showInfo]="true"></dxo-pager>
+          <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('ReceiveAbleFollowUpGrid') }}"></dxo-state-storing>
+          <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+
+          <dxi-column dataField="" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+          <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+            <div class="d-con-cell-action">
+              <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+            </div>
+          </div>
+          <dxi-column showWhenGrouped="true" caption="#" cellTemplate="rowNumber" [width]="50" cssClass="readonly-grid-cell"></dxi-column>
+          <div *dxTemplate="let data of 'rowNumber'">
+            <div style="text-align: left; font-weight: bold; color: slategray">{{ getRowNumber(data) }}</div>
+          </div>
+          <dxi-column dataField="AccountCode" caption="Code" dataType="number" alignment="left"></dxi-column>
+          <dxi-column dataField="Id" caption="Id" dataType="number" alignment="left" [visible]="false"></dxi-column>
+          <dxi-column dataField="AccountId" caption="AccountId" dataType="number" [visible]="true" alignment="left" [visible]="false"></dxi-column>
+          <dxi-column dataField="AccountTitle" [width]="350" caption="AccountTitle" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="AccountGroup" caption="AccountGroup" dataType="string" alignment="left" [visible]="false"></dxi-column>
+          <dxi-column dataField="ObDebit" caption="Ob Debit" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="ObCredit" caption="Ob Credit" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="CurrDebit" caption="Cr Debit" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="CurrCredit" caption="Cr Credit" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="ClDebit" caption="Cl Debit" dataType="number" alignment="right" cellTemplate="cellTemplate" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <div *dxTemplate="let cell of 'cellTemplate'">
+            <div style="font-weight: bold">{{ cell.text }}</div>
+          </div>
+          <dxi-column dataField="LastBillDate" caption="Last Bill Date" dataType="date" alignment="center" [format]="'dd-MMM-yyyy'"></dxi-column>
+          <dxi-column dataField="LastBillsAmount" caption="Last Bill Amount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="BillDays" caption="Bill Days" dataType="number" alignment="right"></dxi-column>
+          <dxi-column dataField="LastRcvdDate" caption="LastRcvdDate" dataType="date" alignment="center" [format]="'dd-MMM-yyyy'"></dxi-column>
+          <dxi-column dataField="LastRcvdAmount" caption="Last Rcvd Amount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+
+          <dxi-column dataField="RcvdDays" caption="Rcvd Days" dataType="number" alignment="right"></dxi-column>
+          <dxi-column dataField="Credit" caption="Credit" dataType="number" [visible]="false" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+
+          <!-- <dxi-column dataField="rDays" caption="r Days" dataType="number" alignment="left"></dxi-column> -->
+
+          <!-- <dxi-column
+            dataField="button"
+            [fixed]="true"
+            [fixedPosition]="'right'"
+            [width]="90"
+            alignment="right"
+            caption="Action"
+            [allowEditing]="false"
+            [allowExporting]="false"
+            [allowFiltering]="false"
+            [allowFixing]="false"
+            [allowGrouping]="false"
+            [allowHeaderFiltering]="false"
+            [allowHiding]="false"
+            [allowReordering]="false"
+            [allowResizing]="false"
+            [allowSearch]="false"
+            [allowSorting]="false"
+            cellTemplate="buttonTemplate"
+          ></dxi-column> -->
+          <!-- <dxo-master-detail [enabled]="true" template="masterDetail"></dxo-master-detail> -->
+          <dxo-summary>
+            <dxi-total-item column="AccountTitle" summaryType="count" displayFormat="Total Records: {0}"> </dxi-total-item>
+            <dxi-total-item column="LastBillsAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="LastRcvdAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="ClDebit" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="Credit" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="ObDebit" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="ObCredit" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="CurrDebit" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="CurrCredit" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+          </dxo-summary>
+          <!-- <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+            <div class="d-con-cell-action">
+              <dx-button type="default" stylingMode="text" (onClick)="onEdit(cellInfo.data)">
+                <i class="ri-edit-2-line"></i>
+              </dx-button>
+              <dx-button type="danger" stylingMode="text" hint="262-DeliveryOrder Slip" (onClick)="InvoiceSlip262(cellInfo.data)">
+                <i class="ri-printer-line"></i>
+              </dx-button>
+            </div>
+          </div> -->
+          <!-- <div *dxTemplate="let masterDetailItem of 'masterDetail'">
+            <detail-view [key]="masterDetailItem.key" [rowData]="masterDetailItem.data"></detail-view>
+          </div> -->
+
+          <dxo-export [enabled]="true" [allowExportSelectedData]="true"></dxo-export>
+          <dxo-scrolling [mode]="'infinite'"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+    </div>
+    <!-- <div class="col-md-12">
+      <div class="card">
+        <dx-data-grid
+          id="gridContainer"
+          [dataSource]="dataSource"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+          (onToolbarPreparing)="onToolbarPreparing($event)"
+        >
+          <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-filter-row [visible]="filter"></dxo-filter-row>
+          <dxo-header-filter [visible]="filter"></dxo-header-filter>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-load-panel [enabled]="true"></dxo-load-panel>
+          <dxo-paging [enabled]="true"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true"></dxo-pager>
+          <dxi-column dataField="BillDate" caption="Bill Date" dataType="date" alignment="left" [format]="'dd-MMM-yyyy'"></dxi-column>
+          <dxi-column dataField="BNo" caption="B No" dataType="number" alignment="left"></dxi-column>
+          <dxi-column dataField="TAmount" caption="TAmount" dataType="number" alignment="left" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="RAmount" caption="RAmount" dataType="number" alignment="left" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="BAmount" caption="BAmount" dataType="number" alignment="left" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column
+            dataField="button"
+            [fixed]="true"
+            [fixedPosition]="'right'"
+            [width]="90"
+            alignment="right"
+            caption="Action"
+            [allowEditing]="false"
+            [allowExporting]="false"
+            [allowFiltering]="false"
+            [allowFixing]="false"
+            [allowGrouping]="false"
+            [allowHeaderFiltering]="false"
+            [allowHiding]="false"
+            [allowReordering]="false"
+            [allowResizing]="false"
+            [allowSearch]="false"
+            [allowSorting]="false"
+            cellTemplate="buttonTemplate"
+          ></dxi-column>
+           
+          <dxo-master-detail [enabled]="true" template="detail"></dxo-master-detail>
+      <div *dxTemplate="let employee of 'detail'">
+          <div class="master-detail-caption">{{employee.data.FirstName + " " + employee.data.LastName + "'s Tasks:"}}</div>
+          <detail-grid [key]="employee.key"></detail-grid>
+      </div>
+          <dxo-summary>
+            <dxi-total-item column="TAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="RAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="BAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+          </dxo-summary>
+          <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+            <div class="d-con-cell-action">
+              <dx-button type="default" stylingMode="text" (onClick)="onEdit(cellInfo.data)">
+                <i class="ri-edit-2-line"></i>
+              </dx-button>
+              <dx-button type="danger" stylingMode="text" hint="262-DeliveryOrder Slip" (onClick)="InvoiceSlip262(cellInfo.data)">
+                <i class="ri-printer-line"></i>
+              </dx-button>
+            </div>
+          </div>
+          
+  
+          <dxo-export [enabled]="true" [allowExportSelectedData]="true"></dxo-export>
+          <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+        </dx-data-grid>
+  
+        <dx-data-grid [dataSource]="tasksDataSource" [showBorders]="true" [columnAutoWidth]="true">
+      <dxi-column dataField="Subject" dataType="string"></dxi-column>
+      <dxi-column dataField="StartDate" dataType="date"></dxi-column>
+      <dxi-column dataField="DueDate" dataType="date"></dxi-column>
+      <dxi-column dataField="Priority" dataType="string"></dxi-column>
+      <dxi-column caption="Completed" dataType="boolean" [calculateCellValue]="completedValue"></dxi-column>
+  </dx-data-grid>
+      </div>
+    </div> -->
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+      <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+      <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+    </div>
+    <div class="col-md-12">
+      <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+    </div>
+  </div>
+</div>

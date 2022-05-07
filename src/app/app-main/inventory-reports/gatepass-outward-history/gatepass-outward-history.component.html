@@ -1,0 +1,186 @@
+<div class="container-fluid">
+  <!-- start page title -->
+  <app-pagetitle title="GatePass Outward History" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+  <!-- end page title -->
+
+  <div class="row">
+    <div class="col-md-12">
+      <dx-form id="form" [formData]="gatepassOutwardHistoryFormData" #gatepassOutwardHistoryForm [showRequiredMark]="false" [colCountByScreen]="{ lg: 6, md: 3, sm: 2, xs: 1 }">
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="FromDate"
+          editorType="dxDateBox"
+          [editorOptions]="{
+            displayFormat: 'dd-MMM-yyyy',
+            placeholder: 'GpDateFrom',
+            showClearButton: 'true',
+            stylingMode: 'underlined'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="GpDateFrom is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="ToDate"
+          editorType="dxDateBox"
+          [editorOptions]="{
+            displayFormat: 'dd-MMM-yyyy',
+            placeholder: 'GpDateTo',
+            showClearButton: 'true',
+            stylingMode: 'underlined'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="GpDateTo is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="FromDocNo"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            placeholder: 'Gp No From',
+            showClearButton: 'true',
+            stylingMode: 'underlined'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="ToDocNo"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            placeholder: 'Gp No To',
+            showClearButton: 'true',
+            stylingMode: 'underlined'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="SupplierCustomerId"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            dataSource: SupplierList,
+            searchEnabled: true,
+            valueExpr: 'Id',
+            displayExpr: 'CompanyName',
+            placeholder: 'Supplier',
+            showClearButton: 'true',
+            stylingMode: 'underlined'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="Status"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: statusList,
+            searchEnabled: true,
+            valueExpr: 'name',
+            displayExpr: 'name',
+            placeholder: 'Status',
+            showClearButton: 'true',
+            stylingMode: 'underlined'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+      </dx-form>
+      <div class="d-flex justify-content-end mt-1">
+        <div class="m-0 p-1">
+          <dx-button type="success" (onClick)="onSubmit()" text="Show"></dx-button>
+        </div>
+        <div class="m-0 p-1">
+          <dx-button type="danger" (onClick)="clear()" text="Clear"></dx-button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-md-12" [ngStyle]="{ height: gridColumnHeight }" #stickyGrid [class.sticky]="sticky">
+      <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+        <dx-data-grid
+          id="gridContainer"
+          #gatePassOutwardGrid
+          [dataSource]="dataSource"
+          [height]="gridHeight"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [showBorders]="false"
+          [rowAlternationEnabled]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+          (onToolbarPreparing)="onToolPreparingOfItemHistoryGrid($event)"
+        >
+          <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-filter-row [visible]="filter"></dxo-filter-row>
+          <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+          <dxo-header-filter [visible]="filter"></dxo-header-filter>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-load-panel [enabled]="false"></dxo-load-panel>
+          <dxo-export [enabled]="true" fileName="Estimates" [allowExportSelectedData]="true">
+            <dxo-texts exportAll="Export All Rows"></dxo-texts>
+          </dxo-export>
+          <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('gatePassOutwardGrid') }}"></dxo-state-storing>
+          <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+          <dxi-column dataField="" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+          <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+            <div class="d-con-cell-action">
+              <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+            </div>
+          </div>
+
+          <!-- <dxo-selection mode="multiple" selectAllMode="page" showCheckBoxesMode="always"></dxo-selection> -->
+          <dxo-paging [enabled]="true"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true"></dxo-pager>
+          <dxi-column dataField="GpSrNo" caption="GpSrNo" dataType="number" alignment="left"></dxi-column>
+          <dxi-column dataField="GpDate" caption="GpDate" dataType="date" [format]="'dd-MMM-yyyy'"></dxi-column>
+          <dxi-column dataField="CompanyName" caption="Supplier" dataType="string"></dxi-column>
+          <dxi-column dataField="VehicleType" caption="VehicleType" dataType="string"></dxi-column>
+          <dxi-column dataField="VehicleNo" caption="VehicleNo" dataType="string"></dxi-column>
+          <dxi-column dataField="VarietyName" caption="VarietyName" dataType="string"></dxi-column>
+          <dxi-column dataField="ItemQty" caption="ItemQty" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="InTime" caption="InTime" dataType="date" [format]="'HH:mm'"></dxi-column>
+          <dxi-column dataField="OutTime" caption="OutTime" dataType="date" [format]="'HH:mm'"></dxi-column>
+          <dxi-column dataField="UserName" caption="UserName" dataType="string"></dxi-column>
+          <dxi-column dataField="Description" caption="City" dataType="string"></dxi-column>
+          <dxi-column dataField="Freight" caption="Freight" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="OrderNo" caption="OrderNo" dataType="date"></dxi-column>
+          <dxi-column dataField="GatepassType" caption="GatepassType" dataType="string"></dxi-column>
+          <dxi-column dataField="Status" caption="Status" dataType="string"></dxi-column>
+          <dxi-column dataField="SupplierWeight" caption="SupplierWeight" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="FactoryWeight" caption="FactoryWeight" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="DifferenceWeight" caption="DifferenceWeight" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxo-summary>
+            <dxi-total-item column="CompanyName" summaryType="count" displayFormat="Total Records: {0}"> </dxi-total-item>
+            <dxi-total-item column="SupplierWeight" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+            <dxi-total-item column="FactoryWeight" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+            <dxi-total-item column="DifferenceWeight" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+            <dxi-total-item column="ItemQty" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+            <dxi-total-item column="Freight" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+          </dxo-summary>
+          <dxo-scrolling [scrollByContent]="true" [scrollByThumb]="true" [showScrollbar]="'always'" [scrollLeft]="true" mode="infinite"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+      <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+      <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+    </div>
+  </div>
+</div>
+<!-- container-fluid -->

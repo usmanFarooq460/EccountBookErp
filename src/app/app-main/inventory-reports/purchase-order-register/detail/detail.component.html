@@ -1,0 +1,54 @@
+<div class="" style="background-color: rgb(163, 164, 165)">
+  <div class="mx-3">
+    <dx-data-grid
+      [visible]="DetailForReportAgainstOutstandingPurchaseOrders"
+      [dataSource]="detailDataList"
+      [showColumnLines]="false"
+      [showRowLines]="true"
+      [rowAlternationEnabled]="true"
+      [allowColumnResizing]="true"
+      [columnAutoWidth]="true"
+      [showBorders]="true"
+      [wordWrapEnabled]="true"
+      [wordWrapEnabled]="false"
+    >
+      <!-- <dxo-load-panel [enabled]="true"></dxo-load-panel> -->
+      <dxo-paging [enabled]="true"></dxo-paging>
+      <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15]" [showInfo]="true"></dxo-pager>
+
+      <dxi-column dataField="Supplier" [width]="425" caption="Supplier" dataType="string" alignment="left"></dxi-column>
+      <dxi-column dataField="Qty" caption="Quantity" dataType="number" alignment="center" cellTemplate="DetailcellTemplate" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+      <dxi-column dataField="OrderWeight" caption="Weight" dataType="number" cellTemplate="DetailcellTemplate" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+
+      <dxi-column dataField="ItemSupAmount" caption="Amount" cellTemplate="DetailcellTemplate" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+      <dxi-column
+        dataField="MaxRatebyItemCropSupplier"
+        cellTemplate="DetailcellTemplate"
+        caption="Maximum Rate"
+        dataType="number"
+        alignment="center"
+        [format]="{ type: 'fixedPoint', precision: 0 }"
+      ></dxi-column>
+      <dxi-column
+        dataField="MinRateByItemCropSupplier"
+        cellTemplate="DetailcellTemplate"
+        cellTemplate="DetailcellTemplate"
+        caption="Minimum Rate"
+        dataType="number"
+        alignment="center"
+        [format]="{ type: 'fixedPoint', precision: 0 }"
+      ></dxi-column>
+      <dxi-column dataField="AvgRate" caption="AvgRate" cellTemplate="DetailcellTemplate" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+
+      <div *dxTemplate="let cell of 'DetailcellTemplate'">
+        <div id="abcdedf">{{ cell.text }}</div>
+      </div>
+      <dxo-summary>
+        <dxi-total-item column="Qty" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+        <dxi-total-item column="ItemSupAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+        <dxi-total-item column="OrderWeight" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+      </dxo-summary>
+      <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+    </dx-data-grid>
+  </div>
+</div>

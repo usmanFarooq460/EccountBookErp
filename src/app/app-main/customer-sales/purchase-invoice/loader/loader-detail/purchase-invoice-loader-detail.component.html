@@ -1,0 +1,28 @@
+<dx-data-grid
+  [visible]="loaderDetailDataSource"
+  [dataSource]="dataSource"
+  [showColumnLines]="false"
+  [showRowLines]="true"
+  [rowAlternationEnabled]="true"
+  [allowColumnResizing]="true"
+  [columnAutoWidth]="true"
+  [showBorders]="true"
+  [wordWrapEnabled]="false"
+>
+  <dxo-load-panel [enabled]="true"></dxo-load-panel>
+  <dxo-paging [enabled]="true"></dxo-paging>
+  <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15]" [showInfo]="true"></dxo-pager>
+  <dxi-column dataField="ItemName" caption="ItemName" dataType="string" alignment="left"></dxi-column>
+  <dxi-column dataField="ItemQty" caption="Item Quantity" cellTemplate="DetailCellTemplate" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="UOMCode" caption="Item UOM" cellTemplate="DetailCellTemplate" dataType="string" alignment="center"></dxi-column>
+  <dxi-column dataField="NetBillWeight" caption="Item Weight" cellTemplate="DetailCellTemplate" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="OrderItemRate" caption="Item Rate" cellTemplate="DetailCellTemplate" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <div *dxTemplate="let cell of 'DetailCellTemplate'">
+    <div id="abcdedf">{{ cell.text }}</div>
+  </div>
+  <dxo-summary>
+    <dxi-total-item column="ItemQty" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+    <dxi-total-item column="NetBillWeight" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+  </dxo-summary>
+  <dxo-scrolling [scrollByContent]="true" [scrollByThumb]="true" [showScrollbar]="'always'" [scrollLeft]="true" mode="infinite"></dxo-scrolling>
+</dx-data-grid>

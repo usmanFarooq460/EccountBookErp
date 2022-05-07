@@ -1,0 +1,286 @@
+<div class="container-fluid">
+  <!-- start page title -->
+  <div class="d-flex justify-content-between">
+    <h4>Receivable Follow Up</h4>
+    <dx-button style="color: aqua" icon="refresh" type="normal" (onClick)="resetForm()"></dx-button>
+  </div>
+  <!-- end page title -->
+  <div class="row">
+    <div class="col-lg-7 p-2" style="height: 300px">
+      <div class="card" style="height: 100%">
+        <dx-form class="pb-2" [formData]="PayablesRecievablesAgingFormData" #PayablesRecievablesAgingForm [showRequiredMark]="false">
+          <dxi-item itemType="group" cssClass="second-group" [colCount]="2">
+            <dxi-item class="mt-1 mb-3 d-flex justify-content-lg-center text-center">
+              <h4>Report Classification</h4>
+            </dxi-item>
+            <dxi-item class="mt-1 mb-3 d-flex justify-content-lg-center text-center">
+              <h4>Report Types</h4>
+            </dxi-item>
+          </dxi-item>
+          <dxi-item itemType="group" cssClass="second-group" [colCount]="2">
+            <dxi-item
+              cssClass="px-1 mb-2"
+              dataField=""
+              editorType="dxRadioGroup"
+              [editorOptions]="{
+                items: classificationList,
+                layout: 'horizontal',
+                onValueChanged: setClassificationType
+              }"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <dxi-validation-rule type="required" message="Account Title is required"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item
+              cssClass="ml-5 mb-2"
+              dataField=""
+              editorType="dxRadioGroup"
+              [editorOptions]="{
+                items: RptTypeList,
+                layout: 'horizontal',
+                onValueChanged: setRptType
+              }"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <dxi-validation-rule type="required" message="Account Title is required"></dxi-validation-rule>
+            </dxi-item>
+            <!-- <dxi-item
+              cssClass="px-1 m-0"
+              dataField="FollowupDate"
+              editorType="dxDateBox"
+              [editorOptions]="{
+                placeholder: 'Follow Up Date',
+                displayFormat: 'dd-MMM-yyyy'
+                
+              }"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <dxi-validation-rule type="required" message="Follow Up Date is required"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item
+              cssClass="px-1 m-0"
+              dataField="NextFollowupDays"
+              editorType="dxNumberBox"
+              [editorOptions]="{
+                placeholder: 'Next FollowUp Days'
+              }"
+            >
+              <dxi-validation-rule type="required" message="Next FollowUp Days is required"></dxi-validation-rule>
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+            </dxi-item> -->
+          </dxi-item>
+          <dxi-item itemType="group" cssClass="second-group" [colCount]="1">
+            <dxi-item class="mt-0 mb-0 d-flex justify-content-lg-center text-center">
+              <h4>Options for Aging</h4>
+            </dxi-item>
+          </dxi-item>
+          <dxi-item itemType="group" cssClass="second-group" [colCount]="4">
+            <dxi-item
+              cssClass="px-1 mt-3"
+              dataField="IntervalDays"
+              editorType="dxNumberBox"
+              [editorOptions]="{
+                placeholder: 'Interval Days',
+                stylingMode: 'underlined',
+                onValueChanged: handleIntervalChange
+              }"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <!-- <dxi-validation-rule type="required" message="Inte is required"></dxi-validation-rule> -->
+            </dxi-item>
+            <dxi-item
+              cssClass="px-1 mt-3"
+              dataField="FromDate"
+              editorType="dxDateBox"
+              [editorOptions]="{
+                placeholder: 'Start Date',
+                displayFormat: 'dd-MMM-yyyy',
+                stylingMode: 'underlined',
+                onValueChanged: handleenddateChange
+              }"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <!-- <dxi-validation-rule type="required" message="Inte is required"></dxi-validation-rule> -->
+            </dxi-item>
+            <dxi-item
+              cssClass="px-1 mt-3"
+              dataField="ToDate"
+              editorType="dxDateBox"
+              [editorOptions]="{
+                placeholder: 'End Date',
+                displayFormat: 'dd-MMM-yyyy',
+                readOnly: true,
+                stylingMode: 'underlined'
+              }"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <!-- <dxi-validation-rule type="required" message="Inte is required"></dxi-validation-rule> -->
+            </dxi-item>
+            <dxi-item
+              cssClass="px-1 mt-3"
+              dataField="DocNo"
+              editorType="dxNumberBox"
+              [editorOptions]="{
+                placeholder: 'Balance !=',
+                stylingMode: 'underlined'
+              }"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <!-- <dxi-validation-rule type="required" message="Inte is required"></dxi-validation-rule> -->
+            </dxi-item>
+          </dxi-item>
+          <dxi-item itemType="group" cssClass="second-group" [colCount]="1">
+            <dxi-item cssClass="mt-1 d-flex justify-content-center text-center">
+              <div *dxTemplate>
+                <dx-button type="default" icon="sorted" text="Generate" (onClick)="generateReport()"> </dx-button>
+              </div>
+            </dxi-item>
+          </dxi-item>
+        </dx-form>
+      </div>
+      <!-- <div class="d-flex justify-content-end fixed-bottom p-4 pb-6">
+        <dx-button icon="save" text="{{ recId > 0 ? 'Update' : 'Save' }}" type="success" (onClick)="handleSave()"></dx-button>
+        <div class="m-1"></div>
+        <dx-button icon="close" text="Close" type="danger" routerLink="/account-reports/receivableFollowUp-history" (onClick)="handleCancel()"></dx-button>
+      </div> -->
+    </div>
+    <div class="col-lg-5 p-2" style="height: 300px">
+      <div class="card p-2" style="height: 100%">
+        <dx-tab-panel #tabPanel [selectedIndex]="0" height="100%" [showNavButtons]="true" [animationEnabled]="true">
+          <dxi-item title="Filter by COA">
+            <div *dxTemplate class="p-1">
+              <dx-data-grid
+                #employeeGrid
+                id="employeeGrid"
+                height="100%"
+                [dataSource]="AccountsSelectionGridDataSource"
+                [showColumnLines]="false"
+                [showRowLines]="true"
+                [rowAlternationEnabled]="true"
+                [allowColumnResizing]="true"
+                [columnAutoWidth]="true"
+                [showBorders]="true"
+                (onSelectionChanged)="onSelectionChanged($event)"
+              >
+                <dxo-selection mode="multiple" selectAllMode="page" showCheckBoxesMode="always"></dxo-selection>
+                <dxi-column dataField="Id" [visible]="false" caption="Id"> </dxi-column>
+                <dxi-column dataField="AccountClassName" caption="Account Class"> </dxi-column>
+                <dxi-column dataField="AccountTitle" caption="Account Title"> </dxi-column>
+                <dxi-column dataField="AccountCode" caption="AccountCode" [visible]="false"> </dxi-column>
+                <dxi-column dataField="AccountClass" caption="AccountClass" [visible]="false"> </dxi-column>
+
+                <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+              </dx-data-grid>
+            </div>
+          </dxi-item>
+          <dxi-item title="Filter by Custom Group">
+            <div *dxTemplate class="p-1">
+              <dx-data-grid
+                #customGroupGrid
+                id="customGroupGrid"
+                height="100%"
+                [dataSource]="AccountsLookupList"
+                [showColumnLines]="false"
+                [showRowLines]="true"
+                [rowAlternationEnabled]="true"
+                [allowColumnResizing]="true"
+                [columnAutoWidth]="true"
+                [showBorders]="true"
+                (onSelectionChanged)="onSelectionChangeInCustomGroupGid($event)"
+              >
+                <dxo-selection mode="multiple" selectAllMode="page" showCheckBoxesMode="always"></dxo-selection>
+
+                <dxi-column dataField="Id" [visible]="false" caption="Id"> </dxi-column>
+
+                <!-- <dxi-column dataField="AcLookUpTypesId" [width]="100" alignment="left" caption="Group Id"> </dxi-column> -->
+                <dxi-column dataField="AcLookUpsDescription" alignment="left" caption="Custom Group Name"> </dxi-column>
+
+                <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+              </dx-data-grid>
+            </div>
+          </dxi-item>
+        </dx-tab-panel>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="card">
+        <dx-data-grid
+          id="gridContainer"
+          #payAbleReceiveAbleGrid
+          [height]="ApprovalPopupHeight"
+          [dataSource]="dataSource"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnReordering]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+          (onToolbarPreparing)="onToolPreparingOfItemHistoryGrid($event)"
+        >
+          <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-filter-row [visible]="filter"></dxo-filter-row>
+          <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+          <dxo-header-filter [visible]="filter"></dxo-header-filter>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-load-panel [enabled]="false"></dxo-load-panel>
+          <dxo-paging [enabled]="true"></dxo-paging>
+          <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('payAbleReceiveAbleGrid') }}"></dxo-state-storing>
+          <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, dataSource.length]" [showInfo]="true"></dxo-pager>
+          <dxi-column dataField="" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+          <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+            <div class="d-con-cell-action">
+              <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+            </div>
+          </div>
+          <!-- <dxi-column dataField="ArApTypeDesc" caption="Account Type"  dataType="number" alignment="left"></dxi-column>
+          <dxi-column dataField="accountClass" caption="accountClass" dataType="number" alignment="left"></dxi-column>
+          <dxi-column dataField="Ac3LevelCode" caption="Ac3LevelCode" dataType="string" alignment="left"></dxi-column> -->
+          <dxi-column dataField="AccountTitle" [width]="400" caption="Account Title" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="Opening" cellTemplate="formatTemplate" caption="Opening" dataType="number" alignment="left"></dxi-column>
+          <dxi-column dataField="Interval1St" cellTemplate="formatTemplate" caption="1st Interval" dataType="number" alignment="left"></dxi-column>
+          <dxi-column dataField="Interval2nd" cellTemplate="formatTemplate" caption="2nd Interval" dataType="number" alignment="left"></dxi-column>
+          <dxi-column dataField="Interval3rd" cellTemplate="formatTemplate" caption="3rd Interval" dataType="number" alignment="left"></dxi-column>
+
+          <dxi-column dataField="Closing" cellTemplate="formatTemplate" caption="Closing" dataType="number" alignment="left"></dxi-column>
+          <div *dxTemplate="let cell of 'formatTemplate'">
+            <div id="abcdedf">{{ formatValue(cell.value) }}</div>
+          </div>
+
+          <dxo-summary>
+            <dxi-total-item column="AccountTitle" summaryType="count" displayFormat="Total Records: {0}"> </dxi-total-item>
+            <dxi-total-item column="Interval1St" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+            <dxi-total-item column="Interval2nd" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+            <dxi-total-item column="Interval3rd" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+            <dxi-total-item column="IntervalAbove" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+            <dxi-total-item column="Closing" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+          </dxo-summary>
+          <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+            <div class="d-con-cell-action">
+              <dx-button type="default" stylingMode="text" (onClick)="onEdit(cellInfo.data)">
+                <i class="ri-edit-2-line"></i>
+              </dx-button>
+              <!-- <dx-button type="danger" stylingMode="text" hint="262-DeliveryOrder Slip" (onClick)="InvoiceSlip262(cellInfo.data)">
+                <i class="ri-printer-line"></i>
+              </dx-button> -->
+            </div>
+          </div>
+          <dxo-export [enabled]="true" [allowExportSelectedData]="true"></dxo-export>
+          <dxo-scrolling [mode]="'infinite'"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="checkClick($event)" [visibility]="warningPopupVisibility" [message]="warningPopupMessage"></notification-popups>
+      <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+      <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,137 @@
+<div class="container-fluid">
+  <app-pagetitle title="Gate Pass Inward"></app-pagetitle>
+  <dx-button id="filter" class="ml-3 mb-3" type="default" text="Add New" icon="plus" (onClick)="gotoForm()"> </dx-button>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <dx-data-grid
+          id="gridContainer"
+          [height]="gridHeight"
+          [dataSource]="dataSource"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnReordering]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+          [allowColumnReordering]="true"
+          [noDataText]="'No Record Found'"
+          (onToolbarPreparing)="GatePassInwardHistoryGridToolBarPreparing($event)"
+        >
+          <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-filter-row [visible]="filter"></dxo-filter-row>
+          <dxo-header-filter [visible]="filter"></dxo-header-filter>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-load-panel [enabled]="false"></dxo-load-panel>
+          <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('ExportPreProductionLabHistoryGridState') }}"></dxo-state-storing>
+          <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+          <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+          <dxi-column dataField="Sr#" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+          <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+            <div class="d-con-cell-action">
+              <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+            </div>
+          </div>
+
+          <dxi-column dataField="Id" caption="Id" [visible]="false"></dxi-column>
+          <dxi-column dataField="GpSrNo" caption="GpSrNo" dataType="number" alignment="left"></dxi-column>
+          <dxi-column dataField="GpDate" caption="GpDate" dataType="date" [format]="'dd-MMM-yyyy'" alignment="center"></dxi-column>
+          <dxi-column dataField="OrderType" caption="OrderType" dataType="string" alignment="center" cellTemplate="orderTypeTemplate"></dxi-column>
+          <dxi-column dataField="OrderNo" caption="OrderNo" dataType="string" alignment="center" cellTemplate="orderNumberTemplate" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <div *dxTemplate="let cell of 'orderNumberTemplate'">
+            <div id="abcdedf">{{ cell.text }}</div>
+          </div>
+          <dxi-column dataField="CompanyName" caption="Supplier" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="VehicleType" caption="VehicleType" dataType="string" alignemnt="left"></dxi-column>
+          <dxi-column dataField="VehicleNo" caption="VehicleNo" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="VarietyName" caption="VarietyName" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="Status" caption="Status" dataType="string" alignment="center" [fixed]="true" [fixedPosition]="'right'" cellTemplate="statusTemplate"></dxi-column>
+          <dxi-column dataField="ItemQty" caption="ItemQty" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="InTime" caption="InTime" dataType="date" [format]="'HH:mm'" alignment="center"></dxi-column>
+          <dxi-column dataField="OutTime" caption="OutTime" dataType="date" [format]="'HH:mm'" alignment="center"></dxi-column>
+          <dxi-column dataField="UserName" caption="UserName" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="Description" caption="City" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="Freight" caption="Freight" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+
+          <dxi-column dataField="GatepassType" caption="GatepassType" dataType="string" alignment="left"></dxi-column>
+          <div *dxTemplate="let cellInfo of 'statusTemplate'">
+            <div *ngIf="cellInfo.text == 'Open'">
+              <span class="badge badge-warning">Open</span>
+            </div>
+            <div *ngIf="cellInfo.text == 'Accepted'">
+              <span class="badge badge-success">Accepted</span>
+            </div>
+            <div *ngIf="cellInfo.text == 'Rejected'">
+              <span class="badge badge-danger">Rejected</span>
+            </div>
+          </div>
+          <div *dxTemplate="let cellInfo of 'orderTypeTemplate'">
+            <div *ngIf="cellInfo.text == 'Purchase Order'; else falseStatus">
+              <span class="badge badge-success">Purchase Order</span>
+            </div>
+            <ng-template #falseStatus class="badge badge-info"><span class="badge badge-info">Supply Order</span></ng-template>
+          </div>
+          <dxi-column dataField="SupplierWeight" caption="SupplierWeight" alignment="right" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="FactoryWeight" caption="FactoryWeight" alignment="right" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="DifferenceWeight" caption="DifferenceWeight" alignment="right" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+
+          <dxi-column
+            dataField="button"
+            [fixed]="true"
+            [fixedPosition]="'right'"
+            [width]="120"
+            alignment="right"
+            caption="Action"
+            [allowEditing]="false"
+            [allowExporting]="false"
+            [allowFiltering]="false"
+            [allowFixing]="false"
+            [allowGrouping]="false"
+            [allowHeaderFiltering]="false"
+            [allowHiding]="false"
+            [allowReordering]="false"
+            [allowResizing]="false"
+            [allowSearch]="false"
+            [allowSorting]="false"
+            cellTemplate="buttonTemplate"
+          ></dxi-column>
+          <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+            <div class="d-con-cell-action">
+              <dx-button type="default" stylingMode="text" (onClick)="onEdit(cellInfo.data)">
+                <i class="ri-edit-2-line"></i>
+              </dx-button>
+              <dx-button type="danger" stylingMode="text" hint="251-GP Inward" (onClick)="onPrint(cellInfo.data)">
+                <i class="ri-printer-line"></i>
+              </dx-button>
+              <dx-button type="danger" stylingMode="text" hint="802-Import GP Inward" (onClick)="GatePassInward_Import_Slip_802(cellInfo.data)">
+                <i class="ri-printer-line"></i>
+              </dx-button>
+            </div>
+          </div>
+          <dxo-summary>
+            <dxi-total-item column="Sr#" summaryType="count" displayFormat="{0}"> </dxi-total-item>
+            <dxi-total-item column="SupplierWeight" summaryType="sum" name="SupplierWeight" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+            <dxi-total-item column="FactoryWeight" summaryType="sum" name="FactoryWeight" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+            <dxi-total-item column="DifferenceWeight" summaryType="sum" name="DifferenceWeight" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+            <dxi-total-item column="ItemQty" summaryType="sum" name="ItemQty" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+          </dxo-summary>
+          <dxo-scrolling [scrollByContent]="true" [scrollByThumb]="true" [showScrollbar]="'always'" [scrollLeft]="true" mode="infinite"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+      <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+      <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+    </div>
+    <div class="col-md-12">
+      <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+    </div>
+  </div>
+</div>
+
+<short-cut-keys-new-design></short-cut-keys-new-design>

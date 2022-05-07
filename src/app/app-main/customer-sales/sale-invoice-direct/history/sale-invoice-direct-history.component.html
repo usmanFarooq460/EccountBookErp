@@ -1,0 +1,93 @@
+<div class="container-fluid">
+  <!-- start page title -->
+  <h4>Sale Invoice Direct History</h4>
+  <!-- end page title -->
+</div>
+
+<div class="row">
+  <dx-button id="filter" class="ml-3 mb-3" type="default" text="Add New" icon="plus" (onClick)="gotoForm()"> </dx-button>
+
+  <div class="col-md-12">
+    <div class="card">
+      <dx-data-grid
+        id="gridContainer"
+        [dataSource]="dataSource"
+        [showColumnLines]="false"
+        [showRowLines]="true"
+        [rowAlternationEnabled]="true"
+        [allowColumnResizing]="true"
+        [columnAutoWidth]="true"
+        [showBorders]="true"
+        (onToolbarPreparing)="onToolbarPreparing($event)"
+      >
+        <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+        <dxo-group-panel [visible]="true"></dxo-group-panel>
+        <!-- <dxo-filter-row [visible]="filter"></dxo-filter-row>
+            <dxo-header-filter [visible]="filter"></dxo-header-filter> -->
+        <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+        <dxo-load-panel [enabled]="true"></dxo-load-panel>
+        <dxo-paging [enabled]="true"></dxo-paging>
+        <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true"></dxo-pager>
+        <dxi-column dataField="Id" caption="Id" [visible]="false"></dxi-column>
+        <dxi-column dataField="DocNo" caption="Doc No." dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="DocDate" caption="Doc Date" dataType="date" alignment="center" [width]="110" [format]="'dd-MMM-yyyy'"></dxi-column>
+        <dxi-column dataField="ManualBillNo" caption="Bill No." dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="SupplierName" caption="Supplier" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="CommissionAgent" caption="Com. Agent" dataType="string" alignment="left"></dxi-column>
+
+        <dxi-column dataField="CommissionType" caption="Com. Type" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="CommRate" caption="Com. Rate" dataType="string" alignment="right" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+        <dxi-column dataField="CommAmount" caption="Com. Amount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="CommissionRemarks" caption="Com. Remarks" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="RemarksHeader" caption="Remarks" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="StockPartyName" caption="Stock Party" dataType="string" alignment="left"></dxi-column>
+
+        <dxi-column dataField="BillAmount" caption="Amount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="UserName" caption="UserName" dataType="string" alignment="left"></dxi-column>
+        <dxo-master-detail [enabled]="true" template="masterDetail"></dxo-master-detail>
+        <div *dxTemplate="let masterDetailItem of 'masterDetail'">
+          <purchase-invoice-direct-detail [key]="masterDetailItem.Id" [rowData]="masterDetailItem.data"></purchase-invoice-direct-detail>
+        </div>
+        <dxi-column
+          dataField="button"
+          [fixed]="true"
+          [fixedPosition]="'right'"
+          [width]="140"
+          alignment="left"
+          caption="Action"
+          [allowEditing]="false"
+          [allowExporting]="false"
+          [allowFiltering]="false"
+          [allowFixing]="false"
+          [allowGrouping]="false"
+          [allowHeaderFiltering]="false"
+          [allowHiding]="false"
+          [allowReordering]="false"
+          [allowResizing]="false"
+          [allowSearch]="false"
+          [allowSorting]="false"
+          cellTemplate="buttonTemplate"
+        ></dxi-column>
+        <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+          <div class="d-con-cell-action">
+            <dx-button type="default" stylingMode="text" (onClick)="onEdit(cellInfo.data)">
+              <i class="ri-edit-2-line"></i>
+            </dx-button>
+            <dx-button type="danger" stylingMode="text" hint="220-Invoice Slip" (onClick)="onPrint(cellInfo.data)">
+              <i class="ri-printer-line"></i>
+            </dx-button>
+            <dx-button type="danger" hint="103-Voucher " stylingMode="text" (onClick)="PurchaseInvoiceVoucher103(cellInfo.data)">
+              <i class="ri-printer-line"></i>
+            </dx-button>
+
+            <dx-button type="danger" hint="104-Voucher " stylingMode="text" (onClick)="PurchaseInvoiceVoucher104(cellInfo.data)">
+              <i class="ri-printer-line"></i>
+            </dx-button>
+          </div>
+        </div>
+        <dxo-export [enabled]="true" [allowExportSelectedData]="true"></dxo-export>
+        <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+      </dx-data-grid>
+    </div>
+  </div>
+</div>

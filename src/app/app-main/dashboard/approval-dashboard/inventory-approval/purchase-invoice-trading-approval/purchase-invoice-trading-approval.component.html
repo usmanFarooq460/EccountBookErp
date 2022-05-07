@@ -1,0 +1,132 @@
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <dx-data-grid
+      #PurchaseInvoiceTradingApprovalGrid
+      [height]="gridHeightInPopupWithGrid"
+      width="100%"
+      id="GridWithHeading"
+      [dataSource]="headerArray"
+      [showColumnLines]="false"
+      [showRowLines]="true"
+      [allowColumnReordering]="true"
+      [rowAlternationEnabled]="true"
+      [allowColumnResizing]="true"
+      [columnAutoWidth]="true"
+      [showBorders]="true"
+      (onToolbarPreparing)="ApprovalPopupGridToolbarPreparing($event)"
+    >
+      <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+      <dxo-load-panel [enabled]="true"></dxo-load-panel>
+      <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+      <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+      <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('PurchaseInvoiceTradingApprovalGrid') }}"></dxo-state-storing>
+      <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+      <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+      <div *dxTemplate="let data of 'GridHeadingTemplate'">
+        <div class="HeadingDiv">
+          <h4 class="Heading" style="font-weight: bold; color: whitesmoke">{{ ApprovalPopupHeading }}</h4>
+        </div>
+      </div>
+      <dxi-column dataField="" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+      <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+        <div class="d-con-cell-action">
+          <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+        </div>
+      </div>
+      <dxi-column dataField="Id" caption="Id" dataType="number" [visible]="false"></dxi-column>
+      <dxi-column dataField="VoucherHeadId" caption="VoucherHeadId" dataType="number" [visible]="false"></dxi-column>
+      <dxi-column dataField="InvoiceDate" caption="Invoice Date" [format]="'dd-MMM-yyyy'" dataType="date" alignment="center" [width]="110"></dxi-column>
+      <dxi-column dataField="InvoiceNo" caption="Invoice No" dataType="number" alignment="left"></dxi-column>
+      <dxi-column dataField="SupplierName" caption="Supplier" dataType="string" alignment="left"></dxi-column>
+      <dxi-column dataField="ManualBillNo" caption="Manual Bill No" dataType="string" alignment="left"></dxi-column>
+      <dxi-column dataField="CommissionAgent" caption="Commission Agent" dataType="string" alignment="left"></dxi-column>
+      <dxi-column dataField="CommType" caption="Commission Type" dataType="string" alignment="left"></dxi-column>
+      <dxi-column dataField="CommRate" caption="Commission Rate" dataType="string" alignment="left"></dxi-column>
+      <dxi-column dataField="CommAmount" caption="Commission Amount" dataType="number" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+      <dxi-column dataField="BillAmount" caption="Bill Amount" dataType="number" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+      <dxi-column dataField="UserName" caption="User Name" dataType="string" alignment="left"></dxi-column>
+      <dxi-column dataField="RemarksHeader" caption="Remarks" dataType="string" alignment="left"></dxi-column>
+
+      <!-- <dxi-column dataField="DocDate" caption="Doc Date" [format]="'dd-MMM-yyyy'" dataType="date" alignment="center" [width]="110"></dxi-column>
+      <dxi-column dataField="DocNo" caption="Doc No" dataType="string" alignment="left"></dxi-column>
+      <dxi-column dataField="SupplierName" caption="Supplier" dataType="string"></dxi-column>
+      <dxi-column dataField="ManualBillNo" caption="Manual Bill No" dataType="string"></dxi-column>
+      <dxi-column dataField="PaymentTerm" caption="Payment Term" dataType="string"></dxi-column>
+      <dxi-column dataField="DeliveryTerm" caption="Delivery Term" dataType="string"></dxi-column>
+      <dxi-column dataField="DueDays" caption="Due Days" dataType="number"></dxi-column>
+      <dxi-column dataField="DueDate" caption="Due Date" [format]="'dd-MMM-yyyy'" dataType="date" alignment="center" [width]="110"></dxi-column>
+      <dxi-column dataField="CommissionAgent" caption="Commission Agent" dataType="string"></dxi-column>
+      <dxi-column dataField="CommissionType" caption="Commission Type" dataType="string"></dxi-column>
+      <dxi-column dataField="CommRate" caption="Comm Rate" dataType="number"></dxi-column>
+      <dxi-column dataField="UomScheduleIdCmRate" caption="Comm Rate UOM" dataType="number"></dxi-column>
+      <dxi-column dataField="CommAmount" caption="Comm Amount" dataType="number"></dxi-column>
+      <dxi-column dataField="BillAmount" caption="Bill Amount" dataType="number"></dxi-column>
+      <dxi-column dataField="RemarksHeader" caption="Remarks" dataType="string"></dxi-column> -->
+      <dxi-column dataField="IsApproved" caption="Status" cellTemplate="statusTemplate"></dxi-column>
+      <div *dxTemplate="let cellInfo of 'statusTemplate'">
+        <div *ngIf="cellInfo.text == 'Approved'; else falseStatus">
+          <span class="badge badge-success">Approved</span>
+        </div>
+        <ng-template #falseStatus class="badge badge-danger"> <span class="badge badge-danger">Not Approved</span></ng-template>
+      </div>
+      <dxi-column
+        dataField="button"
+        [fixed]="true"
+        [fixedPosition]="'right'"
+        [width]="100"
+        alignment="right"
+        caption="Action"
+        [allowEditing]="false"
+        [allowExporting]="false"
+        [allowFiltering]="false"
+        [allowFixing]="false"
+        [allowGrouping]="false"
+        [allowHeaderFiltering]="false"
+        [allowHiding]="false"
+        [allowReordering]="false"
+        [allowResizing]="false"
+        [allowSearch]="false"
+        [allowSorting]="false"
+        cellTemplate="buttonTemplate"
+      ></dxi-column>
+      <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+        <div class="d-con-cell-action">
+          <dx-button type="default" stylingMode="text" hint="Approve Order" (onClick)="onApproved(cellInfo.data)">
+            <i class="ri-checkbox-fill" style="height: 24px; width: 24px"></i>
+          </dx-button>
+          <dx-button type="danger" stylingMode="text" hint="276-Purchase Order Slip" (onClick)="onPrint(cellInfo.data)">
+            <i class="ri-printer-line"></i>
+          </dx-button>
+        </div>
+      </div>
+      <dxo-scrolling [mode]="'infinite'" [showScrollbar]="'always'" [scrollByContent]="true" [scrollByThumb]="true" [scrollLeft]="true"></dxo-scrolling>
+      <dxo-summary>
+        <dxi-total-item column="SupplierName" summaryType="count" displayFormat="Total Records: {0}"> </dxi-total-item>
+      </dxo-summary>
+      <!-- <dxo-master-detail [enabled]="true" template="masterDetail"></dxo-master-detail>
+      <div *dxTemplate="let masterDetailItem of 'masterDetail'">
+        <purchase-Invoice-trading-approval-detial [key]="masterDetailItem.Id" [dataSource]="dataSource" [rowData]="masterDetailItem.data"></purchase-Invoice-trading-approval-detial>
+      </div> -->
+    </dx-data-grid>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <notification-popups
+        [title]="'Confirmation'"
+        [type]="'confirmation'"
+        (confirmed)="handleYesNoClicked($event)"
+        [visibility]="confirmationPopupVisible"
+        [message]="'Do You want to Approve?'"
+      ></notification-popups>
+      <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+      <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+      <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+    </div>
+    <div class="col-md-12">
+      <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+    </div>
+  </div>
+</div>

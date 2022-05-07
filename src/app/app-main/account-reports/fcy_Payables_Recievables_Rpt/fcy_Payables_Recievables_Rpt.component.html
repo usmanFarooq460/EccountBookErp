@@ -1,0 +1,325 @@
+<div class="container-fluid">
+  <app-pagetitle title="Fcy Payables Recievables Rpt" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card shadow-sm">
+        <dx-form id="form" [formData]="FcyPayablesRecievablesRptFormData" #FcyPayablesRecievablesRptForm [showRequiredMark]="false" [colCountByScreen]="{ lg: 5, md: 4, sm: 2, xs: 1 }">
+          <dxi-item
+            dataField="FromDate"
+            cssClass="m-0 p-1"
+            editorType="dxDateBox"
+            [editorOptions]="{
+              displayFormat: 'dd-MMM-yyyy',
+              placeholder: 'FromDate',
+              showClearButton: 'true',
+              stylingMode: 'underlined'
+            }"
+          >
+            <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          </dxi-item>
+          <dxi-item
+            dataField="ToDate"
+            cssClass="m-0 p-1"
+            editorType="dxDateBox"
+            [editorOptions]="{
+              displayFormat: 'dd-MMM-yyyy',
+              placeholder: 'ToDate',
+              showClearButton: 'true',
+              stylingMode: 'underlined'
+            }"
+          >
+            <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          </dxi-item>
+
+          <dxi-item
+            dataField="ExchangeRateUSD"
+            cssClass="m-0 p-1"
+            editorType="dxNumberBox"
+            [editorOptions]="{
+              placeholder: 'Exchange Rate USD',
+              showClearButton: 'true',
+              stylingMode: 'underlined'
+            }"
+          >
+            <dxi-validation-rule type="required" message="Rate USD is required"></dxi-validation-rule>
+            <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          </dxi-item>
+          <dxi-item
+            dataField="ExchangeRateEURO"
+            cssClass="m-0 p-1"
+            editorType="dxNumberBox"
+            [editorOptions]="{
+              placeholder: 'Exchange Rate EURO',
+              showClearButton: 'true',
+              stylingMode: 'underlined'
+            }"
+          >
+            <dxi-validation-rule type="required" message="Rate EURO is required"></dxi-validation-rule>
+            <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          </dxi-item>
+          <!-- 
+            <dxi-item cssClass="m-0 mt-2 p-1">
+              <div class="d-flex justify-content-end">
+                <div class="m-0 p-1">
+                  <dx-button type="success" (onClick)="onSubmit()" text="Show"></dx-button>
+                </div>
+                <div class="m-0 p-1">
+                  <dx-button type="danger" (onClick)="clear()" text="Clear"></dx-button>
+                </div>
+              </div>
+            </dxi-item> -->
+        </dx-form>
+        <div class="d-flex justify-content-end">
+          <div class="m-0 p-1">
+            <dx-button type="success" (onClick)="onSubmit()" text="Show"></dx-button>
+          </div>
+          <div class="m-0 p-1">
+            <dx-button type="danger" (onClick)="clear()" text="Clear"></dx-button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-12" [ngStyle]="{ height: IsLoadedInPopup == false ? gridColumnHeight : gridColumnHeightInPopupWithGrid }" #stickyGrid [class.sticky]="sticky">
+      <div class="card shadow-md p-3 mb-5 bg-white rounded">
+        <dx-data-grid
+          id="gridContainer"
+          #fcyPayAbleReceivableGrid
+          [dataSource]="dataSource"
+          [showColumnLines]="true"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnReordering]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+          (onToolbarPreparing)="onToolPreparingOfItemHistoryGrid($event)"
+        >
+          <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-filter-row [visible]="filter"></dxo-filter-row>
+          <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+          <dxo-header-filter [visible]="filter"></dxo-header-filter>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-load-panel [enabled]="false"></dxo-load-panel>
+          <dxo-export [enabled]="true" fileName="Estimates" [allowExportSelectedData]="true">
+            <dxo-texts exportAll="Export All Rows"></dxo-texts>
+          </dxo-export>
+          <!-- <dxo-selection mode="multiple" selectAllMode="page" showCheckBoxesMode="always"></dxo-selection> -->
+          <dxo-paging [enabled]="true"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 100, 500]" [showInfo]="true"></dxo-pager>
+          <dxi-column dataField="" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+          <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+            <div class="d-con-cell-action">
+              <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+            </div>
+          </div>
+
+          <dxi-column dataField="Id" caption="Id" [visible]="false"></dxi-column>
+          <dxi-column dataField="AccountTitle" [fixed]="true" [fixedPosition]="'left'" caption="AccountTitle" dataType="string" alignment="left"></dxi-column>
+          <dxi-column caption="Currency" dataType="string" alignment="center">
+            <dxi-column dataField="CurrencyCode" caption="Code" dataType="string" alignment="left"></dxi-column>
+            <dxi-column dataField="CurrencyRate" caption="Rate" cellTemplate="CurrencyRateTemplate" dataType="number" [format]="{ type: 'fixedPoint', precision: 2 }" alignment="right"></dxi-column>
+          </dxi-column>
+          <div *dxTemplate="let cell of 'CurrencyRateTemplate'">
+            <div style="font-weight: bolder">{{ cell.text }}</div>
+          </div>
+          <dxi-column caption="Debit" alignment="center">
+            <dxi-column dataField="USD_AmountDr" caption="USD Debit" dataType="number" [format]="{ type: 'fixedPoint', precision: 2 }" alignment="right"></dxi-column>
+            <dxi-column dataField="Euro_AmountDr" caption="EURO Debit" dataType="number" [format]="{ type: 'fixedPoint', precision: 2 }" alignment="right"></dxi-column>
+          </dxi-column>
+          <dxi-column caption="Credit" alignment="center">
+            <dxi-column dataField="USD_AmountCr" caption="USD Credit" dataType="number" [format]="{ type: 'fixedPoint', precision: 2 }" alignment="right"></dxi-column>
+            <dxi-column dataField="Euro_AmountCr" caption="EURO Credit" dataType="number" [format]="{ type: 'fixedPoint', precision: 2 }" alignment="right"></dxi-column>
+          </dxi-column>
+          <dxi-column caption="Balance" [fixed]="true" [fixedPosition]="'right'" alignment="center">
+            <dxi-column dataField="USD_Balance" caption="USD Balance" dataType="number" [format]="{ type: 'fixedPoint', precision: 2 }" alignment="right"></dxi-column>
+            <dxi-column dataField="Euro_Balance" caption="Euro Balance" dataType="number" [format]="{ type: 'fixedPoint', precision: 2 }" alignment="right"></dxi-column>
+            <dxi-column dataField="PKR_Amount" caption="PKR Balance" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }" alignment="right"></dxi-column>
+          </dxi-column>
+          <dxi-column
+            dataField="button"
+            [fixed]="true"
+            [fixedPosition]="'right'"
+            [width]="90"
+            alignment="center"
+            caption="Ledger"
+            [allowEditing]="false"
+            [allowExporting]="false"
+            [allowFiltering]="false"
+            [allowFixing]="false"
+            [allowGrouping]="false"
+            [allowHeaderFiltering]="false"
+            [allowHiding]="false"
+            [allowReordering]="false"
+            [allowResizing]="false"
+            [allowSearch]="false"
+            [allowSorting]="false"
+            cellTemplate="buttonTemplate"
+          ></dxi-column>
+          <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+            <div class="d-con-cell-action">
+              <dx-button type="danger" stylingMode="text" hint="Ledger For {{ cellInfo.data.AccountTitle }}" (onClick)="loadLedgerPopup(cellInfo.data)">
+                <i class="ri-search-eye-line"></i>
+              </dx-button>
+              <dx-button type="danger" stylingMode="text" hint="133-FcyCustomer Ledger" (onClick)="onLedgerPrint(cellInfo.data)">
+                <i class="ri-printer-line"></i>
+              </dx-button>
+              <!-- <dx-button type="danger" stylingMode="text" hint="516-Fcy BankReceipt Slip" (onClick)="FcBankSlip516(cellInfo.data)">
+                <i class="ri-printer-line"></i>
+              </dx-button> -->
+            </div>
+          </div>
+          <dxo-export [enabled]="true" [allowExportSelectedData]="true"></dxo-export>
+          <dxo-summary>
+            <dxi-total-item column="AccountTitle" summaryType="count" displayFormat="Total Records: {0}"> </dxi-total-item>
+            <dxi-total-item column="USD_AmountDr" name="USD_AmountDr" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+            <dxi-total-item column="Euro_AmountDr" name="Euro_AmountDr" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+            <dxi-total-item column="USD_AmountCr" name="USD_AmountCr" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+            <dxi-total-item column="Euro_AmountCr" name="Euro_AmountCr" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+            <dxi-total-item column="USD_Balance" name="USD_Balance" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+            <dxi-total-item column="Euro_Balance" name="Euro_Balance" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+
+            <dxi-group-item column="PKR_Amount" name="PKR_Amount" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0.##"> </dxi-group-item>
+            <dxi-group-item column="USD_AmountDr" name="PKR_Amount" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0.##"> </dxi-group-item>
+            <dxi-group-item column="Euro_AmountDr" name="PKR_Amount" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0.##"> </dxi-group-item>
+            <dxi-group-item column="USD_AmountCr" name="PKR_Amount" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0.##"> </dxi-group-item>
+            <dxi-group-item column="Euro_AmountCr" name="PKR_Amount" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0.##"> </dxi-group-item>
+            <dxi-group-item column="USD_Balance" name="PKR_Amount" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0.##"> </dxi-group-item>
+            <dxi-group-item column="Euro_Balance" name="PKR_Amount" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0.##"> </dxi-group-item>
+          </dxo-summary>
+          <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+  <dx-popup
+    [width]="ApprovalPopupWidth"
+    [height]="ApprovalPopupHeight"
+    [position]="'center'"
+    [showTitle]="true"
+    titleTemplate="titleTemplate"
+    [dragEnabled]="true"
+    [showCloseButton]="true"
+    [closeOnOutsideClick]="false"
+    [(visible)]="ledgerPopupVisible"
+  >
+    <div *dxTemplate="let content of 'titleTemplate'" class="d-flex justify-content-between">
+      <div class=""></div>
+      <div class="">
+        <h4>Ledger For {{ ledgerPopupTitle }}</h4>
+      </div>
+      <div class="d-flex justify-content-end">
+        <dx-button class="p-0 border-0" type="transparent" (onClick)="loadLedgerPopup(1)" icon="close"></dx-button>
+      </div>
+    </div>
+    <div *dxTemplate="let data of 'content'">
+      <dx-data-grid
+        #popupGrid
+        [width]="ApprovalPopupGridWidth"
+        height="100%"
+        id="gridContainer"
+        [dataSource]="ledgerDataSource"
+        [showColumnLines]="false"
+        [allowColumnReordering]="true"
+        [showRowLines]="true"
+        [rowAlternationEnabled]="true"
+        [allowColumnResizing]="true"
+        [columnAutoWidth]="true"
+        [showBorders]="true"
+      >
+        <dxo-load-panel [enabled]="true"></dxo-load-panel>
+        <dxo-paging [enabled]="true"></dxo-paging>
+        <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, ledgerDataSource.length]" [showInfo]="true"></dxo-pager>
+        <dxo-filter-row [visible]="filter"></dxo-filter-row>
+        <dxo-header-filter [visible]="filter"></dxo-header-filter>
+        <!-- <dxo-selection mode="multiple" selectAllMode="page" showCheckBoxesMode="always"></dxo-selection> -->
+        <dxi-column dataField="Id" caption="Id" dataType="number" [visible]="false"></dxi-column>
+        <!-- <dxi-column dataField="VarietyName" caption="VarietyName" dataType="string" alignment="left"></dxi-column> -->
+
+        <dxi-column dataField="AccountTitle" caption="Account Title" cellTemplate="SupplierNameTemplate" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="VoucherDate" caption="VoucherDate" dataType="date" cellTemplate="cellTemplate" [format]="'dd-MMM-yyyy'" alignment="center" [width]="110"></dxi-column>
+        <dxi-column dataField="DocumentTypeCode" caption="Doc Type" cellTemplate="SupplierNameTemplate" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="VoucherCode" caption="VoucherCode" cellTemplate="SupplierNameTemplate" dataType="string" alignment="left"></dxi-column>
+
+        <dxi-column dataField="ContractNo" caption="ContractNo" cellTemplate="SupplierNameTemplate" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="InvoiceNo" caption="InvoiceNo" cellTemplate="SupplierNameTemplate" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="M_Tons" caption="M_Tons" cellTemplate="cellTemplate" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="CurrencyCode" caption="CurrencyCode" cellTemplate="SupplierNameTemplate" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="FcyRate" caption="FcyRate" cellTemplate="cellTemplate" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="FcyAmount" caption="FcyAmount" cellTemplate="cellTemplate" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="FcyBalance" caption="FcyBalance" cellTemplate="cellTemplate" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="DebitAmount" caption="DebitAmount" cellTemplate="cellTemplate" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="CreditAmount" caption="CreditAmount" cellTemplate="cellTemplate" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="PKR_Balance" caption="PKR_Balance" cellTemplate="cellTemplate" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+
+        <div *dxTemplate="let cell of 'cellTemplate'">
+          <div id="abcdedf">{{ cell.text }}</div>
+        </div>
+        <div *dxTemplate="let cell of 'SupplierNameTemplate'">
+          <div id="lkjfljdf">{{ cell.text }}</div>
+        </div>
+        <div *dxTemplate="let cell of 'GpNoTemplate'">
+          <div id="abcdedf" style="font-weight: bolder; font-size: medium">{{ cell.text }}</div>
+        </div>
+
+        <div *dxTemplate="let cellInfo of 'DocTypeTemplate'">
+          <div *ngIf="cellInfo.text == 'Supply_Order'; else falseStatus">
+            <span class="badge badge-info">Supply Order</span>
+          </div>
+          <ng-template #falseStatus class="badge badge-success"><span class="badge badge-success">Purchase Order</span></ng-template>
+        </div>
+        <!-- <dxi-column
+          dataField="button"
+          [fixed]="true"
+          [fixedPosition]="'right'"
+          [width]="70"
+          alignment="center"
+          caption="Print"
+          [allowEditing]="false"
+          [allowExporting]="false"
+          [allowFiltering]="false"
+          [allowFixing]="false"
+          [allowGrouping]="false"
+          [allowHeaderFiltering]="false"
+          [allowHiding]="false"
+          [allowReordering]="false"
+          [allowResizing]="false"
+          [allowSearch]="false"
+          [allowSorting]="false"
+          cellTemplate="buttonTemplate"
+        ></dxi-column> -->
+        <!--  <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+          <div class="d-con-cell-action">
+            <dx-button type="danger" stylingMode="text" (onClick)="onLoadClickInPopupGrid(cellInfo.data)">
+              <i class="ri-download-2-fill"></i>
+            </dx-button>
+           </div>
+        </div> -->
+        <dxo-summary>
+          <dxi-total-item column="FcyAmount" name="FcyAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+          <dxi-total-item column="FcyBalance" name="FcyBalance" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+          <dxi-total-item column="DebitAmount" name="DebitAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+
+          <dxi-total-item column="CreditAmount" name="CreditAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+
+          <dxi-total-item column="PKR_Balance" name="PKR_Balance" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+        </dxo-summary>
+        <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+      </dx-data-grid>
+    </div>
+  </dx-popup>
+
+  <div class="row">
+    <div class="col-md-12">
+      <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+      <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+      <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+    </div>
+
+    <div class="col-md-12">
+      <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,245 @@
+<!-- Form Design By ================== Sufian Arshad 
+ Property Of ======================= Synergic Corporate Solution  -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="d-flex justify-content-between">
+        <div class="">
+          <app-pagetitle [title]="'Sample Analysis'"></app-pagetitle>
+        </div>
+        <div class="">
+          <dx-button class="mr-2" [hint]="'Add New'" type="default" icon="plus" (onClick)="resetForm()"> </dx-button>
+          <dx-button icon="refresh" type="success" [hint]="'Reload Form Fields'" (onClick)="FetchData()"></dx-button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <dx-form [formData]="SampleAnalysisFormData" #SampleAnalysisForm [showRequiredMark]="false" [colCountByScreen]="{ lg: 5, md: 4, sm: 3 }">
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="DocNo"
+      editorType="dxTextBox"
+      [editorOptions]="{
+        placeholder: 'Document No.',
+        readOnly: true
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Document No is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="DocDate"
+      editorType="dxDateBox"
+      [editorOptions]="{
+        placeholder: 'Document Date',
+        displayFormat: 'dd-MMM-yyyy'
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Document Date is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="ReportNo"
+      editorType="dxTextBox"
+      [editorOptions]="{
+        placeholder: 'Manual Report No'
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Report No is required"></dxi-validation-rule>
+    </dxi-item>
+
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="InvLabSampleLogRegisterId"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        items: sampleLogList,
+        valueExpr: 'Id',
+        displayExpr: 'SampleNo',
+        placeholder: 'Sample Log#',
+        searchEnabled: true,
+        onValueChanged: onSampleLogChange
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+    </dxi-item>
+
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="SupplierCustomerId"
+      [colSpan]="2"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        dataSource: supCustList,
+        valueExpr: 'Id',
+        displayExpr: 'CompanyName',
+        placeholder: 'Supplier',
+        searchEnabled: true,
+        onValueChanged: getPurchaseOrderNoByItemAndSupplierLeave
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Supplier is required"></dxi-validation-rule>
+    </dxi-item>
+
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="CommissionAgentId"
+      [colSpan]="2"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        dataSource: supCustList,
+        valueExpr: 'Id',
+        displayExpr: 'CompanyName',
+        placeholder: 'Commission agent',
+        searchEnabled: true
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="ItemId"
+      [colSpan]="2"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        dataSource: ItemList,
+        valueExpr: 'Id',
+        displayExpr: 'ItemName',
+        placeholder: 'Item ',
+        searchEnabled: true,
+        onValueChanged: getPurchaseOrderNoByItemAndSupplierLeave
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Item is required"></dxi-validation-rule>
+    </dxi-item>
+
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="OrderId"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        items: purchaseOrderList,
+        valueExpr: 'Id',
+        displayExpr: 'DocNo',
+        placeholder: 'purchase Order',
+        searchEnabled: true
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+    </dxi-item>
+
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="Crop"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        items: cropYearList,
+        valueExpr: 'CropYear',
+        displayExpr: 'CropYear',
+        placeholder: 'Crop Year',
+        searchEnabled: true
+      }"
+    >
+      <dxi-validation-rule type="required" message="Crop Year is required"></dxi-validation-rule>
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+    </dxi-item>
+
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="JobLotId"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        items: jobLotList,
+        valueExpr: 'Id',
+        displayExpr: 'JobLotDescription',
+        placeholder: 'Job Lot',
+        searchEnabled: true
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Job Lot is required"></dxi-validation-rule>
+    </dxi-item>
+
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="InvLabAnalysisGroupId"
+      editorType="dxSelectBox"
+      [colSpan]="2"
+      [editorOptions]="{
+        items: analysisGroupList,
+        valueExpr: 'id',
+        displayExpr: 'AnalysisGroupCode',
+        placeholder: 'Analysis Group',
+        searchEnabled: true,
+        onValueChanged: GetByGroupId
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Analysis Group is required"></dxi-validation-rule>
+    </dxi-item>
+
+    <dxi-item
+      [colSpan]="2"
+      cssClass="px-1 m-0"
+      dataField="Remarks"
+      editorType="dxTextBox"
+      [editorOptions]="{
+        placeholder: 'Remarks'
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+    </dxi-item>
+    <dxi-item dataField="IsAccepted" editorType="dxCheckBox">
+      <dxo-label text="IsAccepted" location="left"></dxo-label>
+    </dxi-item>
+  </dx-form>
+
+  <div class="d-flex justify-content-end fixed-bottom p-4 pb-6">
+    <dx-button icon="save" text="{{ SampleAnalysisParamsId > 0 ? 'Update' : 'Save' }}" type="success" (onClick)="handleSave()"></dx-button>
+    <div class="m-1"></div>
+    <dx-button icon="close" text="Close" type="danger" routerLink="/lab/sample-analysis-history"></dx-button>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card mt-4">
+        <dx-data-grid
+          id="gridContainer"
+          [dataSource]="dataSource"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+        >
+          <dxo-load-panel [enabled]="false"></dxo-load-panel>
+          <dxo-editing mode="cell" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="false" [useIcons]="false"> </dxo-editing>
+          <dxi-column dataField="AnalysisGroupDescription" caption="Analysis Group" [allowEditing]="false" dataType="string"></dxi-column>
+          <dxi-column dataField="AnalysisParameterDescription" caption="Analysis Item" [allowEditing]="false" dataType="string"></dxi-column>
+          <dxi-column dataField="MinValue" caption="MinValue" [allowEditing]="false"></dxi-column>
+          <dxi-column dataField="MaxValue" caption="MaxValue" [allowEditing]="false"></dxi-column>
+          <dxi-column dataField="ResultValue" caption="ResultValue" [setCellValue]="onResultValueChange"></dxi-column>
+          <dxo-scrolling [scrollByContent]="true" [scrollByThumb]="true" [showScrollbar]="'always'" [scrollLeft]="true" mode="infinite"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+      <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+      <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+    </div>
+    <div class="col-md-12">
+      <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+    </div>
+  </div>
+</div>

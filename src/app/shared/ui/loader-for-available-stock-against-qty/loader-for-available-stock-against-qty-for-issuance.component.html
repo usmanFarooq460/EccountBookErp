@@ -1,0 +1,143 @@
+<dx-popup
+  [width]="ApprovalPopupGridWidth"
+  [height]="ApprovalPopupHeight"
+  [position]="'center'"
+  [showTitle]="true"
+  title="Pending GRN For Purchase Invoice"
+  titleTemplate="titleTemplate"
+  [dragEnabled]="true"
+  [closeOnOutsideClick]="false"
+  [(visible)]="visibility"
+>
+  <div *dxTemplate="let content of 'titleTemplate'" class="d-flex justify-content-between">
+    <div class="">
+      <h4>Available Stock Transactions for Issuance</h4>
+    </div>
+    <div class="d-flex justify-content-end">
+      <!-- <dx-button text="" type="success" icon="search" (onClick)="getPendingGrnForPurchaseInvoiceInLoaderAgainstSupplierId()"></dx-button> -->
+      <!-- <dx-button text="" type="normal" icon="refresh" (onClick)="resetPopupGrid()"></dx-button> -->
+      <dx-button class="p-0 mr-1 border-0" text="" type="default" icon="search" (onClick)="getAvailableDataForIssuanceOnLoad()"></dx-button>
+      <dx-button class="p-0 mr-1 border-0" text="" type="danger" icon="export" (onClick)="TransferDataAgainstSelectedRecord()"></dx-button>
+      <dx-button class="p-0 mr-1 border-0" type="success" (onClick)="filtering()" icon="filter"></dx-button>
+      <dx-button class="p-0 border-0" type="warning" (onClick)="loadPopup()" icon="close"></dx-button>
+    </div>
+  </div>
+  <div *dxTemplate="let data of 'content'">
+    <div class="row">
+      <div class="col-md-12" [ngStyle]="{ height: heightForColumnContainingForm }">
+        <dx-form id="form" [formData]="availableTransactionsForIssuanceFormData" #availableTransactionsForIssuanceForm>
+          <dxi-item itemType="group" [colCount]="6" cssClass="mb-3">
+            <dxi-item dataField="FromDate" editorType="dxDateBox" [editorOptions]="{ placeholder: 'From Date', displayFormat: 'dd-MMM-yyyy' }" cssClass="px-1 m-0">
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+            </dxi-item>
+            <dxi-item dataField="ToDate" editorType="dxDateBox" [editorOptions]="{ placeholder: 'To Date', displayFormat: 'dd-MMM-yyyy' }" cssClass="px-1 m-0">
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+            </dxi-item>
+            <dxi-item
+              dataField="InventoryParentCategories"
+              editorType="dxSelectBox"
+              [editorOptions]="{
+                placeholder: 'Parent Category',
+                items: itemParentCategoryListFromStockEvaluation,
+                valueExpr: 'Id',
+                displayExpr: 'InvParentCateCode',
+                searchEnabled: true
+              }"
+              cssClass="px-1 m-0"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+            </dxi-item>
+            <dxi-item
+              dataField="WarehouseId"
+              editorType="dxSelectBox"
+              [editorOptions]="{
+                placeholder: 'Warehouse',
+                items: warehouseListFromStockEvaluation,
+                valueExpr: 'WarehouseId',
+                displayExpr: 'WareHouseName',
+                searchEnabled: true
+              }"
+              [colSpan]="2"
+              cssClass="px-1 m-0"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+            </dxi-item>
+          </dxi-item>
+          <dxi-item itemType="group" [colCount]="6" cssClass="mb-3">
+            <dxi-item
+              dataField="ItemId"
+              editorType="dxSelectBox"
+              [editorOptions]="{
+                placeholder: 'Item',
+                items: itemListFromStockEvaluation,
+                valueExpr: 'ItemId',
+                displayExpr: 'ItemName',
+                searchEnabled: true
+              }"
+              [colSpan]="2"
+              cssClass="px-1 m-0"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+            </dxi-item>
+            <dxi-item
+              dataField="JobLotId"
+              editorType="dxSelectBox"
+              [editorOptions]="{
+                placeholder: 'Job/Lot',
+                items: jobLotListFromStockEvaluation,
+                valueExpr: 'JobLotId',
+                displayExpr: 'JobLotDescription',
+                searchEnabled: true
+              }"
+              cssClass="px-1 m-0"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+            </dxi-item>
+          </dxi-item>
+        </dx-form>
+      </div>
+      <div class="col-md-12" [ngStyle]="{ height: heightForColumnContainingGrid }">
+        <dx-data-grid
+          #availableTransactionsForIssuanceGrid
+          id="availableTransactionsForIssuanceGrid"
+          width="100%"
+          height="100%"
+          [dataSource]="availableTransactionsForIssuanceDataSource"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+        >
+          <dxo-load-panel [enabled]="true"></dxo-load-panel>
+          <dxo-filter-row [visible]="filter"></dxo-filter-row>
+          <dxo-header-filter [visible]="filter"></dxo-header-filter>
+          <dxo-selection mode="multiple" selectAllMode="page" showCheckBoxesMode="always"></dxo-selection>
+          <dxo-paging [enabled]="true"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, availableTransactionsForIssuanceDataSource.length]" [showInfo]="true"></dxo-pager>
+          <dxi-column dataField="WareHouseCode" caption="Warehouse" alignment="left" dataType="string"></dxi-column>
+          <dxi-column dataField="WarehouseId" caption="WarehouseId" alignment="left" dataType="number" [visible]="false"></dxi-column>
+          <dxi-column dataField="ItemName" caption="ItemName" alignment="left" dataType="string"></dxi-column>
+          <dxi-column dataField="ItemId" caption="ItemId" alignment="left" dataType="number" [visible]="false"></dxi-column>
+          <dxi-column dataField="JobLotId" caption="JobLotId" alignment="left" dataType="number"></dxi-column>
+          <dxi-column dataField="JobLotCode" caption="JobLotCode" alignment="left" dataType="string"></dxi-column>
+          <dxi-column dataField="QtyIn" cellTemplate="cellTemplate" caption="QtyIn" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="QtyOut" cellTemplate="cellTemplate" caption="QtyOut" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="BalQty" cellTemplate="cellTemplate" caption="Balance Qty" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="AvgRate" cellTemplate="cellTemplate" caption="AVgRate" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+          <div *dxTemplate="let cell of 'cellTemplate'">
+            <div id="abcdedf">{{ cell.text }}</div>
+          </div>
+          <dxo-summary>
+            <dxi-total-item column="QtyIn" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+            <dxi-total-item column="QtyOut" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+            <dxi-total-item column="BalQty" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+          </dxo-summary>
+          <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+</dx-popup>
+<load-panel [visibility]="loadPanelVisible" [message]="loadPanelMessage"></load-panel>

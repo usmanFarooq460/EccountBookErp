@@ -1,0 +1,106 @@
+<div class="container-fluid">
+  <!-- start page title -->
+  <app-pagetitle title="Chart Of Account" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+  <!-- end page title -->
+
+  <div class="row">
+    <dx-button id="AddNewButton" class="ml-3 mb-3" type="default" text="Add New" (onClick)="handleChartOfAccountFormPopupVisibility(1)" icon="plus"> </dx-button>
+
+    <div class="col-md-12">
+      <div class="card">
+        <dx-data-grid
+          id="gridContainer"
+          [height]="gridHeight"
+          [dataSource]="dataSource"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+          (onToolbarPreparing)="onToolbarPreparing($event)"
+        >
+          <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-load-panel [enabled]="true"></dxo-load-panel>
+          <dxo-filter-row [visible]="filter"></dxo-filter-row>
+          <dxo-header-filter [visible]="filter"></dxo-header-filter>
+          <dxo-export [enabled]="true" fileName="Estimates" [allowExportSelectedData]="true">
+            <dxo-texts exportAll="Export All Rows"></dxo-texts>
+          </dxo-export>
+          <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('ChartOfAccountHistoryGrid') }}"></dxo-state-storing>
+          <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+          <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+          <!-- <dxo-selection mode="multiple" selectAllMode="page" showCheckBoxesMode="always"></dxo-selection> -->
+          <dxi-column dataField="" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+          <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+            <div class="d-con-cell-action">
+              <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+            </div>
+          </div>
+          <dxi-column dataField="Id" caption="Id" dataType="number" alignment="left" [visible]="false"></dxi-column>
+          <dxi-column dataField="AccountCode" caption="Account Code" dataType="number" [width]="170" alignment="left"></dxi-column>
+          <dxi-column dataField="AccountTitle" caption="Account Title" dataType="string"></dxi-column>
+          <dxi-column dataField="Account_Level" caption="Ac Level" dataType="number" alignment="center" [width]="120"></dxi-column>
+          <dxi-column dataField="AccountGroup" caption="Ac Group" dataType="string" [width]="150"></dxi-column>
+          <dxi-column dataField="BsNote" caption="BsNote" dataType="string" [width]="150"></dxi-column>
+          <dxi-column dataField="PLNote" caption="PLNote" dataType="string" [width]="150"></dxi-column>
+          <dxi-column dataField="AccountClassName" caption="Account Class" dataType="string" [width]="150"></dxi-column>
+          <!-- <dxi-column dataField="IsActive" caption="Status" cellTemplate="statusTemplate"></dxi-column>
+        <div *dxTemplate="let cellInfo of 'statusTemplate'">
+          <div *ngIf="cellInfo.text == 'true'; else falseStatus">
+            <span class="badge badge-success">Active</span>
+          </div>
+          <ng-template #falseStatus class="badge badge-danger"><span class="badge badge-danger">InActive</span></ng-template>
+        </div> -->
+          <!-- <dxi-column
+            dataField="button"
+            [fixed]="true"
+            [fixedPosition]="'right'"
+            [width]="90"
+            alignment="right"
+            caption="Add Child"
+            [allowEditing]="false"
+            [allowExporting]="false"
+            [allowFiltering]="false"
+            [allowFixing]="false"
+            [allowGrouping]="false"
+            [allowHeaderFiltering]="false"
+            [allowHiding]="true"
+            [allowReordering]="false"
+            [allowResizing]="false"
+            [allowSearch]="false"
+            [allowSorting]="false"
+            cellTemplate="buttonTemplate"
+          ></dxi-column>
+          <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+            <div class="d-con-cell-action">
+              <dx-button [disabled]="cellInfo.Account_Level == 4" type="default" stylingMode="text" (onClick)="onEdit(cellInfo.data)">
+                <i class="ri-edit-2-line"></i>
+              </dx-button>
+            </div>
+          </div> -->
+
+          <dxo-export [enabled]="true" [allowExportSelectedData]="true"></dxo-export>
+
+          <dxo-summary>
+            <dxi-total-item column="AccountTitle" summaryType="count" displayFormat="Total Accounts: {0}"> </dxi-total-item>
+          </dxo-summary>
+          <dxo-scrolling mode="infinite" [scrollByContent]="true" scrollByThumb="true" [showScrollbar]="'always'"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+    </div>
+    <!-- end col -->
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <def-coa-form-popup
+        #DefineChartOfAccountFormComponent
+        [PopupWithGridVisible]="ChartOfAccountFormPopupVisible"
+        [dataSource]="dataSource"
+        (closePopupGrid)="handleChartOfAccountFormPopupVisibility($event)"
+      ></def-coa-form-popup>
+    </div>
+  </div>
+</div>

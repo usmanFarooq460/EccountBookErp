@@ -1,0 +1,181 @@
+<div id="printContainer"></div>
+<div class="container-fluid" id="MainPage" [ngStyle]="{ height: heightOfInvoiceHistoryMainBox }"> 
+  <div class="row py-3" id="btn-toogle-first-row">
+    <div class="col-sm-12 d-flex justify-content-between">
+      <div class="px-2">
+        <dx-button class="btn-sm"  text="Add New" icon="plus" type="default" (onClick)="GoToForm()"></dx-button>
+      </div>
+      <div class="">
+        <h4 style="font-family: cursive; font-weight: bold;">{{HistoryTitle}}</h4>
+      </div>
+      <div class="mr-2">
+<dx-button   text="" icon="download" (onClick)="LoadAllRecordButtonClick()" [hint]="'Load All Records'" type="danger" ></dx-button>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="row py-3" id="btn-toogle-first-row">
+    <div class="col-sm-12 d-flex justify-content-between">
+      <div class="px-2">
+        <dx-button class="btn-sm"  text="Add New" icon="plus" type="default" (onClick)="GoToForm()"></dx-button>
+      </div>
+      <div class="">
+        <h4 style="font-family: cursive; font-weight: bold;">Sale Invoice History (@Whole)</h4>
+      </div>
+      <div class="mr-2">
+<dx-button   text="" icon="download" (onClick)="LoadAllRecordButtonClick()" [hint]="'Load All Records'" type="danger" ></dx-button>
+      </div>
+    </div>
+  </div> -->
+  <div class="row" id="btn-toogle-second-row-border" >
+    <div class="col-sm-3">
+      <div class="row" style="border-bottom: 1px solid rgba(2, 2, 2, 0.219); height: 70px;">
+        <div class="col-sm-12" >
+          <dx-form [formData]="ItemFilterationFormData" #ItemFilterationForm [showRequiredMark]="false">
+            <dxi-item itemType="group" cssClass="second-group" [colCount]="6">
+              <dxi-item [colSpan]="6" class="">
+                <div *dxTemplate class="d-flex">
+                  <!-- <div class="dx-field-label" style="width: 140% !important"></div> -->
+                  <div class="dx-field-value mt-3 px-1" style="width: 140% !important">
+                    <dx-text-box [placeholder]="'Filter'" [showClearButton]="true"  [(value)]="FilterBoxValue"></dx-text-box>
+                  </div>
+                </div>
+              </dxi-item>
+              <!-- <dxi-item
+                cssClass="px-1 mt-2"
+                [colSpan]="6"
+                
+                dataField="FilterBoxValue"
+                editorType="dxTextBox"
+                [editorOptions]="{
+                  placeholder: 'Filter By Any Word Visible',
+                  showClearButton: 'true',
+                  (value):'hamza',
+                  onValueChanged: handleFilterBoxValueChanged
+                }"
+              >
+                <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              </dxi-item> -->
+            </dxi-item>
+          </dx-form>
+          <!-- <div class="d-flex justify-content-between">
+            <div class="btns">
+              <dx-button class="mr-2"  text="" icon="share" type="danger" ></dx-button>
+              <dx-button class="mr-2"  text="" [hint]="InvoiceSlipButton1Hint" (onClick)="InvoiceSlip1Click()" icon="print" type="danger" ></dx-button>
+            </div>
+            <div class="">
+              <dx-button class="mr-2"  text="" [hint]="InvoiceSlipButton2Hint" (onClick)="InvoiceSlip2Click()" icon="print" type="danger" ></dx-button>
+              <dx-button class="mr-2"  text="" [hint]="InvoiceSlipButton3Hint" (onClick)="InvoiceSlip3Click()" icon="print" type="danger" ></dx-button>
+            </div>
+          </div> -->
+        </div>
+      </div>
+      <div class="row mb-4 " id="Preview-Border" [ngStyle]="{ height: heightOfInvoiceHisotoryChildBox  }">
+
+        <dx-scroll-view [showScrollbar]="'always'" width="100%" [scrollByContent]="true" [scrollByThumb]="true">
+          <div class="col-sm-12 m-0 p-0" *ngFor="let item of DataSource |  filterByAllProperties:FilterBoxValue; let i = index; let last = last">
+            <div class="customer" (click)="GeneratePreview(item)" [ngClass]="{ last: last }">
+              <h6>{{ item?.SupplierCustomerName }}</h6>
+              <p class="d-flex justify-content-between" style="color:#2A8EAC;"><span> {{ item?.InvoiceNumber }}</span><span class="ml-2 mb-1"><i *ngIf="item?.InvoicePaymentTerms=='Cash'" class="ri-currency-fill"></i> <i *ngIf="item?.InvoicePaymentTerms=='Credit'" class="ri-bank-card-line"></i></span> </p>
+             
+              <div class="date-cash">
+                <p class="date">
+                  <i class="fa-solid fa-calendar-days icon"></i>
+                  {{ item?.InvoiceDate }}
+                </p>
+        
+                <p class="Rs">
+                 <span>{{ item?.InvoiceBillAmount }}</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </dx-scroll-view>
+
+      </div>
+      <div class="row d-flex justify-content-between" style="height: 10px;font-size: 14px;margin-bottom: 6px;">
+        <div class=""></div>
+        <div class="">  <p>Total Records: {{DataSource?.length}}</p></div>
+        <div class=""></div>
+        
+       
+      </div>
+    </div>
+    <div class="col-sm-9"  id="Preview-Border"  >
+      <div class="row" style="border-bottom: 1px solid rgba(2, 2, 2, 0.219); height: 70px;">
+        <div class="col-sm-12" >
+
+          <div class="d-flex justify-content-between">
+            <div class="btns">
+              <dx-button class="mr-2"  text="" icon="share" type="danger" ></dx-button>
+              <dx-button class="mr-2"  text="" [hint]="InvoiceSlipButton1Hint" (onClick)="InvoiceSlip1Click()" icon="print" type="danger" ></dx-button>
+              <dx-button class="mr-2"  text="" [hint]="InvoiceSlipButton4Hint" *ngIf="InvoiceSlipButton4Visible" (onClick)="InvoiceSlip4Click()" icon="print" type="danger" ></dx-button>
+            </div>
+            <div class="">
+              <dx-button class="mr-2"  text="" *ngIf="InovoiceSlipButton2Visible" [hint]="InvoiceSlipButton2Hint" (onClick)="InvoiceSlip2Click()" icon="print" type="danger" ></dx-button>
+              <dx-button class="mr-2"  text="" *ngIf="InvoiceSlipButton3Visible" [hint]="InvoiceSlipButton3Hint" (onClick)="InvoiceSlip3Click()" icon="print" type="danger" ></dx-button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" id="InvoicePreviewBox"  >
+        <div class="col-md-12" [ngStyle]="{ height: heightOfInvoiceHisotoryChildBox }">
+          <dx-scroll-view [showScrollbar]="'always'" width="100%" [scrollByContent]="true" [scrollByThumb]="true">
+            <div id="InvoiceBox">
+                                  <app-invoice-one *ngIf="InvoicePreviewVisible" id="showInPrint"
+                    [InvoiceData]="InvoiceData"
+                    [CompanyId]="CompanyIdToFetchCompanyIfnoInInvoicePreview"
+                    ></app-invoice-one>
+            </div>
+
+          </dx-scroll-view>
+  
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+      <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+      <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+    </div>
+    <div class="col-md-12">
+      <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+    </div>
+  </div>
+
+</div>
+<dx-load-panel
+#loadPanel
+shadingColor="#e1eaed"
+[position]="{ of: '#InvoicePreviewBox' }"
+[(visible)]="SpecialLoadPanelVisible"
+[showIndicator]="true"
+[showPane]="true"
+[message]="'Generating Preview'"
+[shading]="true"
+[closeOnOutsideClick]="false"
+>
+</dx-load-panel>
+<!-- 
+<div class="row" id="Preview-Border">
+  <div class="col-sm-12">
+    <dx-form [formData]="ItemFilterationFormData" class="p-0 m-0" #ItemFilterationForm [showRequiredMark]="false">
+      <dxi-item itemType="group" cssClass="second-group p-0 m-0" [colCount]="6">
+        <dxi-item
+          cssClass="p-0 m-0"
+          [colSpan]="3"
+          dataField="FilterBoxValue"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            placeholder: 'Filter',
+            showClearButton: 'true',
+            onValueChanged: FilterData
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+      </dxi-item>
+    </dx-form>
+  </div>
+</div> -->

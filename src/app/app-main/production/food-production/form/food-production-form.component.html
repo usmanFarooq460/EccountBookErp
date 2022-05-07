@@ -1,0 +1,271 @@
+<div class="container-fluid">
+  <!-- start page title -->
+  <div class="d-flex justify-content-between">
+    <div>
+      <h4>Food Production</h4>
+    </div>
+    <div>
+      <dx-button icon="refresh"></dx-button>
+    </div>
+  </div>
+  <!-- end page title -->
+
+  <div class="row">
+    <div class="col-md-12">
+      <dx-form
+        [formData]="foodProductionData"
+        #foodProductionForm
+        [showRequiredMark]="false"
+      >
+        <dxi-item itemType="group" [colCount]="12">
+          <dxi-item
+            dataField="DocCode"
+            editorType="dxNumberBox"
+            [editorOptions]="{ placeholder: 'Document No.' }"
+            [colSpan]="2"
+            cssClass="px-1 m-0"
+          >
+            <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          </dxi-item>
+          <dxi-item
+            dataField="DocDate"
+            editorType="dxDateBox"
+            [editorOptions]="{ placeholder: 'Document Date' }"
+            [colSpan]="2"
+            cssClass="px-1 m-0"
+          >
+            <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          </dxi-item>
+          <dxi-item
+            dataField="InvJobOrderNo"
+            editorType="dxSelectBox"
+            [editorOptions]="{ placeholder: 'Job Order No.' }"
+            [colSpan]="2"
+            cssClass="px-1 m-0"
+          >
+            <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          </dxi-item>
+          <dxi-item
+            dataField="MainRemarks"
+            editorType="dxTextBox"
+            [editorOptions]="{ placeholder: 'Remarks' }"
+            [colSpan]="4"
+            cssClass="px-1 m-0"
+          >
+            <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          </dxi-item>
+          <dxi-item editorType="empty" [colSpan]="1"></dxi-item>
+          <dxi-item>
+            <div *dxTemplate class="mt-2">
+              <dx-button text="Load" icon="download" type="danger"></dx-button>
+            </div>
+          </dxi-item>
+        </dxi-item>
+        <dxi-item>
+          <div *dxTemplate>
+            <dx-form
+              [formData]="foodProductionDetailData"
+              #foodProductionDetailForm
+              [showRequiredMark]="false"
+            >
+              <dxi-item itemType="group" [colCount]="12" cssClass="py-0">
+                <dxi-item
+                  dataField="WarehouseId"
+                  editorType="dxSelectBox"
+                  [editorOptions]="{ placeholder: 'Warehouse' }"
+                  [colSpan]="2"
+                  cssClass="px-1 m-0"
+                >
+                  <dxo-label
+                    text=" "
+                    location="top"
+                    [showColon]="false"
+                  ></dxo-label>
+                </dxi-item>
+                <dxi-item
+                  dataField="ItemId"
+                  editorType="dxSelectBox"
+                  [editorOptions]="{ placeholder: 'Item' }"
+                  [colSpan]="2"
+                  cssClass="px-1 m-0"
+                >
+                  <dxo-label
+                    text=" "
+                    location="top"
+                    [showColon]="false"
+                  ></dxo-label>
+                </dxi-item>
+                <dxi-item
+                  dataField="ItemUomId"
+                  editorType="dxSelectBox"
+                  [editorOptions]="{ placeholder: 'UOM' }"
+                  [colSpan]="2"
+                  cssClass="px-1 m-0"
+                >
+                  <dxo-label
+                    text=" "
+                    location="top"
+                    [showColon]="false"
+                  ></dxo-label>
+                </dxi-item>
+                <dxi-item
+                  dataField="CropBatch"
+                  editorType="dxSelectBox"
+                  [editorOptions]="{ placeholder: 'Crop Year' }"
+                  [colSpan]="2"
+                  cssClass="px-1 m-0"
+                >
+                  <dxo-label
+                    text=" "
+                    location="top"
+                    [showColon]="false"
+                  ></dxo-label>
+                </dxi-item>
+                <dxi-item
+                  dataField="JobLotId"
+                  editorType="dxSelectBox"
+                  [editorOptions]="{ placeholder: 'Lot' }"
+                  [colSpan]="2"
+                  cssClass="px-1 m-0"
+                >
+                  <dxo-label
+                    text=" "
+                    location="top"
+                    [showColon]="false"
+                  ></dxo-label>
+                </dxi-item>
+                <dxi-item
+                  dataField="PackingtypeId"
+                  editorType="dxSelectBox"
+                  [editorOptions]="{ placeholder: 'Pack Type' }"
+                  [colSpan]="2"
+                  cssClass="px-1 m-0"
+                >
+                  <dxo-label
+                    text=" "
+                    location="top"
+                    [showColon]="false"
+                  ></dxo-label>
+                </dxi-item>
+              </dxi-item>
+              <dxi-item itemType="group" [colCount]="12" cssClass="py-0">
+                <dxi-item
+                  dataField="Qty"
+                  editorType="dxNumberBox"
+                  [editorOptions]="{ placeholder: 'Quantity' }"
+                  [colSpan]="1"
+                  cssClass="px-1 m-0"
+                >
+                  <dxo-label
+                    text=" "
+                    location="top"
+                    [showColon]="false"
+                  ></dxo-label>
+                </dxi-item>
+                <dxi-item
+                  dataField="Weight"
+                  editorType="dxNumberBox"
+                  [editorOptions]="{ placeholder: 'Net Weight' }"
+                  [colSpan]="2"
+                  cssClass="px-1 m-0"
+                >
+                  <dxo-label
+                    text=" "
+                    location="top"
+                    [showColon]="false"
+                  ></dxo-label>
+                </dxi-item>
+                <dxi-item
+                  dataField="Rate"
+                  editorType="dxNumberBox"
+                  [editorOptions]="{ placeholder: 'Rate' }"
+                  [colSpan]="1"
+                  cssClass="px-1 m-0"
+                >
+                  <dxo-label
+                    text=" "
+                    location="top"
+                    [showColon]="false"
+                  ></dxo-label>
+                </dxi-item>
+                <dxi-item
+                  dataField="RateUOMId"
+                  editorType="dxSelectBox"
+                  [editorOptions]="{ placeholder: 'Rate UOM' }"
+                  [colSpan]="1"
+                  cssClass="px-1 m-0"
+                >
+                  <dxo-label
+                    text=" "
+                    location="top"
+                    [showColon]="false"
+                  ></dxo-label>
+                </dxi-item>
+                <dxi-item
+                  dataField="Amount"
+                  editorType="dxNumberBox"
+                  [editorOptions]="{ placeholder: 'Amount' }"
+                  [colSpan]="2"
+                  cssClass="px-1 m-0"
+                >
+                  <dxo-label
+                    text=" "
+                    location="top"
+                    [showColon]="false"
+                  ></dxo-label>
+                </dxi-item>
+                <dxi-item
+                  dataField="Remarks"
+                  editorType="dxTextBox"
+                  [editorOptions]="{ placeholder: 'Remarks' }"
+                  [colSpan]="4"
+                  cssClass="px-1 m-0"
+                >
+                  <dxo-label
+                    text=" "
+                    location="top"
+                    [showColon]="false"
+                  ></dxo-label>
+                </dxi-item>
+                <dxi-item [colSpan]="2" cssClass="mt-2">
+                  <div *dxTemplate>
+                    <dx-button text="Add" icon="add" type="success">
+                    </dx-button>
+                  </div>
+                </dxi-item>
+              </dxi-item>
+            </dx-form>
+          </div>
+        </dxi-item>
+      </dx-form>
+      <div class="m-4"></div>
+
+      <dx-tab-panel
+        id="tabpanel"
+        [animationEnabled]="true"
+        itemTemplate="city-template"
+      >
+        <dxi-item title="Input">
+          <app-data-grid
+            [columns]="columns"
+            [dataSource]="inputDataSource"
+          ></app-data-grid>
+        </dxi-item>
+        <dxi-item title="Output">
+          <app-data-grid
+            [columns]="columns"
+            [dataSource]="outputDataSource"
+          ></app-data-grid>
+        </dxi-item>
+      </dx-tab-panel>
+      <dx-speed-dial-action
+        cssClass="text-primary"
+        icon="save"
+        label="Save"
+        type="success"
+        [index]="1"
+      >
+      </dx-speed-dial-action>
+    </div>
+  </div>
+</div>

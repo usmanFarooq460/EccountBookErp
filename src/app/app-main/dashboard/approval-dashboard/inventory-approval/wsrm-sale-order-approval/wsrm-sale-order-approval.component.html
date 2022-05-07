@@ -1,0 +1,117 @@
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <dx-data-grid
+      #WsrmSaleOrderApprovalGrid
+      [height]="gridHeightInPopupWithGrid"
+      width="100%"
+      id="GridWithHeading"
+      [dataSource]="headerArray"
+      [showColumnLines]="false"
+      [showRowLines]="true"
+      [allowColumnReordering]="true"
+      [rowAlternationEnabled]="true"
+      [allowColumnResizing]="true"
+      [columnAutoWidth]="true"
+      [showBorders]="true"
+      (onToolbarPreparing)="ApprovalPopupGridToolbarPreparing($event)"
+    >
+      <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+      <dxo-load-panel [enabled]="true"></dxo-load-panel>
+      <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+      <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+      <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('WsrmSaleOrderApprovalGrid') }}"></dxo-state-storing>
+      <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+      <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+      <div *dxTemplate="let data of 'GridHeadingTemplate'">
+        <div class="HeadingDiv">
+          <h4 class="Heading" style="font-weight: bold; color: whitesmoke">{{ ApprovalPopupHeading }}</h4>
+        </div>
+      </div>
+      <dxi-column dataField="Sr#" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+      <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+        <div class="d-con-cell-action">
+          <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+        </div>
+      </div>
+      <dxi-column dataField="Id" caption="Id" [visible]="false"></dxi-column>
+      <dxi-column dataField="DocNo" caption="Doc No" dataType="number" alignment="left" [width]="80"></dxi-column>
+      <dxi-column dataField="DocDate" caption="Doc Date" dataType="date" [format]="'dd-MMM-yyyy'"></dxi-column>
+      <dxi-column dataField="Customer" caption="Customer" dataType="string"></dxi-column>
+      <dxi-column dataField="SalesMan" caption="Sales Man" dataType="string"></dxi-column>
+      <dxi-column dataField="RefCellNo" caption="Ref Cell No" dataType="string"></dxi-column>
+      <dxi-column dataField="RefDocNo" caption="Ref Doc No" dataType="string"></dxi-column>
+      <dxi-column dataField="DeliveryTerm" caption="Delivery Term" dataType="string"></dxi-column>
+      <dxi-column dataField="TermsDescription" caption="Payment Term" dataType="string"></dxi-column>
+      <dxi-column dataField="DeliveryDate" caption="Delivery Date" dataType="date" [format]="'dd-MMM-yyyy'"></dxi-column>
+      <dxi-column dataField="DueDays" caption="DueDays" dataType="number"></dxi-column>
+      <dxi-column dataField="RemarksHeader" caption="Remarks" dataType="string"></dxi-column>
+      <dxi-column dataField="EntryUser" caption="Entry User" dataType="string"></dxi-column>
+      <dxi-column dataField="IsApproved" caption="Status" cellTemplate="statusTemplate"></dxi-column>
+      <div *dxTemplate="let cellInfo of 'statusTemplate'">
+        <div *ngIf="cellInfo.text == 'Approved'; else falseStatus">
+          <span class="badge badge-success">Approved</span>
+        </div>
+        <ng-template #falseStatus class="badge badge-danger"> <span class="badge badge-danger">Not Approved</span></ng-template>
+      </div>
+      <dxi-column
+        dataField="button"
+        [fixed]="true"
+        [fixedPosition]="'right'"
+        [width]="100"
+        alignment="right"
+        caption="Action"
+        [allowEditing]="false"
+        [allowExporting]="false"
+        [allowFiltering]="false"
+        [allowFixing]="false"
+        [allowGrouping]="false"
+        [allowHeaderFiltering]="false"
+        [allowHiding]="false"
+        [allowReordering]="false"
+        [allowResizing]="false"
+        [allowSearch]="false"
+        [allowSorting]="false"
+        cellTemplate="buttonTemplate"
+      ></dxi-column>
+      <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+        <div class="d-con-cell-action">
+          <dx-button type="default" stylingMode="text" hint="Approved Voucher" (onClick)="onApproved(cellInfo.data)">
+            <i class="ri-checkbox-fill" style="height: 24px; width: 24px"></i>
+          </dx-button>
+
+          <dx-button type="danger" hint="Sale Order Slip 701" stylingMode="text" (onClick)="WsrmSalesOrderSlip_701(cellInfo.data)">
+            <i class="ri-printer-line"></i>
+          </dx-button>
+        </div>
+      </div>
+      <dxo-scrolling [mode]="'infinite'" [showScrollbar]="'always'" [scrollByContent]="true" [scrollByThumb]="true" [scrollLeft]="true"></dxo-scrolling>
+      <dxo-summary>
+        <dxi-total-item column="Sr#" summaryType="count" displayFormat="{0}"> </dxi-total-item>
+      </dxo-summary>
+      <dxo-master-detail [enabled]="true" template="masterDetail"></dxo-master-detail>
+      <div *dxTemplate="let masterDetailItem of 'masterDetail'">
+        <wsrm-sale-order-approval-detial [key]="masterDetailItem.Id" [dataSource]="dataSource" [rowData]="masterDetailItem.data"></wsrm-sale-order-approval-detial>
+      </div>
+    </dx-data-grid>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <notification-popups
+        [title]="'Confirmation'"
+        [type]="'confirmation'"
+        (confirmed)="handleYesNoClicked($event)"
+        [visibility]="confirmationPopupVisible"
+        [message]="'Do You want to Approve?'"
+      ></notification-popups>
+      <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+      <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+      <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+    </div>
+    <div class="col-md-12">
+      <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+    </div>
+  </div>
+</div>

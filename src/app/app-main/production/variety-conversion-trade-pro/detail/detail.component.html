@@ -1,0 +1,241 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="d-flex justify-content-center">
+      <div class="">
+        <h4>Input</h4>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <dx-data-grid
+      [dataSource]="inputDataSource"
+      [showColumnLines]="false"
+      [showRowLines]="true"
+      [rowAlternationEnabled]="true"
+      [allowColumnResizing]="true"
+      [columnAutoWidth]="true"
+      [showBorders]="true"
+      [wordWrapEnabled]="false"
+    >
+      <dxo-paging [enabled]="true"></dxo-paging>
+      <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15]" [showInfo]="true"></dxo-pager>
+      <dxi-column dataField="EntryType" caption="Entry Type" dataType="any" alignment="left"></dxi-column>
+      <dxi-column dataField="WarehouseId" caption="Warehouse" [visible]="false" dataType="number" alignment="left"></dxi-column>
+      <dxi-column dataField="WareHouseName" caption="WareHouse" dataType="string" alignment="left"></dxi-column>
+      <dxi-column dataField="ItemId" caption="ItemId" [visible]="false" dataType="number" alignment="left"></dxi-column>
+      <dxi-column dataField="ItemName" caption="Item" dataType="string" alignment="left"></dxi-column>
+      <!-- <dxi-column dataField="Stock" caption="Stock" dataType="string" alignment="left"></dxi-column> -->
+      <dxi-column dataField="ItemUomId" caption="ItemUomId" [visible]="false" dataType="number" alignment="left"></dxi-column>
+      <dxi-column dataField="UOMDescription" caption="UOM" dataType="string" alignment="left"></dxi-column>
+      <dxi-column dataField="JobLotId" caption="JobLotId" [visible]="false" dataType="number" alignment="left"></dxi-column>
+      <dxi-column dataField="JobLotDescription" caption="JobLot" dataType="string" alignment="left"></dxi-column>
+      <dxi-column dataField="Qty" caption="Qty" dataType="number" alignment="left"></dxi-column>
+      <dxi-column dataField="Rate" caption="Rate" dataType="number" alignment="left"></dxi-column>
+      <dxi-column dataField="RateUOMId" caption="RateUOMId" [visible]="false" dataType="number" alignment="left"></dxi-column>
+      <dxi-column dataField="Equivalent" caption="Rate UOM" dataType="string" alignment="left"></dxi-column>
+      <dxi-column dataField="AmountWithoutExpenses" caption="Amount" dataType="number" alignment="left"></dxi-column>
+      <dxi-column dataField="Amount" caption="Total Amount" dataType="number" alignment="left"></dxi-column>
+      <dxi-column dataField="Remarks" caption="Remarks" dataType="string" alignment="left"></dxi-column>
+      <div *dxTemplate="let cell of 'DetailcellTemplate'">
+        <div id="abcdedf">{{ cell.text }}</div>
+      </div>
+      <dxo-summary>
+        <dxi-total-item column="Qty" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+        <dxi-total-item column="AmountWithoutExpenses" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+        <dxi-total-item column="Amount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+      </dxo-summary>
+      <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+    </dx-data-grid>
+  </div>
+  <div class="col-md-12">
+    <div class="d-flex justify-content-center">
+      <div class="">
+        <h4>Output</h4>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <dx-data-grid
+      [dataSource]="outputDataSource"
+      [showColumnLines]="false"
+      [showRowLines]="true"
+      [rowAlternationEnabled]="true"
+      [allowColumnResizing]="true"
+      [columnAutoWidth]="true"
+      [showBorders]="true"
+      [wordWrapEnabled]="false"
+    >
+      <dxo-paging [enabled]="true"></dxo-paging>
+      <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15]" [showInfo]="true"></dxo-pager>
+      <dxi-column dataField="EntryType" caption="Entry Type" dataType="any" alignment="left"></dxi-column>
+      <dxi-column dataField="WarehouseId" caption="Warehouse" [visible]="false" dataType="number" alignment="left"></dxi-column>
+      <dxi-column dataField="WareHouseName" caption="WareHouse" dataType="string" alignment="left"></dxi-column>
+      <dxi-column dataField="ItemId" caption="ItemId" [visible]="false" dataType="number" alignment="left"></dxi-column>
+      <dxi-column dataField="ItemName" caption="Item" dataType="string" alignment="left"></dxi-column>
+      <!-- <dxi-column dataField="Stock" caption="Stock" dataType="string" alignment="left"></dxi-column> -->
+      <dxi-column dataField="ItemUomId" caption="ItemUomId" [visible]="false" dataType="number" alignment="left"></dxi-column>
+      <dxi-column dataField="UOMDescription" caption="UOM" dataType="string" alignment="left"></dxi-column>
+      <dxi-column dataField="JobLotId" caption="JobLotId" [visible]="false" dataType="number" alignment="left"></dxi-column>
+      <dxi-column dataField="JobLotDescription" caption="JobLot" dataType="string" alignment="left"></dxi-column>
+      <dxi-column dataField="Qty" caption="Qty" dataType="number" alignment="left"></dxi-column>
+      <dxi-column dataField="Rate" caption="Rate" dataType="number" alignment="left"></dxi-column>
+      <dxi-column dataField="RateUOMId" caption="RateUOMId" [visible]="false" dataType="number" alignment="left"></dxi-column>
+      <dxi-column dataField="Equivalent" caption="Rate UOM" dataType="string" alignment="left"></dxi-column>
+      <dxi-column dataField="AmountWithoutExpenses" caption="Amount" dataType="number" alignment="left"></dxi-column>
+      <dxi-column dataField="PackingMaterialAmount" caption="Pack Material Amount" dataType="number" alignment="left"></dxi-column>
+      <dxi-column dataField="ExpenseAmount" caption="Expense Amount" dataType="number" alignment="left"></dxi-column>
+      <dxi-column dataField="Amount" caption="Total Amount" dataType="number" alignment="left"></dxi-column>
+      <dxi-column dataField="Remarks" caption="Remarks" dataType="string" alignment="left"></dxi-column>
+      <div *dxTemplate="let cell of 'DetailcellTemplate'">
+        <div id="abcdedf">{{ cell.text }}</div>
+      </div>
+      <dxo-summary>
+        <dxi-total-item column="Qty" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+        <dxi-total-item column="AmountWithoutExpenses" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+        <dxi-total-item column="PackingMaterialAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+        <dxi-total-item column="ExpenseAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+        <dxi-total-item column="Amount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+      </dxo-summary>
+      <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+    </dx-data-grid>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="d-flex justify-content-center">
+          <div class=""><h4>Packing Material</h4></div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <dx-data-grid
+          [height]="250"
+          #outputGrid
+          id="packingMaterialGrid"
+          [dataSource]="packingMaterialDataSource"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+        >
+          <dxi-column dataField="Id" caption="Id" dataType="number" [visible]="false" alignment="left"></dxi-column>
+          <dxi-column dataField="InvStockConversionId" caption="InvStockConversionId" [visible]="false" dataType="number" alignment="left"></dxi-column>
+          <dxi-column dataField="ItemId" caption="Item" dataType="number" alignment="left">
+            <dxo-lookup [dataSource]="itemList" [valueExpr]="'Id'" dataType="number" [displayExpr]="'ItemName'"></dxo-lookup>
+          </dxi-column>
+          <!-- <dxi-column dataField="ItemSchUOM" caption="UOM" dataType="number" alignment="left">
+                <dxo-lookup [dataSource]="uomList" [valueExpr]="'Id'" dataType="number" [displayExpr]="'Equivalent'"></dxo-lookup>
+              </dxi-column> -->
+          <dxi-column dataField="ItemQty" caption="Qty" dataType="number" alignment="left"></dxi-column>
+          <dxi-column dataField="ItemRate" caption="Rate" dataType="number" alignment="left"></dxi-column>
+          <dxi-column dataField="ItemAmount" caption="Amount" dataType="number" alignment="left"></dxi-column>
+          <dxi-column dataField="ChargeTo" caption="Charge To" dataType="string" alignment="left">
+            <dxo-lookup [dataSource]="chargeToList" [valueExpr]="'Label'" dataType="number" [displayExpr]="'Label'"></dxo-lookup>
+          </dxi-column>
+          <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+          <dxo-summary>
+            <dxi-total-item column="ItemQty" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+            <dxi-total-item column="ItemAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+          </dxo-summary>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="d-flex justify-content-center">
+          <div class=""><h4>Overheads</h4></div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <dx-data-grid
+          [height]="250"
+          #overheadGrid
+          id="overheadGrid"
+          [dataSource]="overheadDataSource"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+        >
+          <dxi-column dataField="Id" caption="Id" dataType="number" [visible]="false" alignment="left"></dxi-column>
+          <dxi-column dataField="InvStockConversionId" caption="InvStockConversionId" [visible]="false" dataType="number" alignment="left"></dxi-column>
+          <dxi-column dataField="ChartOfAccountId" caption="Item" dataType="number" alignment="left">
+            <dxo-lookup [dataSource]="accountHeadList" [valueExpr]="'Id'" dataType="number" [displayExpr]="'AccountTitle'"></dxo-lookup>
+          </dxi-column>
+          <dxi-column dataField="LedgerRemarks" caption="Remarks" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="ExpAmount" caption="Amount" dataType="number" alignment="left"></dxi-column>
+          <dxi-column dataField="ChargeTo" caption="Charge To" dataType="string" alignment="left">
+            <dxo-lookup [dataSource]="chargeToList" [valueExpr]="'Label'" dataType="number" [displayExpr]="'Label'"></dxo-lookup>
+          </dxi-column>
+          <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+          <dxo-summary>
+            <dxi-total-item column="ExpAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+          </dxo-summary>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <dx-data-grid
+  [dataSource]="detailData"
+  [showColumnLines]="false"
+  [showRowLines]="true"
+  [rowAlternationEnabled]="true"
+  [allowColumnResizing]="true"
+  [columnAutoWidth]="true"
+  [showBorders]="true"
+  [wordWrapEnabled]="false"
+>
+  <dxo-load-panel [enabled]="true"></dxo-load-panel>
+  <dxo-paging [enabled]="true"></dxo-paging>
+  <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15]" [showInfo]="true"></dxo-pager>
+  <dxi-column dataField="EntryType" caption="Entry Type" dataType="any" alignment="left"></dxi-column>
+  <dxi-column dataField="WarehouseId" caption="Warehouse" [visible]="false" dataType="number" alignment="left"></dxi-column>
+  <dxi-column dataField="WareHouseName" caption="WareHouse" dataType="string" alignment="left"></dxi-column>
+  <dxi-column dataField="ItemId" caption="ItemId" [visible]="false" dataType="number" alignment="left"></dxi-column>
+  <dxi-column dataField="ItemName" caption="Item" dataType="string" alignment="left"></dxi-column>
+  <dxi-column dataField="ItemUomId" caption="ItemUomId" [visible]="false" dataType="number" alignment="left"></dxi-column>
+  <dxi-column dataField="UOMDescription" caption="UOM" dataType="string" alignment="left"></dxi-column>
+  <dxi-column dataField="CropBatch" caption="Crop" dataType="string" alignment="left"></dxi-column>
+  <dxi-column dataField="JobLotId" caption="JobLotId" [visible]="false" dataType="number" alignment="left"></dxi-column>
+  <dxi-column dataField="JobLotDescription" caption="JobLot" dataType="string" alignment="left"></dxi-column>
+  <dxi-column dataField="PackingtypeId" caption="PackingtypeId" [visible]="false" dataType="number" alignment="left"></dxi-column>
+  <dxi-column dataField="PackTypeDesc" caption="PackType" dataType="string" alignment="left"></dxi-column>
+  <dxi-column dataField="Qty" caption="Qty" dataType="number" alignment="left"></dxi-column>
+  <dxi-column dataField="Weight" caption="Weight" dataType="number" alignment="left"></dxi-column>
+  <dxi-column dataField="Rate" caption="Rate" dataType="number" alignment="left"></dxi-column>
+  <dxi-column dataField="RateUOMId" caption="RateUOMId" [visible]="false" dataType="number" alignment="left"></dxi-column>
+  <dxi-column dataField="Equivalent" caption="Rate UOM" dataType="string" alignment="left"></dxi-column>
+  <dxi-column dataField="AmountWithoutExpenses" caption="Amount" dataType="number" alignment="left"></dxi-column>
+  <dxi-column dataField="PackingMaterialAmount" caption="Pack Material Amount" dataType="number" alignment="left"></dxi-column>
+  <dxi-column dataField="ExpenseAmount" caption="Expense Amount" dataType="number" alignment="left"></dxi-column>
+  <dxi-column dataField="Amount" caption="Total Amount" dataType="number" alignment="left"></dxi-column>
+  <dxi-column dataField="Remarks" caption="Remarks" dataType="string" alignment="left"></dxi-column>
+  <div *dxTemplate="let cell of 'DetailcellTemplate'">
+    <div id="abcdedf">{{ cell.text }}</div>
+  </div>
+  <dxo-summary>
+    <dxi-total-item column="Qty" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+    <dxi-total-item column="NetWeight" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+  </dxo-summary>
+  <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+</dx-data-grid> -->
+<dx-load-panel
+  #loadPanel
+  shadingColor="rgba(0,0,0,0.4)"
+  [position]="'center'"
+  [(visible)]="loadPanelForDetailVisible"
+  message="'Fetching Detail'"
+  [showIndicator]="true"
+  [showPane]="true"
+  [shading]="false"
+  [closeOnOutsideClick]="false"
+>
+</dx-load-panel>

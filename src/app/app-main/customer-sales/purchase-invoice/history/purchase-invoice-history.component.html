@@ -1,0 +1,117 @@
+<div class="container-fluid">
+  <app-pagetitle [title]="'Purchase Invoice'"></app-pagetitle>
+  <dx-button id="filter" class="ml-3 mb-3" type="default" text="Add New" icon="plus" (onClick)="gotoForm()"> </dx-button>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <dx-data-grid
+          id="gridContainer"
+          [height]="gridHeight"
+          #purchaseInvoiceHistoryGrid
+          [dataSource]="dataSource"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnReordering]="true"
+          [allowColumnResizing]="true"
+          [allowColumnReordering]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+          (onToolbarPreparing)="onToolbarPreparing($event)"
+        >
+          <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-filter-row [visible]="filter"></dxo-filter-row>
+          <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+          <dxo-header-filter [visible]="filter"></dxo-header-filter>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('purchaseInvoiceHistoryGrid') }}"></dxo-state-storing>
+          <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+          <dxo-load-panel [enabled]="false"></dxo-load-panel>
+          <dxo-export [enabled]="true" fileName="purchase Invoice History" [allowExportSelectedData]="true">
+            <dxo-texts exportAll="Export All Rows"></dxo-texts>
+          </dxo-export>
+          <dxi-column dataField="" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+          <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+            <div class="d-con-cell-action">
+              <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+            </div>
+          </div>
+
+          <dxi-column dataField="Id" caption="Id" [visible]="false"></dxi-column>
+          <dxi-column dataField="DocNo" caption="Doc No." dataType="number" alignment="left" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="DocDate" caption="Doc Date" dataType="date" alignment="center" [width]="110" [format]="'dd-MMM-yyyy'"></dxi-column>
+          <dxi-column dataField="ManualBillNo" caption="Bill No." dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="SupplierName" caption="Supplier" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="CommissionAgent" caption="Com. Agent" dataType="string" alignment="left"></dxi-column>
+
+          <dxi-column dataField="CommissionType" caption="Com. Type" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="CommRate" caption="Com. Rate" dataType="string" alignment="right" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+          <dxi-column dataField="CommAmount" caption="Com. Amount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="CommissionRemarks" caption="Com. Remarks" [visible]="false" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="BillAmount" caption="Bill Amount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="RemarksHeader" caption="Remarks" [visible]="false" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="StockPartyName" caption="Stock Party" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="UserName" caption="UserName" dataType="string" alignment="left"></dxi-column>
+          <dxo-master-detail [enabled]="true" template="masterDetail"></dxo-master-detail>
+          <div *dxTemplate="let masterDetailItem of 'masterDetail'">
+            <app-purchase-invoice-history-detail [rowData]="masterDetailItem.data"></app-purchase-invoice-history-detail>
+          </div>
+          <dxi-column
+            dataField="button"
+            [fixed]="true"
+            [fixedPosition]="'right'"
+            [width]="140"
+            alignment="left"
+            caption="Action"
+            [allowEditing]="false"
+            [allowExporting]="false"
+            [allowFiltering]="false"
+            [allowFixing]="false"
+            [allowGrouping]="false"
+            [allowHeaderFiltering]="false"
+            [allowHiding]="false"
+            [allowReordering]="false"
+            [allowResizing]="false"
+            [allowSearch]="false"
+            [allowSorting]="false"
+            cellTemplate="buttonTemplate"
+          ></dxi-column>
+          <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+            <div class="d-con-cell-action">
+              <dx-button type="default" stylingMode="text" (onClick)="onEdit(cellInfo.data)">
+                <i class="ri-edit-2-line"></i>
+              </dx-button>
+              <dx-button type="danger" stylingMode="text" hint="220-Invoice Slip" (onClick)="onPrint(cellInfo.data)">
+                <i class="ri-printer-line"></i>
+              </dx-button>
+              <dx-button type="danger" hint="103-Voucher " stylingMode="text" (onClick)="PurchaseInvoiceVoucher103(cellInfo.data)">
+                <i class="ri-printer-line"></i>
+              </dx-button>
+
+              <dx-button type="danger" hint="104-Voucher " stylingMode="text" (onClick)="PurchaseInvoiceVoucher104(cellInfo.data)">
+                <i class="ri-printer-line"></i>
+              </dx-button>
+            </div>
+          </div>
+          <dxo-summary>
+            <dxi-total-item column="SupplierName" summaryType="count" displayFormat="Total Records: {0}"> </dxi-total-item>
+          </dxo-summary>
+          <dxo-scrolling [scrollByContent]="true" [scrollByThumb]="true" [showScrollbar]="'always'" [scrollLeft]="true" mode="infinite"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+      <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+      <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+    </div>
+    <div class="col-md-12">
+      <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+    </div>
+  </div>
+</div>

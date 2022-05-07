@@ -1,0 +1,41 @@
+<dx-data-grid
+  id="multiGroupComparisonDetailGrid"
+  [dataSource]="detailDataSource"
+  [showColumnLines]="false"
+  [showRowLines]="true"
+  [rowAlternationEnabled]="true"
+  [allowColumnResizing]="true"
+  [columnAutoWidth]="true"
+  [showBorders]="true"
+  [wordWrapEnabled]="false"
+>
+  <dxo-paging [enabled]="true"></dxo-paging>
+  <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15]" [showInfo]="true"></dxo-pager>
+  <dxi-column dataField="SecondGroupName" [width]="280" caption="{{ secondGroupCaption }}" dataType="string" alignment="left"></dxi-column>
+  <dxi-column dataField="CropBatch" caption="Crop Year" dataType="string" alignment="left"></dxi-column>
+  <dxi-column dataField="Qty" caption="Qty" cellTemplate="cellTemplate" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+  <dxi-column dataField="WeightKg" caption="Weight(Kg)" cellTemplate="cellTemplate" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+  <!-- <dxi-column dataField="FcyCode" caption="Fcy Code" cellTemplate="cellTemplate" dataType="string" alignment="left"></dxi-column> -->
+  <dxi-column dataField="Amount" caption="Amount" cellTemplate="cellTemplate" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+  <dxi-column dataField="PrctSale" caption="% of Amount" cellTemplate="cellTemplate" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+  <div *dxTemplate="let cell of 'cellTemplate'">
+    <div id="abcdedf">{{ cell.text }}</div>
+  </div>
+  <!-- <dxo-summary>
+    <dxi-total-item column="MTons" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+    <dxi-total-item column="PrctExport" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+    <dxi-total-item column="Fcy_Amount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+    <dxi-total-item column="PKR_Amount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+  </dxo-summary> -->
+  <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+  <!-- <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+    <div class="d-con-cell-action">
+      <dx-button type="default" stylingMode="text">
+        <i class="ri-edit-2-line"></i>
+      </dx-button>
+      <dx-button type="danger" stylingMode="text" hint="262-DeliveryOrder Slip">
+        <i class="ri-printer-line"></i>
+      </dx-button>
+    </div>
+  </div> -->
+</dx-data-grid>

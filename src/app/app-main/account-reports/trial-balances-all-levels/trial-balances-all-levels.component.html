@@ -1,0 +1,152 @@
+<div class="container-fluid">
+  <app-pagetitle title="Trial Balance All Levels" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+  <div class="row d-flex justify-content-between py-2">
+    <div class="">
+      <dx-form id="form" [formData]="expandOptionFormData" #expandOptionForm [showRequiredMark]="false">
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="ExpandOptions"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            placeholder: 'View Option',
+            searchEnabled: true,
+            items: expandOptions,
+            valueExpr: 'Id',
+            displayExpr: 'option',
+            onValueChanged: changeGrouping,
+            value: expandOptions[0].Id,
+            readOnly: expandOptionsReadOnly
+          }"
+        >
+          <dxo-label text=" " location="left" [showColon]="false"></dxo-label>
+        </dxi-item>
+      </dx-form>
+    </div>
+    <div class="">
+      <dx-button class="ml-3 mb-3" type="default" text="Back" routerLink="/admin-panel/report-panel" icon="back" style="background-color: #ffa100"></dx-button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card shadow-sm">
+        <dx-form [formData]="trialBalanceAllLevelFormData" #trialBalanceAllLevelForm [showRequiredMark]="false" [colCountByScreen]="{ lg: 3, md: 2, sm: 2, xs: 1 }">
+          <dxi-item
+            cssClass="px-1 m-0"
+            dataField="fromDate"
+            editorType="dxDateBox"
+            [editorOptions]="{
+              placeholder: 'From Date',
+              displayFormat: 'dd-MMM-yyyy',
+              showClearButton: 'true',
+              stylingMode: 'underlined'
+            }"
+          >
+            <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+            <dxi-validation-rule type="required" message="From Date is required"></dxi-validation-rule>
+          </dxi-item>
+          <dxi-item
+            cssClass="px-1 m-0"
+            dataField="toDate"
+            editorType="dxDateBox"
+            [editorOptions]="{
+              placeholder: 'To Date',
+              displayFormat: 'dd-MMM-yyyy',
+              showClearButton: 'true',
+              stylingMode: 'underlined'
+            }"
+          >
+            <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+            <dxi-validation-rule type="required" message="To Date is required"></dxi-validation-rule>
+          </dxi-item>
+        </dx-form>
+        <div class="d-flex justify-content-end mt-1">
+          <div class="m-0 p-1">
+            <dx-button type="success" (onClick)="onSubmit()" text="Show"></dx-button>
+          </div>
+          <div class="m-0 p-1">
+            <dx-button type="danger" (onClick)="clear()" text="Clear"></dx-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-2">
+    <div class="col-md-12" [ngStyle]="{ height: IsLoadedInPopup == false ? gridColumnHeight : gridColumnHeightInPopupWithGrid }" #stickyGrid [class.sticky]="sticky">
+      <div class="card p-2 rounded">
+        <dx-data-grid
+          id="gridContainer"
+          #trialBalanceAllLevelsGrid
+          [dataSource]="dataSource"
+          [height]="gridHeight"
+          [showColumnLines]="true"
+          [showRowLines]="true"
+          [allowColumnReordering]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+          (onToolbarPreparing)="toolbarPreparing($event)"
+        >
+          <dxo-group-panel [visible]="false"></dxo-group-panel>
+          <dxo-grouping  [autoExpandAll]="false"></dxo-grouping>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-load-panel [enabled]="false"></dxo-load-panel>
+          <dxo-export [enabled]="true" fileName="Trial Balances All Level" [allowExportSelectedData]="true">
+            <dxo-texts exportAll="Export All Rows"></dxo-texts>
+          </dxo-export>
+      
+          <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('TrialBalancesAllLevelReportGridState') }}"></dxo-state-storing>
+        <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+        <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+
+          <dxi-column dataField="" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+          <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+            <div class="d-con-cell-action">
+              <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+            </div>
+          </div>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 100, 200]" [showInfo]="true"></dxo-pager>
+          <dxo-paging [enabled]="true"></dxo-paging>
+          <dxi-column dataField="Ac1LevelTitle" caption="" dataType="string" [groupIndex]="0" alignment="left"></dxi-column>
+          <dxi-column dataField="Ac2LevelTitle" caption="" dataType="string" [groupIndex]="1" alignment="left"></dxi-column>
+          <dxi-column dataField="Ac3LevelTitle" caption="" dataType="string" [groupIndex]="2" alignment="left"></dxi-column>
+          <dxi-column dataField="Ac4LevelTitle" caption="" dataType="string" width="300"> </dxi-column>
+          <!-- <dxi-column dataField="Ac4LevelCode" caption="AcLevel4 Code" dataType="string" alignment="left"></dxi-column> -->
+          <dxi-column dataField="ObDebit" caption="ObDebit" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }" alignment="left"></dxi-column>
+          <dxi-column dataField="ObCredit" caption="ObCredit" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }" alignment="left"></dxi-column>
+          <dxi-column dataField="CurrDebit" caption="CurrDebit" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }" alignment="left"></dxi-column>
+          <dxi-column dataField="CurrCredit" caption="CurrCredit" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }" alignment="left"></dxi-column>
+          <dxi-column dataField="ClDebit" caption="ClDebit" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }" alignment="left"></dxi-column>
+          <dxi-column dataField="ClCredit" caption="ClCredit" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }" alignment="left"></dxi-column>
+          <!-- <dxi-column dataField="" caption="CreditAmount" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column> -->
+         <!-- <dxo-scrolling mode="infinite" [scrollByContent]="true" [scrollByThumb]="true" [showScrollbar]="'always'" ></dxo-scrolling> -->
+          <dxo-summary>
+            <dxi-total-item column="Ac4LevelTitle" summaryType="count" displayFormat="Total Records: {0}"> </dxi-total-item>
+            <dxi-group-item column="ClCredit" summaryType="sum" [showInGroupFooter]="false" [alignByColumn]="true" displayFormat="{0}" valueFormat="#,##0"> </dxi-group-item>
+            <dxi-group-item column="ClDebit" summaryType="sum" [showInGroupFooter]="false" [alignByColumn]="true" displayFormat="{0}" valueFormat="#,##0"> </dxi-group-item>
+            <dxi-group-item column="CurrCredit" summaryType="sum" [showInGroupFooter]="false" [alignByColumn]="true" displayFormat="{0}" valueFormat="#,##0"> </dxi-group-item>
+            <dxi-group-item column="CurrDebit" summaryType="sum" [showInGroupFooter]="false" [alignByColumn]="true" displayFormat="{0}" valueFormat="#,##0"> </dxi-group-item>
+            <dxi-group-item column="ObCredit" summaryType="sum" [showInGroupFooter]="false" [alignByColumn]="true" displayFormat="{0}" valueFormat="#,##0"> </dxi-group-item>
+            <dxi-group-item column="ObDebit" summaryType="sum" [showInGroupFooter]="false" [alignByColumn]="true" displayFormat="{0}" valueFormat="#,##0"> </dxi-group-item>
+            <dxi-total-item column="CurrDebit" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="ObCredit" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="ObDebit" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="CurrCredit" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="ClDebit" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="ClCredit" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+          </dxo-summary>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+      <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+      <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+    </div>
+        <div class="col-md-12">
+      <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+    </div>
+  </div>
+</div>

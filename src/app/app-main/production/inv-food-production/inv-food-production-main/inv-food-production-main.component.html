@@ -1,0 +1,33 @@
+<dx-tab-panel
+  #invFoodProductionHistoryTabPanel
+  [selectedIndex]="selectedIndex"
+  (selectedIndexChange)="selectedIndexCheck($event)"
+  [showNavButtons]="true"
+  [scrollByContent]="true"
+  [animationEnabled]="true"
+>
+  <dxi-item title="Input">
+    <app-inv-food-production-input-form (isSubmitted)="refreshHistory($event)" #inputFormComponent></app-inv-food-production-input-form>
+  </dxi-item>
+  <dxi-item title="Output">
+    <inv-food-production-output-form (isSubmitted)="refreshHistory($event)" #outputFormComponent></inv-food-production-output-form>
+  </dxi-item>
+  <dxi-item title="Packing Type">
+    <inv-food-production-packing-type #ProductionPAckingTypeComponent></inv-food-production-packing-type>
+  </dxi-item>
+  <dxi-item title="Over Head">
+    <inv-food-production-over-head #ProductionOverHeadComponent></inv-food-production-over-head>
+  </dxi-item>
+  <dxi-item title="Transactional History">
+    <app-transactional-history-of-input-output (rowDataToUpdate)="getRowDataForUpdate($event)" #transactionalHistoryComponent></app-transactional-history-of-input-output>
+  </dxi-item>
+  <dxi-item title="Summary">
+    <inv-food-production-summary #ProductionSummaryComponent></inv-food-production-summary>
+  </dxi-item>
+  <dxi-item title="Settlement">
+    <inv-food-production-settlement #ProductionSettlementComponent></inv-food-production-settlement>
+  </dxi-item>
+  <dxi-item title="Define Plant">
+    <app-define-plant></app-define-plant>
+  </dxi-item>
+</dx-tab-panel>

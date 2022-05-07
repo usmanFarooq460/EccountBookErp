@@ -1,0 +1,81 @@
+<div class="container-fluid">
+  <!-- start page title -->
+  <app-pagetitle title="Sale Order" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+  <!-- end page title -->
+</div>
+
+<div class="row">
+  <dx-button id="filter" class="ml-3 mb-3" type="default" text="Add New" icon="plus" (onClick)="gotoPurchaseOrderForm()"> </dx-button>
+  <dx-button class="ml-3 mb-3" type="success" text="Filters" (onClick)="filtering()" icon="filter"></dx-button>
+  <div class="col-md-12">
+    <div class="card">
+      <dx-data-grid
+        id="gridContainer"
+        [dataSource]="dataSource"
+        [showColumnLines]="false"
+        [showRowLines]="true"
+        [rowAlternationEnabled]="true"
+        [allowColumnResizing]="true"
+        [columnAutoWidth]="true"
+        [showBorders]="true"
+        (onToolbarPreparing)="onToolbarPreparing($event)"
+      >
+        <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+        <dxo-group-panel [visible]="true"></dxo-group-panel>
+        <dxo-filter-row [visible]="filter"></dxo-filter-row>
+        <dxo-header-filter [visible]="filter"></dxo-header-filter>
+        <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+        <dxo-load-panel [enabled]="true"></dxo-load-panel>
+        <dxo-paging [enabled]="true"></dxo-paging>
+        <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true"></dxo-pager>
+        <dxi-column dataField="Id" caption="Id" [visible]="false"></dxi-column>
+
+        <dxi-column dataField="DocNo" caption="Doc No." dataType="number" [width]="90" alignment="left"></dxi-column>
+        <dxi-column dataField="DocDate" caption="Doc Date" dataType="date" [format]="'dd-MMM-yyyy'" [width]="120"></dxi-column>
+        <dxi-column dataField="SupplierName" caption="Customer Name" dataType="string"></dxi-column>
+        <dxi-column dataField="TermsDescription" caption="Payment Term" dataType="string"></dxi-column>
+        <dxi-column dataField="DueDate" caption="Due Date" dataType="date" [format]="'dd-MMM-yyyy'" [width]="120"></dxi-column>
+        <dxi-column dataField="DueDays" caption="Due Days" dataType="number" [width]="90" alignment="left"></dxi-column>
+        <dxi-column dataField="DeliveryTerm" caption="Delivery Term" dataType="string"></dxi-column>
+        <dxi-column dataField="DeliveryStartDate" caption="Delivery Start" dataType="date" [width]="110" [format]="'dd-MMM-yyyy'"></dxi-column>
+        <dxi-column dataField="OrderExpiryDate" caption="Order Expiry" dataType="date" [width]="110" [format]="'dd-MMM-yyyy'"></dxi-column>
+        <dxi-column dataField="DeliveryDays" caption="Delivery Days" dataType="number" [width]="120"></dxi-column>
+
+        <!-- <dxi-column dataField="NoOfAttachments" caption="Attachments"></dxi-column> -->
+        <dxi-column
+          dataField="button"
+          [fixed]="true"
+          [fixedPosition]="'right'"
+          [width]="90"
+          alignment="right"
+          caption="Action"
+          [allowEditing]="false"
+          [allowExporting]="false"
+          [allowFiltering]="false"
+          [allowFixing]="false"
+          [allowGrouping]="false"
+          [allowHeaderFiltering]="false"
+          [allowHiding]="false"
+          [allowReordering]="false"
+          [allowResizing]="false"
+          [allowSearch]="false"
+          [allowSorting]="false"
+          cellTemplate="buttonTemplate"
+        ></dxi-column>
+        <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+          <div class="d-con-cell-action">
+            <dx-button type="default" stylingMode="text" (onClick)="onEdit(cellInfo.data)">
+              <i class="ri-edit-2-line"></i>
+            </dx-button>
+            <dx-button type="danger" stylingMode="text" hint="273-SaleOrder Slip" (onClick)="onPrint(cellInfo.data)">
+              <i class="ri-printer-line"></i>
+            </dx-button>
+          </div>
+        </div>
+
+        <dxo-export [enabled]="true" [allowExportSelectedData]="true"></dxo-export>
+        <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+      </dx-data-grid>
+    </div>
+  </div>
+</div>

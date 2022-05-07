@@ -1,0 +1,96 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <h4>Define Company History</h4>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <dx-button id="filter" class="ml-3 mb-3" type="default" text="Add New" icon="plus" (onClick)="gotoForm()"> </dx-button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12" [ngStyle]="{ height: gridColumnHeight }" #stickyGrid [class.sticky]="sticky">
+      <div class="card p-2 rounded">
+        <dx-data-grid
+          id="dataGrid"
+          #dataGrid
+          [height]="gridHeight"
+          [dataSource]="dataSource"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+          [allowColumnReordering]="true"
+          [noDataText]="'No Record Found'"
+          (onToolbarPreparing)="DefineCompanyHistoryDataGridTollobarPreparing($event)"
+        >
+          <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-load-panel [enabled]="true"></dxo-load-panel>
+          <dxo-filter-row [visible]="filter"></dxo-filter-row>
+          <dxo-header-filter [visible]="filter"></dxo-header-filter>
+          <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('DefineCompanyHistoryGrid') }}"></dxo-state-storing>
+          <!-- <dxo-paging [enabled]="true"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="gridPageSize" [showInfo]="true"></dxo-pager> -->
+          <dxi-column dataField="Id" caption="Id" [visible]="false"></dxi-column>
+
+          <dxi-column dataField="CompCode" caption="Code" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="CompName" caption="Name" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="CompContactPerson" caption="Contact Person" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="CompEmailA" caption="Email(A)" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="CompEmailB" caption="Email(B)" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="CompMobileA" caption="Mobile(A)" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="CompMobileB" caption="Mobile(B)" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="CompReportingTitle" caption="Rpt Title" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="CompCountry" caption="Country" dataType="string" alignment="left"></dxi-column>
+
+          <dxi-column dataField="CompState" caption="City" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="CompBaseCurr" caption="Base Currency" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="CompAddress" caption="Address" dataType="string" alignment="left"></dxi-column>
+
+          <!-- <dxi-column dataField="UserName" caption="UserName" dataType="string" alignment="left"></dxi-column> -->
+
+          <!-- <dxi-column dataField="NoOfAttachments" caption="Attachments" dataType="any" alignment="right"></dxi-column> -->
+          <dxi-column
+            dataField="button"
+            [fixed]="true"
+            [fixedPosition]="'right'"
+            [width]="90"
+            alignment="center"
+            caption="Action"
+            [allowEditing]="false"
+            [allowExporting]="false"
+            [allowFiltering]="false"
+            [allowFixing]="false"
+            [allowGrouping]="false"
+            [allowHeaderFiltering]="false"
+            [allowHiding]="false"
+            [allowReordering]="false"
+            [allowResizing]="false"
+            [allowSearch]="false"
+            [allowSorting]="false"
+            cellTemplate="buttonTemplate"
+          ></dxi-column>
+          <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+            <div class="d-con-cell-action">
+              <dx-button type="default" stylingMode="text" (onClick)="onEdit(cellInfo.data)">
+                <i class="ri-edit-2-line"></i>
+              </dx-button>
+              <!-- <dx-button type="danger" stylingMode="text" (onClick)="onPrint(cellInfo.data)">
+                <i class="ri-printer-line"></i>
+              </dx-button> -->
+            </div>
+          </div>
+          <dxo-export [enabled]="true" [allowExportSelectedData]="true"></dxo-export>
+          <!-- <dxo-scrolling [useNative]="false" [rowRenderingMode]="'standard'" [scrollByContent]="true" [mode]="'standard'" [scrollByThumb]="true" showScrollbar="always"></dxo-scrolling> -->
+          <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,830 @@
+<div class="container-fluid">
+  <h5 class="mb-3">Configurations</h5>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="shadow-lg">
+        <dx-tab-panel #tabPanel [selectedIndex]="0" [showNavButtons]="true" [scrollByContent]="true" [animationEnabled]="true">
+          <dxi-item title="Accounts">
+            <dx-form class="py-5">
+              <dxi-item cssClass="px-2" itemType="group" [colCountByScreen]="{ lg: 4, md: 3, sm: 2, xs: 1 }">
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-select-box
+                      [(value)]="currencyVal"
+                      [dataSource]="currencyList"
+                      [valueExpr]="'Id'"
+                      [displayExpr]="'CurrencyName'"
+                      [placeholder]="'Base Currency'"
+                      [searchEnabled]="true"
+                      (onValueChanged)="onComboChange($event, 'Base Currency')"
+                    >
+                    </dx-select-box>
+                  </div>
+                </dxi-item>
+
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-select-box
+                      [(value)]="cashCtrlVal"
+                      [dataSource]="cashControlList"
+                      [valueExpr]="'Id'"
+                      [displayExpr]="'AccountTitle'"
+                      [placeholder]="'Cash Control Account'"
+                      [searchEnabled]="true"
+                      (onValueChanged)="onComboChange($event, 'Cash Control Account')"
+                    >
+                    </dx-select-box>
+                  </div>
+                </dxi-item>
+
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-select-box
+                      [(value)]="bankCtrlVal"
+                      [dataSource]="bankControlList"
+                      [valueExpr]="'Id'"
+                      [displayExpr]="'AccountTitle'"
+                      [placeholder]="'Bank Control Account'"
+                      [searchEnabled]="true"
+                      (onValueChanged)="onComboChange($event, 'Bank Control Account')"
+                    >
+                    </dx-select-box>
+                  </div>
+                </dxi-item>
+
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-select-box
+                      [(value)]="accountsConfigCashInHandVal"
+                      [dataSource]="cashAccountList"
+                      [valueExpr]="'Id'"
+                      [displayExpr]="'AccountTitle'"
+                      [placeholder]="'Cash Account'"
+                      [searchEnabled]="true"
+                      (onValueChanged)="onComboChange($event, 'CashInHandAc')"
+                    >
+                    </dx-select-box>
+                  </div>
+                </dxi-item>
+
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-select-box
+                      [(value)]="accumulatedBudgetVal"
+                      [dataSource]="accumulatedBudgetList"
+                      [valueExpr]="'list'"
+                      [displayExpr]="'list'"
+                      [placeholder]="'Accumulated Budget Exceeded'"
+                      [searchEnabled]="true"
+                      (onValueChanged)="onComboChange($event, 'MonthlyBudget')"
+                    >
+                    </dx-select-box>
+                  </div>
+                </dxi-item>
+
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-number-box [(value)]="BackDaysEntryVal" [placeholder]="'Back Days Entry'" (onValueChanged)="onComboChange($event, 'BackDaysEntry')"> </dx-number-box>
+                  </div>
+                </dxi-item>
+              </dxi-item>
+
+              <dxi-item cssClass="px-2" itemType="group" [colCountByScreen]="{ lg: 4, md: 3, sm: 2, xs: 1 }">
+                <dxi-item>
+                  <div *dxTemplate class="d-flex">
+                    <div class="dx-field-label" style="width: 140% !important">Check Book Enabled</div>
+                    <div class="dx-field-value">
+                      <dx-switch [(value)]="chequeBookVal" (onValueChanged)="onSwitchChange($event, 'CheqBook Enabled')"> </dx-switch>
+                    </div>
+                  </div>
+                </dxi-item>
+
+                <dxi-item>
+                  <div *dxTemplate class="d-flex">
+                    <div class="dx-field-label" style="width: 140% !important">Balance In Minus</div>
+                    <div class="dx-field-value">
+                      <dx-switch [(value)]="minusVal" (onValueChanged)="onSwitchChange($event, 'is Minus balance Allowed')"> </dx-switch>
+                    </div>
+                  </div>
+                </dxi-item>
+
+                <dxi-item>
+                  <div *dxTemplate class="d-flex">
+                    <div class="dx-field-label" style="width: 140% !important">SMS on P. Voucher</div>
+                    <div class="dx-field-value">
+                      <dx-switch [(value)]="smsPV_val" (onValueChanged)="onSwitchChange($event, 'Send SMS Payment Voucher (Value From)')"> </dx-switch>
+                    </div>
+                  </div>
+                </dxi-item>
+
+                <dxi-item>
+                  <div *dxTemplate class="d-flex">
+                    <div class="dx-field-label" style="width: 140% !important">SMS on R. Voucher</div>
+                    <div class="dx-field-value">
+                      <dx-switch [(value)]="smsRV_val" (onValueChanged)="onSwitchChange($event, 'Send SMS Receipts Voucher (Value From)')"> </dx-switch>
+                    </div>
+                  </div>
+                </dxi-item>
+
+                <dxi-item>
+                  <div *dxTemplate class="d-flex">
+                    <div class="dx-field-label" style="width: 140% !important">Stock Conversion Financials</div>
+                    <div class="dx-field-value">
+                      <dx-switch [(value)]="StockConversionFinancialVal" (onValueChanged)="onSwitchChange($event, 'StockConversionFinancial Effect')"> </dx-switch>
+                    </div>
+                  </div>
+                </dxi-item>
+
+                <dxi-item>
+                  <div *dxTemplate class="d-flex">
+                    <div class="dx-field-label" style="width: 140% !important">Store Issuance Financials</div>
+                    <div class="dx-field-value">
+                      <dx-switch [(value)]="storeIssuanceVal" (onValueChanged)="onSwitchChange($event, 'StoreIssuanceFinancialEffect')"> </dx-switch>
+                    </div>
+                  </div>
+                </dxi-item>
+
+                <dxi-item>
+                  <div *dxTemplate class="d-flex">
+                    <div class="dx-field-label" style="width: 140% !important">Expense Account On P. Voucher</div>
+                    <div class="dx-field-value">
+                      <dx-switch [(value)]="expenseAmmountVal" (onValueChanged)="onSwitchChange($event, 'ExpenseAccountAllowOnPaymentVoucher')"> </dx-switch>
+                    </div>
+                  </div>
+                </dxi-item>
+
+                <dxi-item>
+                  <div *dxTemplate class="d-flex">
+                    <div class="dx-field-label" style="width: 140% !important">Debit To Product On C. Wages</div>
+                    <div class="dx-field-value">
+                      <dx-switch [(value)]="debitToProductVal" (onValueChanged)="onSwitchChange($event, 'ContractWagesChargetoProduct')"> </dx-switch>
+                    </div>
+                  </div>
+                </dxi-item>
+
+                <dxi-item>
+                  <div *dxTemplate class="d-flex">
+                    <div class="dx-field-label" style="width: 140% !important">Apply On Actual Expenses</div>
+                    <div class="dx-field-value">
+                      <dx-switch [(value)]="actualExpensesVal" (onValueChanged)="onSwitchChange($event, 'Apply On Actual Expenses')"> </dx-switch>
+                    </div>
+                  </div>
+                </dxi-item>
+              </dxi-item>
+            </dx-form>
+          </dxi-item>
+
+          <dxi-item title="System">
+            <div *dxTemplate class="p-1">
+              <dx-form class="px-2 py-5">
+                <dxi-item cssClass="px-2" itemType="group" [colCountByScreen]="{ lg: 4, md: 3, sm: 2, xs: 1 }">
+                  <dxi-item cssClass="px-1 m-0">
+                    <div *dxTemplate>
+                      <dx-text-box [(value)]="AttachmentFolderPathVal" [placeholder]="'Attachment Folder Path'" (onValueChanged)="onComboChange($event, 'Attachment Folder Path')"> </dx-text-box>
+                    </div>
+                  </dxi-item>
+                  <dxi-item cssClass="px-1 m-0">
+                    <div *dxTemplate>
+                      <dx-text-box [(value)]="backupFolderPathVal" [placeholder]="'Backup Folder Path'" (onValueChanged)="onComboChange($event, 'Backup Folder Path')"> </dx-text-box>
+                    </div>
+                  </dxi-item>
+                  <dxi-item cssClass="px-1 m-0">
+                    <div *dxTemplate>
+                      <dx-text-box [(value)]="reportFolderPathVal" [placeholder]="'Report Folder Path'" (onValueChanged)="onComboChange($event, 'Report Folder Path')"> </dx-text-box>
+                    </div>
+                  </dxi-item>
+                  <dxi-item cssClass="px-1 m-0">
+                    <div *dxTemplate>
+                      <dx-text-box [(value)]="localDrivePathVal" [placeholder]="'Share Local Drive Folder Path'" (onValueChanged)="onComboChange($event, 'ShareLocalDrivePath')"> </dx-text-box>
+                    </div>
+                  </dxi-item>
+                  <dxi-item cssClass="px-1 m-0">
+                    <div *dxTemplate>
+                      <dx-text-box [(value)]="ServerFileURLVal" [placeholder]="'Server File URl'" (onValueChanged)="onComboChange($event, 'ServerFileURL')"> </dx-text-box>
+                    </div>
+                  </dxi-item>
+                  <dxi-item cssClass="px-1 m-0">
+                    <div *dxTemplate>
+                      <dx-text-box [(value)]="BackupIntervalDaysVal" [placeholder]="'Backup Interval Days'" (onValueChanged)="onComboChange($event, 'BackupIntervalDays')"> </dx-text-box>
+                    </div>
+                  </dxi-item>
+                  <dxi-item cssClass="px-1 m-0">
+                    <div *dxTemplate>
+                      <dx-text-box [(value)]="LogoVal" [placeholder]="'Logo'" (onValueChanged)="onComboChange($event, 'Logo')"> </dx-text-box>
+                    </div>
+                  </dxi-item>
+                </dxi-item>
+              </dx-form>
+            </div>
+          </dxi-item>
+
+          <dxi-item title="Inventory">
+            <dx-form class="py-5 px-2">
+              <dxi-item cssClass="px-2" itemType="group" [colCountByScreen]="{ lg: 4, md: 3, sm: 2, xs: 1 }">
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-select-box
+                      [(value)]="cropYearVal"
+                      [dataSource]="cropYearList"
+                      [valueExpr]="'Id'"
+                      [displayExpr]="'CropYear'"
+                      [placeholder]="'Default Crop Year'"
+                      [searchEnabled]="true"
+                      (onValueChanged)="onComboChange($event, 'Default Crop Year')"
+                    >
+                    </dx-select-box>
+                  </div>
+                </dxi-item>
+
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-select-box
+                      [(value)]="jobLotVal"
+                      [dataSource]="jobLotList"
+                      [valueExpr]="'Id'"
+                      [displayExpr]="'JobLotDescription'"
+                      [placeholder]="'Default Job/Lot'"
+                      [searchEnabled]="true"
+                      (onValueChanged)="onComboChange($event, 'Job/Lot')"
+                    >
+                    </dx-select-box>
+                  </div>
+                </dxi-item>
+
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-select-box
+                      [(value)]="packTypeVal"
+                      [dataSource]="packingTypeList"
+                      [valueExpr]="'Id'"
+                      [displayExpr]="'PackTypeDesc'"
+                      [placeholder]="'Default Packing Type'"
+                      [searchEnabled]="true"
+                      (onValueChanged)="onComboChange($event, 'Paking Type')"
+                    >
+                    </dx-select-box>
+                  </div>
+                </dxi-item>
+
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-select-box
+                      [(value)]="expAccVal"
+                      [dataSource]="expenseLaborList"
+                      [valueExpr]="'Id'"
+                      [displayExpr]="'AccountTitle'"
+                      [placeholder]="'Expense Labor A/C'"
+                      [searchEnabled]="true"
+                      (onValueChanged)="onComboChange($event, 'ExpensesLabourOtherAc')"
+                    >
+                    </dx-select-box>
+                  </div>
+                </dxi-item>
+
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-select-box
+                      [(value)]="warehouseVal"
+                      [dataSource]="warehouseList"
+                      [valueExpr]="'Id'"
+                      [displayExpr]="'WareHouseName'"
+                      [placeholder]="'Default Warehouse'"
+                      [searchEnabled]="true"
+                      (onValueChanged)="onComboChange($event, 'Warehouse')"
+                    >
+                    </dx-select-box>
+                  </div>
+                </dxi-item>
+
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-select-box
+                      [(value)]="cityVal"
+                      [dataSource]="cityAreaList"
+                      [valueExpr]="'Id'"
+                      [displayExpr]="'CityName'"
+                      [placeholder]="'Default City Area'"
+                      [searchEnabled]="true"
+                      (onValueChanged)="onComboChange($event, 'City Area')"
+                    >
+                    </dx-select-box>
+                  </div>
+                </dxi-item>
+
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-select-box
+                      [(value)]="agStockVal"
+                      [dataSource]="accountList"
+                      [valueExpr]="'Id'"
+                      [displayExpr]="'AccountTitle'"
+                      [placeholder]="'Against Stock Account'"
+                      [searchEnabled]="true"
+                      (onValueChanged)="onComboChange($event, 'StockAgainstAccount')"
+                    >
+                    </dx-select-box>
+                  </div>
+                </dxi-item>
+
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-select-box
+                      [(value)]="diffBalVal"
+                      [dataSource]="accountList"
+                      [valueExpr]="'Id'"
+                      [displayExpr]="'AccountTitle'"
+                      [placeholder]="'Difference Balance A/C'"
+                      [searchEnabled]="true"
+                      (onValueChanged)="onComboChange($event, 'DifferenceBalanceAc')"
+                    >
+                    </dx-select-box>
+                  </div>
+                </dxi-item>
+              </dxi-item>
+
+              <dxi-item cssClass="px-2" itemType="group" [colCountByScreen]="{ lg: 4, md: 3, sm: 2, xs: 1 }">
+                <dxi-item>
+                  <div *dxTemplate class="d-flex">
+                    <div class="dx-field-label" style="width: 140% !important">Issuance By Loader</div>
+                    <div class="dx-field-value">
+                      <dx-switch [(value)]="IssuanceByLoaderVal" (onValueChanged)="onSwitchChange($event, 'IssuanceByLoader')"> </dx-switch>
+                    </div>
+                  </div>
+                </dxi-item>
+
+                <dxi-item>
+                  <div *dxTemplate class="d-flex">
+                    <div class="dx-field-label" style="width: 140% !important">Stock In Minus</div>
+                    <div class="dx-field-value">
+                      <dx-switch [(value)]="stockInMinusVal" (onValueChanged)="onSwitchChange($event, 'IsMinusStockAllowed')"> </dx-switch>
+                    </div>
+                  </div>
+                </dxi-item>
+              </dxi-item>
+
+              <dxi-item cssClass="px-2" itemType="group" caption="Manage Stock By" [colCountByScreen]="{ lg: 2, md: 2, sm: 2, xs: 1 }">
+                <dxi-item>
+                  <div *dxTemplate>
+                    <dx-radio-group [items]="ManageStockBy" [value]="ManageStockBy[ManageStockByVal]" (onValueChanged)="onRadioButtonChange($event)"> </dx-radio-group>
+                    <!-- <dx-radio-group [items]="ManageStockBy" [value]="ManageStockBy[0]" (onValueChanged)="onRadioButtonChange($event)"> </dx-radio-group> -->
+                  </div>
+                </dxi-item>
+              </dxi-item>
+            </dx-form>
+          </dxi-item>
+
+          <dxi-item title="Purchase">
+            <dx-form class="py-5 px-2">
+              <dxi-item cssClass="px-2" itemType="group" [colCountByScreen]="{ lg: 4, md: 3, sm: 2, xs: 1 }">
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-text-box [(value)]="purByInvVal" [placeholder]="'Payment by Invoice'" (onValueChanged)="onComboChange($event, 'PaymentByInvoicePurchaseInvoice')"> </dx-text-box>
+                  </div>
+                </dxi-item>
+
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-select-box
+                      [(value)]="FreightInwardAcVal"
+                      [dataSource]="LocationAcclist"
+                      [valueExpr]="'Id'"
+                      [displayExpr]="'AccountTitle'"
+                      [placeholder]="'Freight Inward AC'"
+                      [searchEnabled]="true"
+                      (onValueChanged)="onComboChange($event, 'FreightInwardAc')"
+                    >
+                    </dx-select-box>
+                  </div>
+                </dxi-item>
+              </dxi-item>
+
+              <dxi-item cssClass="px-2" itemType="group" [colCountByScreen]="{ lg: 4, md: 3, sm: 2, xs: 1 }">
+                <dxi-item>
+                  <div *dxTemplate class="d-flex">
+                    <div class="dx-field-label" style="width: 140% !important">PO Compulsory in GPI</div>
+                    <div class="dx-field-value">
+                      <dx-switch [(value)]="poGPVal" (onValueChanged)="onSwitchChange($event, 'PO Compulsory in GPI')"> </dx-switch>
+                    </div>
+                  </div>
+                </dxi-item>
+
+                <dxi-item>
+                  <div *dxTemplate class="d-flex">
+                    <div class="dx-field-label" style="width: 140% !important">Weight more than 1 by GpNo</div>
+                    <div class="dx-field-value">
+                      <dx-switch [(value)]="moreByGP" (onValueChanged)="onSwitchChange($event, 'More Than 1 Weight By 1GpNo Against')"> </dx-switch>
+                    </div>
+                  </div>
+                </dxi-item>
+
+                <dxi-item>
+                  <div *dxTemplate class="d-flex">
+                    <div class="dx-field-label" style="width: 140% !important">Open Order Quantity</div>
+                    <div class="dx-field-value">
+                      <dx-switch [(value)]="openOrderQtyVal" (onValueChanged)="onSwitchChange($event, 'Open Order Quantity')"> </dx-switch>
+                    </div>
+                  </div>
+                </dxi-item>
+
+                <dxi-item>
+                  <div *dxTemplate class="d-flex">
+                    <div class="dx-field-label" style="width: 140% !important">GP Weight Check in GRN</div>
+                    <div class="dx-field-value">
+                      <dx-switch [(value)]="gpWeGRNVal" (onValueChanged)="onSwitchChange($event, 'Gp Weight Check In GRN')"> </dx-switch>
+                    </div>
+                  </div>
+                </dxi-item>
+
+                <dxi-item>
+                  <div *dxTemplate class="d-flex">
+                    <div class="dx-field-label" style="width: 140% !important">Purchase invoice Freight Equal</div>
+                    <div class="dx-field-value">
+                      <dx-switch [(value)]="purchaseFrEqVal" (onValueChanged)="onSwitchChange($event, 'PurchaeInvoiceFreightEqual')"> </dx-switch>
+                    </div>
+                  </div>
+                </dxi-item>
+
+                <dxi-item>
+                  <div *dxTemplate class="d-flex">
+                    <div class="dx-field-label" style="width: 140% !important">PO Compulsory for GRN</div>
+                    <div class="dx-field-value">
+                      <dx-switch [(value)]="poGRNVal" (onValueChanged)="onSwitchChange($event, 'POCompulsoryforGrn')"> </dx-switch>
+                    </div>
+                  </div>
+                </dxi-item>
+
+                <dxi-item>
+                  <div *dxTemplate class="d-flex">
+                    <div class="dx-field-label" style="width: 140% !important">Lab Compulsory for WeighBridge</div>
+                    <div class="dx-field-value">
+                      <dx-switch [(value)]="LabCompulsoryForWeighBridgeVal" (onValueChanged)="onSwitchChange($event, 'LabCompulsoryForWeighBridge')"> </dx-switch>
+                    </div>
+                  </div>
+                </dxi-item>
+
+                <dxi-item>
+                  <div *dxTemplate class="d-flex">
+                    <div class="dx-field-label" style="width: 140% !important">PO edit after approval</div>
+                    <div class="dx-field-value">
+                      <dx-switch [(value)]="PoUpdateAfterApprovedVal" (onValueChanged)="onSwitchChange($event, 'PoUpdateAfterApproved')"> </dx-switch>
+                    </div>
+                  </div>
+                </dxi-item>
+                <dxi-item>
+                  <div *dxTemplate class="d-flex">
+                    <div class="dx-field-label" style="width: 140% !important">Wb Compulsory For GpInward</div>
+                    <div class="dx-field-value">
+                      <dx-switch [(value)]="WbCompulsoryForGpInward" (onValueChanged)="onSwitchChange($event, 'WbCompulsoryForGpInward')"> </dx-switch>
+                    </div>
+                  </div>
+                </dxi-item>
+              </dxi-item>
+            </dx-form>
+          </dxi-item>
+
+          <dxi-item title="Camera">
+            <dx-form class="px-2 py-5">
+              <dxi-item cssClass="px-2" itemType="group" [colCountByScreen]="{ lg: 4, md: 3, sm: 2, xs: 1 }">
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-text-box [(value)]="IPCam01Val" [placeholder]="'IPCam01'" (onValueChanged)="onComboChange($event, 'IpCameraAddress01')"> </dx-text-box>
+                  </div>
+                </dxi-item>
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-text-box [(value)]="IPCam02Val" [placeholder]="'IPCam02'" (onValueChanged)="onComboChange($event, 'IpCameraAddress02')"> </dx-text-box>
+                  </div>
+                </dxi-item>
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-text-box [(value)]="IPCam03Val" [placeholder]="'IPCam03'" (onValueChanged)="onComboChange($event, 'IpCameraAddress03')"> </dx-text-box>
+                  </div>
+                </dxi-item>
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-text-box [(value)]="IPCam04Val" [placeholder]="'IPCam04'" (onValueChanged)="onComboChange($event, 'IpCameraAddress04')"> </dx-text-box>
+                  </div>
+                </dxi-item>
+              </dxi-item>
+              <dxi-item cssClass="px-2" itemType="group" [colCountByScreen]="{ lg: 4, md: 3, sm: 2, xs: 1 }">
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-text-box [(value)]="PortNo01Val" [placeholder]="'Port No. 01'" (onValueChanged)="onComboChange($event, 'PortNo01')"> </dx-text-box>
+                  </div>
+                </dxi-item>
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-text-box [(value)]="PortNo02Val" [placeholder]="'Port No. 02'" (onValueChanged)="onComboChange($event, 'PortNo02')"> </dx-text-box>
+                  </div>
+                </dxi-item>
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-text-box [(value)]="PortNo03Val" [placeholder]="'Port No. 03'" (onValueChanged)="onComboChange($event, 'PortNo03')"> </dx-text-box>
+                  </div>
+                </dxi-item>
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-text-box [(value)]="PortNo04Val" [placeholder]="'Port No. 04'" (onValueChanged)="onComboChange($event, 'PortNo04')"> </dx-text-box>
+                  </div>
+                </dxi-item>
+              </dxi-item>
+              <dxi-item cssClass="px-2" itemType="group" [colCountByScreen]="{ lg: 4, md: 3, sm: 2, xs: 1 }">
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-text-box [(value)]="UserNameCamer01Val" [placeholder]="'User Name 01'" (onValueChanged)="onComboChange($event, 'UserNameCamer01')"> </dx-text-box>
+                  </div>
+                </dxi-item>
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-text-box [(value)]="UserNameCamer02Val" [placeholder]="'User Name 02'" (onValueChanged)="onComboChange($event, 'UserNameCamer02')"> </dx-text-box>
+                  </div>
+                </dxi-item>
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-text-box [(value)]="UserNameCamer03Val" [placeholder]="'User Name 03'" (onValueChanged)="onComboChange($event, 'UserNameCamer03')"> </dx-text-box>
+                  </div>
+                </dxi-item>
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-text-box [(value)]="UserNameCamer04Val" [placeholder]="'User Name 04'" (onValueChanged)="onComboChange($event, 'UserNameCamer04')"> </dx-text-box>
+                  </div>
+                </dxi-item>
+              </dxi-item>
+              <dxi-item cssClass="px-2" itemType="group" [colCountByScreen]="{ lg: 4, md: 3, sm: 2, xs: 1 }">
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-text-box [(value)]="PasswordCamer01Val" [placeholder]="'Password 01'" (onValueChanged)="onComboChange($event, 'PasswordCamer01')"> </dx-text-box>
+                  </div>
+                </dxi-item>
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-text-box [(value)]="PasswordCamer02Val" [placeholder]="'Password 02'" (onValueChanged)="onComboChange($event, 'PasswordCamer02')"> </dx-text-box>
+                  </div>
+                </dxi-item>
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-text-box [(value)]="PasswordCamer03Val" [placeholder]="'Password 03'" (onValueChanged)="onComboChange($event, 'PasswordCamer03')"> </dx-text-box>
+                  </div>
+                </dxi-item>
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-text-box [(value)]="PasswordCamer04Val" [placeholder]="'Password 04'" (onValueChanged)="onComboChange($event, 'PasswordCamer04')"> </dx-text-box>
+                  </div>
+                </dxi-item>
+              </dxi-item>
+
+              <dxi-item cssClass="px-2" itemType="group" [colCountByScreen]="{ lg: 4, md: 3, sm: 2, xs: 1 }">
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-text-box [(value)]="cameraPicBoxVal" [readOnly]="true" [placeholder]="'Camera Picture Box'" (onValueChanged)="onComboChange($event, 'CameraPictureBox')"> </dx-text-box>
+                  </div>
+                </dxi-item>
+              </dxi-item>
+            </dx-form>
+          </dxi-item>
+
+          <dxi-item title="Sale">
+            <dx-form class="px-2 py-5">
+              <dxi-item cssClass="px-2" itemType="group" [colCountByScreen]="{ lg: 4, md: 3, sm: 2, xs: 1 }">
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-text-box [(value)]="receiptsbyInvoiceVal" [placeholder]="'Receipts by Invoice'" (onValueChanged)="onComboChange($event, 'ReceiptsByInvoiceSalesInvoice')"> </dx-text-box>
+                  </div>
+                </dxi-item>
+
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-select-box
+                      [(value)]="FreightOutwardAcVal"
+                      [dataSource]="freightOutwardAccList"
+                      [valueExpr]="'Id'"
+                      [displayExpr]="'AccountTitle'"
+                      [placeholder]="'Freight Outward AC'"
+                      [searchEnabled]="true"
+                      (onValueChanged)="onComboChange($event, 'FreightOutwardAc')"
+                    >
+                    </dx-select-box>
+                  </div>
+                </dxi-item>
+              </dxi-item>
+
+              <dxi-item cssClass="px-2" itemType="group" [colCountByScreen]="{ lg: 4, md: 3, sm: 2, xs: 1 }">
+                <dxi-item>
+                  <div *dxTemplate class="d-flex">
+                    <div class="dx-field-label" style="width: 140% !important">SO Compulsory In GPO</div>
+                    <div class="dx-field-value">
+                      <dx-switch [(value)]="soCompGPO" (onValueChanged)="onSwitchChange($event, 'SO Compulsory in GPO')"> </dx-switch>
+                    </div>
+                  </div>
+                </dxi-item>
+
+                <dxi-item>
+                  <div *dxTemplate class="d-flex">
+                    <div class="dx-field-label" style="width: 140% !important">Weight more than 1 by GpNo</div>
+                    <div class="dx-field-value">
+                      <dx-switch [(value)]="moreByGPSale" (onValueChanged)="onSwitchChange($event, 'More Than 1 Weight By 1GpNoO Against')"> </dx-switch>
+                    </div>
+                  </div>
+                </dxi-item>
+
+                <dxi-item>
+                  <div *dxTemplate class="d-flex">
+                    <div class="dx-field-label" style="width: 140% !important">Open Sale Order Quantity</div>
+                    <div class="dx-field-value">
+                      <dx-switch [(value)]="openOrderQtySaleVal" (onValueChanged)="onSwitchChange($event, 'Open Sale Order Quantity')"> </dx-switch>
+                    </div>
+                  </div>
+                </dxi-item>
+
+                <dxi-item>
+                  <div *dxTemplate class="d-flex">
+                    <div class="dx-field-label" style="width: 140% !important">GP Weight Check In GDN</div>
+                    <div class="dx-field-value">
+                      <dx-switch [(value)]="gpWeGDNVal" (onValueChanged)="onSwitchChange($event, 'Gp Weight Check In GDN')"> </dx-switch>
+                    </div>
+                  </div>
+                </dxi-item>
+
+                <dxi-item>
+                  <div *dxTemplate class="d-flex">
+                    <div class="dx-field-label" style="width: 140% !important">SO Compulsory For GDN</div>
+                    <div class="dx-field-value">
+                      <dx-switch [(value)]="soCompGDN" (onValueChanged)="onSwitchChange($event, 'SOCompulsoryforGdn')"> </dx-switch>
+                    </div>
+                  </div>
+                </dxi-item>
+
+                <dxi-item>
+                  <div *dxTemplate class="d-flex">
+                    <div class="dx-field-label" style="width: 140% !important">Credit Amount in Item Sale GL</div>
+                    <div class="dx-field-value">
+                      <dx-switch [(value)]="credSale" (onValueChanged)="onSwitchChange($event, 'CreditAmountInItemSaleGL')"> </dx-switch>
+                    </div>
+                  </div>
+                </dxi-item>
+
+                <dxi-item>
+                  <div *dxTemplate class="d-flex">
+                    <div class="dx-field-label" style="width: 140% !important">Sale Order Load Customer Wise</div>
+                    <div class="dx-field-value">
+                      <dx-switch [(value)]="SaleOrderLoadCustomerVal" (onValueChanged)="onSwitchChange($event, 'SaleOrderLoadCustomerWise')"> </dx-switch>
+                    </div>
+                  </div>
+                </dxi-item>
+
+                <dxi-item>
+                  <div *dxTemplate class="d-flex">
+                    <div class="dx-field-label" style="width: 140% !important">Allow CGS Entry</div>
+                    <div class="dx-field-value">
+                      <dx-switch [(value)]="AllowCgsEntryVal" (onValueChanged)="onSwitchChange($event, 'CGSEntryAllow')"> </dx-switch>
+                    </div>
+                  </div>
+                </dxi-item>
+              </dxi-item>
+            </dx-form>
+          </dxi-item>
+
+          <dxi-item title="Mobile SMS">
+            <dx-form class="px-2 py-5">
+              <dxi-item cssClass="px-2" itemType="group" [colCountByScreen]="{ lg: 4, md: 3, sm: 2, xs: 1 }">
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-text-box [placeholder]="'Port Name'" (onValueChanged)="onComboChange($event, '')"> </dx-text-box>
+                  </div>
+                </dxi-item>
+
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-text-box [placeholder]="'Baud Rate'" (onValueChanged)="onComboChange($event, '')"> </dx-text-box>
+                  </div>
+                </dxi-item>
+
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-text-box [placeholder]="'Time Out'" (onValueChanged)="onComboChange($event, '')"> </dx-text-box>
+                  </div>
+                </dxi-item>
+              </dxi-item>
+            </dx-form>
+          </dxi-item>
+
+          <dxi-item title="Point of Sale">
+            <dx-form class="px-2 py-5">
+              <dxi-item cssClass="px-2" itemType="group" [colCountByScreen]="{ lg: 4, md: 3, sm: 2, xs: 1 }">
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-select-box
+                      [(value)]="cashInHandAccountVal"
+                      [dataSource]="cashAccountList"
+                      [valueExpr]="'Id'"
+                      [displayExpr]="'AccountTitle'"
+                      [placeholder]="'Cash Account'"
+                      [searchEnabled]="true"
+                      (onValueChanged)="onComboChange($event, 'PosCashInHandAc')"
+                    >
+                    </dx-select-box>
+                  </div>
+                </dxi-item>
+
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-select-box
+                      [(value)]="POSDiscountAllowedAccVal"
+                      [dataSource]="DiscountAllowedAccList"
+                      [valueExpr]="'Id'"
+                      [displayExpr]="'AccountTitle'"
+                      [placeholder]="'Pos Discount Allowed Acc'"
+                      [searchEnabled]="true"
+                      (onValueChanged)="onComboChange($event, 'PosDiscountAllowed')"
+                    >
+                    </dx-select-box>
+                  </div>
+                </dxi-item>
+
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-select-box
+                      [(value)]="POSDiscountReceivedAccVal"
+                      [dataSource]="DiscountReceivedAccList"
+                      [valueExpr]="'Id'"
+                      [displayExpr]="'AccountTitle'"
+                      [placeholder]="'Pos Discount Received Acc'"
+                      [searchEnabled]="true"
+                      (onValueChanged)="onComboChange($event, 'PosDiscountReceived')"
+                    >
+                    </dx-select-box>
+                  </div>
+                </dxi-item>
+
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-select-box
+                      [(value)]="WsrmDiscountAllowedAccVal"
+                      [dataSource]="DiscountAllowedAccList"
+                      [valueExpr]="'Id'"
+                      [displayExpr]="'AccountTitle'"
+                      [placeholder]="'Wsrm Discount Allowed Acc'"
+                      [searchEnabled]="true"
+                      (onValueChanged)="onComboChange($event, 'WsRmDiscountAllowed')"
+                    >
+                    </dx-select-box>
+                  </div>
+                </dxi-item>
+
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-select-box
+                      [(value)]="WsrmDiscountReceivedAccVal"
+                      [dataSource]="DiscountReceivedAccList"
+                      [valueExpr]="'Id'"
+                      [displayExpr]="'AccountTitle'"
+                      [placeholder]="'Wsrm Discount Received Acc'"
+                      [searchEnabled]="true"
+                      (onValueChanged)="onComboChange($event, 'WsRmDiscountReceived')"
+                    >
+                    </dx-select-box>
+                  </div>
+                </dxi-item>
+
+                <dxi-item cssClass="px-1 m-0">
+                  <div *dxTemplate>
+                    <dx-select-box
+                      [(value)]="locationAccountVal"
+                      [dataSource]="LocationAcclist"
+                      [valueExpr]="'Id'"
+                      [displayExpr]="'AccountTitle'"
+                      [placeholder]="'Location Acc'"
+                      [searchEnabled]="true"
+                      (onValueChanged)="onComboChange($event, 'LocationAccount')"
+                    >
+                    </dx-select-box>
+                  </div>
+                </dxi-item>
+              </dxi-item>
+
+              <dxi-item cssClass="px-2" itemType="group" [colCountByScreen]="{ lg: 4, md: 3, sm: 2, xs: 1 }">
+                <dxi-item>
+                  <div *dxTemplate class="d-flex">
+                    <div class="dx-field-label" style="width: 140% !important">Price From Sale Order</div>
+                    <div class="dx-field-value">
+                      <dx-switch [(value)]="ImplementPriceFromSaleOrderVal" (onValueChanged)="onSwitchChange($event, 'ImplementPriceFromSaleOrder')"> </dx-switch>
+                    </div>
+                  </div>
+                </dxi-item>
+
+                <dxi-item>
+                  <div *dxTemplate class="d-flex">
+                    <div class="dx-field-label" style="width: 140% !important">Discount From Sale Order</div>
+                    <div class="dx-field-value">
+                      <dx-switch [(value)]="ImplementDiscountFromSaleOrderVal" (onValueChanged)="onSwitchChange($event, 'ImplementDiscountFromSaleOrder')"> </dx-switch>
+                    </div>
+                  </div>
+                </dxi-item>
+              </dxi-item>
+            </dx-form>
+          </dxi-item>
+        </dx-tab-panel>
+      </div>
+    </div>
+  </div>
+</div>

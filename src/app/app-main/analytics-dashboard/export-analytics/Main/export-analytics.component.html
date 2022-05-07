@@ -1,0 +1,247 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 text-center">
+      <h4 id="card-header-text">Export Analytics</h4>
+    </div>
+    <div class="col-md-12 mt-4">
+      <dx-form [formData]="ExportAnalyticsFormData" #ExportAnalyticsForm [showRequiredMark]="false">
+        <dxi-item itemType="group" cssClass="second-group" [colCount]="6">
+          <dxi-item
+            dataField="FromDate"
+            [colSpan]="2"
+            cssClass="px-1 m-0"
+            editorType="dxDateBox"
+            [editorOptions]="{
+              displayFormat: 'dd-MMM-yyyy',
+              placeholder: 'From Date',
+              showClearButton: 'true',
+              stylingMode: 'underlined'
+            }"
+          >
+            <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+            <dxi-validation-rule type="required" message="From Date is required"></dxi-validation-rule>
+          </dxi-item>
+          <dxi-item
+            dataField="ToDate"
+            [colSpan]="2"
+            cssClass="px-1 m-0"
+            editorType="dxDateBox"
+            [editorOptions]="{
+              displayFormat: 'dd-MMM-yyyy',
+              placeholder: 'To Date',
+              showClearButton: 'true',
+              stylingMode: 'underlined'
+            }"
+          >
+            <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+            <dxi-validation-rule type="required" message="To Date is required"></dxi-validation-rule>
+          </dxi-item>
+          <dxi-item
+            dataField="SupplierCustomerId"
+            [colSpan]="2"
+            cssClass="px-1 m-0"
+            editorType="dxSelectBox"
+            [editorOptions]="{
+              placeholder: 'Supplier Customer',
+              items: supplierCustomerList,
+              valueExpr: 'Id',
+              displayExpr: 'CompanyName',
+              showClearButton: 'true',
+              stylingMode: 'underlined',
+              searchEnabled: true
+            }"
+          >
+            <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          </dxi-item>
+        </dxi-item>
+        <dxi-item itemType="group" cssClass="second-group" [colCount]="6">
+          <dxi-item
+            dataField="ItemId"
+            [colSpan]="2"
+            cssClass="px-1 m-0"
+            editorType="dxSelectBox"
+            [editorOptions]="{
+              placeholder: 'Item',
+              items: itemList,
+              valueExpr: 'Id',
+              displayExpr: 'ItemName',
+              showClearButton: 'true',
+              stylingMode: 'underlined',
+              searchEnabled: true
+            }"
+          >
+            <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          </dxi-item>
+          <dxi-item
+            dataField="ItemCategoryId"
+            [colSpan]="2"
+            cssClass="px-1 m-0"
+            editorType="dxSelectBox"
+            [editorOptions]="{
+              placeholder: 'Item Category',
+              items: itemCategoryList,
+              valueExpr: 'Id',
+              displayExpr: 'CategoryCode',
+              showClearButton: 'true',
+              stylingMode: 'underlined',
+              searchEnabled: true
+            }"
+          >
+            <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          </dxi-item>
+          <dxi-item
+            dataField="ItemTypeId"
+            [colSpan]="2"
+            cssClass="px-1 m-0"
+            editorType="dxSelectBox"
+            [editorOptions]="{
+              placeholder: 'Item Type',
+              items: itemTypeList,
+              valueExpr: 'Id',
+              displayExpr: 'TypeDescription',
+              showClearButton: 'true',
+
+              stylingMode: 'underlined',
+              searchEnabled: true
+            }"
+          >
+            <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          </dxi-item>
+        </dxi-item>
+        <dxi-item itemType="group" cssClass="second-group" [colCount]="6">
+          <dxi-item [colSpan]="1"></dxi-item>
+
+          <dxi-item
+            dataField="LcOrderId"
+            [colSpan]="2"
+            cssClass="px-1 m-0"
+            editorType="dxSelectBox"
+            [editorOptions]="{
+              placeholder: 'Lc Contract',
+              items: lcContractList,
+              valueExpr: 'Id',
+              displayExpr: 'LcOrderNo',
+              showClearButton: 'true',
+              searchEnabled: true,
+              stylingMode: 'underlined'
+            }"
+          >
+            <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          </dxi-item>
+          <dxi-item
+            dataField="DestinationPortId"
+            [colSpan]="2"
+            cssClass="px-1 m-0"
+            editorType="dxSelectBox"
+            [editorOptions]="{
+              placeholder: 'Destination Sea Port',
+              items: seaPortList,
+              valueExpr: 'Id',
+              displayExpr: 'PortName',
+              showClearButton: 'true',
+              stylingMode: 'underlined',
+              searchEnabled: true
+            }"
+          >
+            <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          </dxi-item>
+          <dxi-item [colSpan]="1"></dxi-item>
+        </dxi-item>
+      </dx-form>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col-md-12 card shadow-none">
+      <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+          <div class="row">
+            <div class="col-md-4 col-sm-6" *ngFor="let item of AnalyticsReportListForSingleGroup">
+              <div class="card shadow-lg m-2" id="ActivityCard">
+                <div class="card-header text-center">
+                  <h4 id="card-header-text">{{ item.ReportName }}</h4>
+                </div>
+                <div class="card-body text-center">
+                  <h1 style="color: #a1a8a1; font-size: 45"><i class="ri-line-chart-line"></i></h1>
+                </div>
+                <div class="card-footer bg-white d-flex justify-content-center">
+                  <div class="mr-1">
+                    <dx-button type="default" text="" [hint]="'Report'" (onClick)="showComparisonReport(item)" icon="find"></dx-button>
+                  </div>
+                  <div class="">
+                    <dx-button type="default" text="" [hint]="'PDF Report'" (onClick)="ExportComparisonsPdf(item)" icon="print"></dx-button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2"></div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 card shadow-none">
+      <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+          <div class="row">
+            <div class="col-md-4 col-sm-6" *ngFor="let item of AnalyticsReportListForMultiGroup">
+              <div class="card shadow-lg m-2" id="ActivityCard">
+                <div class="card-header text-center">
+                  <h4 id="card-header-text">{{ item.ReportName }}</h4>
+                </div>
+                <div class="card-body"></div>
+                <div class="card-footer bg-white d-flex justify-content-center">
+                  <div class="mr-1">
+                    <dx-button type="default" text="" [hint]="'Report'" (onClick)="showComparisonReport(item)" icon="find"></dx-button>
+                  </div>
+
+                  <div class="mr-1">
+                    <dx-button type="default" [hint]="'PDF Report (Format A)'" text="" (onClick)="ExportComparisonByCustomerAndItemPdf1(item)" icon="print"></dx-button>
+                  </div>
+                  <div class="">
+                    <dx-button type="default" text="" [hint]="'PDF Report (Format B)'" (onClick)="ExportComparisonByCustomerAndItemPdf2(item)" icon="print"></dx-button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2"></div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <single-group-comparison-grid
+        [singleGroupComparisonReportPopupVisible]="singleGroupComparisonReportVisible"
+        [ComparisonName]="singleGroupComparisionReportHeading"
+        (closePopup)="closeReportPopup($event)"
+        [dataSource]="singleGroupComparisonDataSource"
+        [FirstGroupCaption]="FirstGroupCaption"
+        [totalExport]="TotalExport"
+      ></single-group-comparison-grid>
+    </div>
+    <div class="col-md-12">
+      <multi-group-comparison-grid
+        [multiGroupComparisonReportPopupVisible]="multiGroupComparisonReportVisible"
+        [ComparisonName]="multiGroupComparisionReportHeading"
+        (closePopup)="closeReportPopup($event)"
+        [FirstGroupCaption]="FirstGroupCaption"
+        [MultiGroupCaption]="SecondGroupCaption"
+        [dataSource]="multiGroupComparisonDataSource"
+        [headerArray]="multiGroupHeaderArray"
+        [totalExport]="TotalExport"
+      ></multi-group-comparison-grid>
+    </div>
+    <div class="col-md-12">
+      <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+      <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+      <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+    </div>
+    <div class="col-md-12">
+      <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+    </div>
+  </div>
+</div>

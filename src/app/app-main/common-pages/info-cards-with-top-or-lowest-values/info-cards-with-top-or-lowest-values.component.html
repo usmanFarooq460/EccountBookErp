@@ -1,0 +1,37 @@
+<div class="custom-card p-0 m-0">
+  <div class="custom-card-header">
+    <div class="CompTitle mt-1 d-flex justify-content-between">
+      <div class="">
+        <p class=" text-truncate">
+          {{ Heading }}
+        </p>
+      </div>
+      <div class="mr-3">
+        <p class="text-truncate">
+          {{ SubTitle }}
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="approval-numbers-cards"  [ngClass]="MostUsedMethods.GetClassNameForCardBackground(Index + 1, 'ClassForBackground')">
+    <div class="d-flex text-center">
+      
+      <p class="Title">
+        {{ Title }}
+      </p>
+    </div>
+    <!-- <div class="SubTitle d-flex text-center">
+               <p></p> 
+            </div> -->
+
+    <div class="">
+      <h5 class="text-center">{{ MostUsedMethods.FormatNumber(Value) }}</h5>
+    </div>
+  </div>
+  <div class="card-footer">
+    <p (click)="handleMoreInfoClicked(UniqueId)">
+      More Info
+      <i class="ri-arrow-right-fill icons" [ngClass]="MostUsedMethods.GetClassNameForCardBackground(Index + 1, 'ClassForIcon')"></i>
+    </p>
+  </div>
+</div>

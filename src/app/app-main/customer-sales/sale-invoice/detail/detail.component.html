@@ -1,0 +1,49 @@
+<dx-data-grid
+  [dataSource]="dataSource"
+  [showColumnLines]="false"
+  [showRowLines]="true"
+  [rowAlternationEnabled]="true"
+  [allowColumnResizing]="true"
+  [allowColumnReordering]="true"
+  [columnAutoWidth]="true"
+  [showBorders]="true"
+  [wordWrapEnabled]="false"
+>
+  <dxi-column dataField="Id" caption="Id" dataType="number" [visible]="false" alignment="left"></dxi-column>
+  <dxi-column dataField="ItemName" caption="ItemName" dataType="string" alignment="left"></dxi-column>
+  <dxi-column dataField="ItemQty" caption="Item Quantity" dataType="number" alignment="left" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="WareHouseName" caption="WarehouseName" dataType="string" alignment="left"></dxi-column>
+
+  <dxi-column dataField="PackTypeDesc" caption="PackType" dataType="string" alignment="left"></dxi-column>
+  <dxi-column dataField="UOMCodeItem" caption="Item UOM" dataType="string" alignment="center"></dxi-column>
+
+  <dxi-column dataField="CropYear" caption="CropYear" dataType="string" alignment="left"></dxi-column>
+  <dxi-column dataField="SaleOrder" caption="Purchase Order" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="ItemAmount" caption="Item Amount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="ItemRate" caption="Item Rate" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="NetBillWeight" caption="NetBillWeight" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="NetStockWeight" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="RateCut" caption="RateCut" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+  <dxi-column dataField="RateCutAmount" caption="RateCutAmount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="WeightCutTotal" caption="WeightCutTotal" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="CommissionAmount" caption="ComissionAmount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="EBTotalWt" caption="EB Total Weight" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="ExpenseAmount" caption="Expense Amount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="FreightAmount" caption="Freight Amount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="GrossWeight" caption="GrossWeight" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+
+  <dxo-summary>
+    <dxi-total-item column="ItemAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+    <dxi-total-item column="ItemQty" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+    <dxi-total-item column="NetBillWeight" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+    <dxi-total-item column="NetStockWeight" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+    <dxi-total-item column="RateCutAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+    <dxi-total-item column="RateCut" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+    <dxi-total-item column="CommissionAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+    <dxi-total-item column="EBTotalWt" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+    <dxi-total-item column="ExpenseAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+    <dxi-total-item column="FreightAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+    <dxi-total-item column="GrossWeight" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+  </dxo-summary>
+  <dxo-scrolling [scrollByContent]="true" [scrollByThumb]="true" [showScrollbar]="'always'" [scrollLeft]="true" mode="infinite"></dxo-scrolling>
+</dx-data-grid>

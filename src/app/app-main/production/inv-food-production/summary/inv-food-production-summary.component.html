@@ -1,0 +1,160 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+      <dx-form id="form" [showRequiredMark]="false" [colCountByScreen]="{ lg: 1, md: 1, sm: 1 }">
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="InvProductionJobOrderId"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: jobOrderList,
+            placeholder: 'job Order No',
+            valueExpr: 'Id',
+            displayExpr: 'PlanCode',
+            searchEnabled: true,
+            onValueChanged: getSummaryValues
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="job Order No is required"></dxi-validation-rule>
+        </dxi-item>
+      </dx-form>
+    </div>
+    <div class="col-md-4"></div>
+  </div>
+
+  <!-- ===================================First Grid -->
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card mt-4">
+        <h4 class="text-center p-3 text-white" style="border-radius: 5px; background-color: #1fb5d3">Summary</h4>
+        <dx-data-grid
+          id="gridContainer"
+          #SummaryProductionGrid
+          [dataSource]="SummaryDataSource"
+          [height]="gridHeight - this.GetPercentageValue(40, gridHeight)"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnReordering]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="false"
+          (onToolbarPreparing)="onToolbarPreparingOfSummary($event)"
+        >
+          <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-filter-row [visible]="filter"></dxo-filter-row>
+          <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+          <dxo-header-filter [visible]="filter"></dxo-header-filter>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('SummaryProductionGrid') }}"></dxo-state-storing>
+          <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+          <dxo-load-panel [enabled]="false"></dxo-load-panel>
+          <dxo-export [enabled]="true" fileName="Over Head Production" [allowExportSelectedData]="true">
+            <dxo-texts exportAll="Export All Rows"></dxo-texts>
+          </dxo-export>
+
+          <dxi-column dataField="SortNo" caption="SortNo" dataType="number" alignment="left" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+
+          <dxi-column dataField="TranType" caption="TranType" dataType="string"></dxi-column>
+          <dxi-column dataField="NetQty" caption="NetQty" dataType="number" alignment="left" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="NetWeight" caption="NetWeight" dataType="number" alignment="left" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="Amount" caption="Amount" dataType="number" alignment="left" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+
+          <dxo-summary>
+            <dxi-total-item column="TranType" summaryType="count" displayFormat="Total Records: {0}"> </dxi-total-item>
+            <dxi-total-item column="NetQty" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="NetWeight" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="Amount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+          </dxo-summary>
+
+          <dxo-scrolling [scrollByContent]="true" [scrollByThumb]="true" [showScrollbar]="'always'" [scrollLeft]="true" mode="infinite"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card mt-4">
+        <h4 class="text-center p-3 text-white" style="border-radius: 5px; background-color: #1fb5d3">Summary Detail</h4>
+        <dx-data-grid
+          id="gridContainer"
+          #SummaryProductionDetailGrid
+          [dataSource]="SummaryDetailData"
+          [height]="gridHeight - this.GetPercentageValue(10, gridHeight)"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnReordering]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+          (onToolbarPreparing)="onToolbarPreparingOfSummaryDetail($event)"
+        >
+          <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-filter-row [visible]="filter"></dxo-filter-row>
+          <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+          <dxo-header-filter [visible]="filter"></dxo-header-filter>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('SummaryProductionDetailGrid') }}"></dxo-state-storing>
+          <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+          <dxo-load-panel [enabled]="false"></dxo-load-panel>
+          <dxo-export [enabled]="true" fileName="Over Head Production" [allowExportSelectedData]="true">
+            <dxo-texts exportAll="Export All Rows"></dxo-texts>
+          </dxo-export>
+
+          <dxi-column dataField="" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+          <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+            <div class="d-con-cell-action">
+              <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+            </div>
+          </div>
+
+          <dxi-column dataField="PlanCode" caption="PlanCode" dataType="number" alignment="left" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="ReferenceReportNo" caption="RefRepNo" dataType="string"></dxi-column>
+          <dxi-column dataField="PlanDate" caption="PlanDate" dataType="date" alignment="center" [format]="'dd-MM-yyyy'"></dxi-column>
+          <dxi-column dataField="PlantName" caption="PlantName" dataType="string"></dxi-column>
+          <dxi-column dataField="SortNo" caption="SortNo" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="TranType" caption="TranType" dataType="string"></dxi-column>
+          <dxi-column dataField="ItemName" caption="ItemName" dataType="string"></dxi-column>
+          <dxi-column dataField="UOMCode" caption="UOMCode" dataType="string"></dxi-column>
+          <dxi-column dataField="CropBatch" caption="CropBatch" dataType="string"></dxi-column>
+          <dxi-column dataField="JobLotCode" caption="JobLotCode" dataType="string"></dxi-column>
+          <dxi-column dataField="NetQty" caption="NetQty" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="NetWeight" caption="NetWeight" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <!-- amount column ? -->
+          <dxi-column dataField="WeightPrcnt" caption="WeightPrcnt" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="OutPutPrcnt" caption="OutPutPrcnt" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="BpFgQty" caption="BpFgQty" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="BpFgWeight" caption="BpFgWeight" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <!-- bpFgAmount -->
+          <dxi-column dataField="BpGgPrcnt" caption="BpGgPrcnt" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+
+          <dxo-summary>
+            <dxi-total-item column="ItemName" summaryType="count" displayFormat="Total Records: {0}"> </dxi-total-item>
+            <dxi-total-item column="NetQty" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="NetWeight" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="Amount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+          </dxo-summary>
+
+          <dxo-scrolling [scrollByContent]="true" [scrollByThumb]="true" [showScrollbar]="'always'" [scrollLeft]="true" mode="infinite"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+      <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+      <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+    </div>
+    <div class="col-md-12">
+      <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+    </div>
+  </div>
+</div>

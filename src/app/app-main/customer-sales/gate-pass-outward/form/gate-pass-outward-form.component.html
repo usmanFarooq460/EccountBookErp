@@ -1,0 +1,549 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="d-flex justify-content-between">
+        <div class="">
+          <app-pagetitle [title]="'GatePass Outward'"></app-pagetitle>
+        </div>
+        <div class="">
+          <dx-switch #switch [value]="true" class="mr-2" hint="Print On Save" (onValueChanged)="printAfterSave($event)"></dx-switch>
+          <dx-button class="mr-2" [hint]="'Add New'" type="default" icon="plus" (onClick)="resetForm()"> </dx-button>
+          <dx-button icon="refresh" type="success" [hint]="'Reload Form Fields'" (onClick)="FetchData()"></dx-button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-8">
+      <dx-form [formData]="GatePassOutwardData" #GatePassOutwardForm1 [colCountByScreen]="{ lg: 2, md: 2, sm: 2, xs: 2 }" [showRequiredMark]="false">
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="GpSrNo"
+          editorType="dxNumberBox"
+          [editorOptions]="{
+            placeholder: 'Doc No',
+            readOnly: true
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="custom" [validationCallback]="validateNumberBox" message="Rate is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="GpDate"
+          editorType="dxDateBox"
+          [editorOptions]="{
+            placeholder: 'GatePass Date',
+            displayFormat: 'dd-MMM-yyyy',
+            pickerType: 'calender'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="GatePass Date  is required"></dxi-validation-rule>
+        </dxi-item>
+
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="GatepassType"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: gpTypeList,
+            valueExpr: 'GpTypeDescription',
+            displayExpr: 'GpTypeDescription',
+            placeholder: 'Gate Pass Type',
+            onValueChanged: GpTypeLeave,
+            searchEnabled: true,
+            readOnly: GatePassParamsId > 0
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Gatepass Type is required"></dxi-validation-rule>
+        </dxi-item>
+
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="GpTypeSrNo"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            placeholder: 'GpTypeSrNo',
+            readOnly: true
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Gp Type SrNo is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="OtherSupCust"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: gatepassbasedOnList,
+            valueExpr: 'name',
+            displayExpr: 'name',
+            placeholder: 'Order Type',
+            searchEnabled: true,
+            readOnly: GatePassParamsId > 0,
+            onValueChanged: hanldeOrderTypeChange
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Order Type is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="SupplierContractCode"
+          editorType="dxNumberBox"
+          [editorOptions]="{
+            placeholder: 'Order No.',
+            onValueChanged: OrderNoLeave,
+            readOnly: GatePassParamsId > 0
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="custom" [validationCallback]="validateNumberBox" message="Rate is required"></dxi-validation-rule>
+        </dxi-item>
+      </dx-form>
+
+      <div class="ship-to-buyer shadow mt-2">
+        <div class="header">
+          <dx-form [formData]="GatePassOutwardData" #GatePassOutwardForm2 [colCountByScreen]="{ lg: 2, md: 2, sm: 2, xs: 2 }"  [showRequiredMark]="false">
+            <dxi-item
+              [colSpan]="2"
+              cssClass="px-1 mb-2"
+              dataField="SupplierCustomerId"
+              editorType="dxSelectBox"
+              [editorOptions]="{
+                dataSource: supplierList,
+                valueExpr: 'Id',
+                displayExpr: 'CompanyName',
+                placeholder: 'Customer Name',
+                searchEnabled: true,
+                readOnly: true,
+                onValueChanged: handleCustomerIdChange
+              }"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <dxi-validation-rule type="custom" [validationCallback]="checkValidationForCustomerName" message="Second Weight is Required!"> </dxi-validation-rule>
+            </dxi-item>
+          </dx-form>
+        </div>
+        <app-supp-cust-detail-under-combo
+          #SuppCustDetailUnderComboComponent
+          [ComboValue]="GatePassOutwardData?.SupplierCustomerId > 0"
+          [SupplierCustomerFormType]="2"
+        ></app-supp-cust-detail-under-combo>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card">
+        <h4 class="title">Gate Pass Info</h4>
+        <div class="Contract-info-wrape">
+          <div class="caption-wrape">
+            <div class="caption">#:{{ GatePassOutwardData?.GpSrNo }}</div>
+            <div class="caption">{{ GatePassOutwardData?.GpDate | date }}</div>
+          </div>
+          <div class="caption-wrape">
+            <div class="caption">Contract #:</div>
+            <div class="value">{{ GatePassOutwardData?.SupplierContractCode }}</div>
+          </div>
+          <div class="caption-wrape">
+            <div class="caption">Time In:</div>
+            <div class="value">{{ GatePassOutwardData?.InDateTimeStamp | date: "shortTime" }}</div>
+          </div>
+          <div class="caption-wrape" *ngIf="GatePassParamsId > 0">
+            <div class="caption">Time Out:</div>
+            <div class="value">{{ GatePassOutwardData?.OutDateTimeStamp | date: "shortTime" }}</div>
+          </div>
+          <div class="caption-wrape">
+            <div class="caption">DO Weight:</div>
+            <div class="value">{{ GatePassOutwardData?.SupplierWeight }}</div>
+          </div>
+          <div class="caption-wrape">
+            <div class="caption">Factory Weight:</div>
+            <div class="value">{{ GatePassOutwardData?.FactoryWeight }}</div>
+          </div>
+          <div class="caption-wrape">
+            <div class="caption">Difference Weight:</div>
+            <div class="value">{{ GatePassOutwardData?.DifferenceWeight }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card p-1 mb-0">
+    <dx-form [formData]="GatePassOutwardData" #GatePassOutwardForm3 [colCountByScreen]="{ lg: 6, md: 4, sm: 3, xs: 2 }"  [showRequiredMark]="false">
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="VehicleType"
+        editorType="dxSelectBox"
+        [editorOptions]="{
+          items: VehicleTypeList,
+          valueExpr: 'VehicleDescription',
+          displayExpr: 'VehicleDescription',
+          placeholder: 'VehicleType',
+          searchEnabled: true
+        }"
+      >
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        <dxi-validation-rule type="required" message="VehicleType is required"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="VehicleNo"
+        editorType="dxTextBox"
+        [editorOptions]="{
+          placeholder: 'Vehicle no'
+        }"
+      >
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        <dxi-validation-rule type="required" message="VehicleNo is required"></dxi-validation-rule>
+      </dxi-item>
+
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="CityId"
+        editorType="dxSelectBox"
+        [editorOptions]="{
+          items: CityList,
+          valueExpr: 'Id',
+          displayExpr: 'CityName',
+          placeholder: 'City Name',
+          searchEnabled: true
+        }"
+      >
+        <dxi-validation-rule type="required" message="City is required"></dxi-validation-rule>
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      </dxi-item>
+
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="BiltyNo"
+        editorType="dxTextBox"
+        [editorOptions]="{
+          placeholder: 'BiltyNo'
+        }"
+      >
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      </dxi-item>
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="NoOfPackages"
+        editorType="dxNumberBox"
+        [editorOptions]="{
+          placeholder: 'Qty'
+        }"
+      >
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        <dxi-validation-rule type="custom" [validationCallback]="validateNumberBox" message="Qty is required"></dxi-validation-rule>
+      </dxi-item>
+
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="Freight"
+        editorType="dxNumberBox"
+        [editorOptions]="{
+          placeholder: 'Bilty Freight'
+        }"
+      >
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      </dxi-item>
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="NetPaid"
+        editorType="dxNumberBox"
+        [editorOptions]="{
+          placeholder: 'NetPaid'
+        }"
+      >
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      </dxi-item>
+
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="WarehouseId"
+        editorType="dxSelectBox"
+        [editorOptions]="{
+          items: warehouseList,
+          valueExpr: 'Id',
+          displayExpr: 'WareHouseName',
+          placeholder: 'WareHouse',
+          searchEnabled: true
+        }"
+      >
+        <dxi-validation-rule type="required" message="WareHouse is required"></dxi-validation-rule>
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      </dxi-item>
+
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="VarietyName"
+        [colSpan]="2"
+        editorType="dxSelectBox"
+        [editorOptions]="{
+          dataSource: ItemsList,
+          valueExpr: 'ItemName',
+          displayExpr: 'ItemName',
+          placeholder: 'Item Name',
+          searchEnabled: true
+        }"
+      >
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      </dxi-item>
+
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="WBTicketNo"
+        editorType="dxNumberBox"
+        [editorOptions]="{
+          placeholder: 'WeighBridge Slip No'
+        }"
+      >
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      </dxi-item>
+
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="Container"
+        [visible]="containersVisible"
+        editorType="dxTextBox"
+        [editorOptions]="{
+          placeholder: 'ContainerNo-1'
+        }"
+      >
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      </dxi-item>
+
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="Container1"
+        [visible]="containersVisible"
+        editorType="dxTextBox"
+        [editorOptions]="{
+          placeholder: 'ContainerNo-2'
+        }"
+      >
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      </dxi-item>
+
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="Status"
+        editorType="dxSelectBox"
+        [editorOptions]="{
+          items: statusList,
+          valueExpr: 'name',
+          displayExpr: 'name',
+          placeholder: 'Status',
+          searchEnabled: true
+        }"
+      >
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        <dxi-validation-rule type="required" message="Status is required"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="DocAttachment"
+        editorType="dxSelectBox"
+        [editorOptions]="{
+          items: weightBridgeTypeList,
+          valueExpr: 'type',
+          displayExpr: 'type',
+          placeholder: 'WB Status',
+          searchEnabled: true,
+          readOnly: GatePassParamsId > 0
+        }"
+      >
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        <dxi-validation-rule type="required" message="WeighBridge Type is required"></dxi-validation-rule>
+      </dxi-item>
+
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="SupplierWeight"
+        editorType="dxTextBox"
+        [editorOptions]="{
+          placeholder: 'DO Weight',
+          readOnly: SupplierWeightStatus,
+          onValueChanged: handleDiffWeight
+        }"
+      >
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      </dxi-item>
+
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="FactoryWeight"
+        editorType="dxTextBox"
+        [editorOptions]="{
+          placeholder: 'FactoryWeight',
+          readOnly: true,
+          onValueChanged: handleDiffWeight
+        }"
+      >
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        <dxi-validation-rule type="custom" [validationCallback]="checkValidationForFactoryWeight" message="Second Weight is Required!"> </dxi-validation-rule>
+      </dxi-item>
+      
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="DifferenceWeight"
+        editorType="dxTextBox"
+        [editorOptions]="{
+          placeholder: 'DifferenceWeight',
+          readOnly: true
+        }"
+      >
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      </dxi-item>
+
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="ApprovedUserName"
+        editorType="dxTextBox"
+        [editorOptions]="{
+          placeholder: 'Approved User Name',
+          readOnly: true
+        }"
+      >
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      </dxi-item>
+
+      <dxi-item
+        cssClass="px-1 m-0"
+        [colSpan]="2"
+        dataField="OtherRemarks"
+        editorType="dxTextBox"
+        [editorOptions]="{
+          placeholder: 'Remarks'
+        }"
+      >
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      </dxi-item>
+      <dxi-item
+        cssClass="px-1 m-0"
+        [colSpan]="2"
+        dataField="WeightDiffRemarks"
+        editorType="dxTextBox"
+        [editorOptions]="{
+          placeholder: 'Weight Diff Remarks'
+        }"
+      >
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        <dxi-validation-rule type="required" message="Weight Diff Remarks length must be greater than 10 its required"></dxi-validation-rule>
+      </dxi-item>
+    </dx-form>
+    <div class="d-flex justify-content-end mt-3">
+      <div class="mr-1">
+        <dx-button icon="save" text="{{ GatePassParamsId > 0 ? 'Update' : 'Save' }}" type="success" (onClick)="onSave()"></dx-button>
+      </div>
+      <div class="ml-1">
+        <dx-button icon="close" text="Close" type="danger" routerLink="/cus-sales/gatepass-outward-history"></dx-button>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-5">
+    <div class="col-md-12">
+      <div class="card">
+        <dx-data-grid
+          id="gridContainer"
+          [dataSource]="GpOpenStatusList"
+          [height]="gridHeight"
+          #gatePassOutwardFormComponentGrid
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnReordering]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+          (onToolbarPreparing)="onToolbarPreparing($event)"
+        >
+          <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-filter-row [visible]="filter"></dxo-filter-row>
+          <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+          <dxo-header-filter [visible]="filter"></dxo-header-filter>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('gatePassOutwardFormComponent') }}"></dxo-state-storing>
+          <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+          <dxo-load-panel [enabled]="false"></dxo-load-panel>
+          <dxi-column dataField="" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+          <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+            <div class="d-con-cell-action">
+              <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+            </div>
+          </div>
+
+          <dxi-column dataField="Id" caption="Id" [visible]="false"></dxi-column>
+          <dxi-column dataField="OrderType" caption="OrderType"></dxi-column>
+          <dxi-column dataField="GatepassType" caption="GP Type"></dxi-column>
+          <dxi-column dataField="GpDate" caption="GpDate" dataType="date" [format]="'dd-MMM-yyyy'"></dxi-column>
+          <dxi-column dataField="GpSrNo" caption="GP Sr#"></dxi-column>
+          <dxi-column dataField="VehicleType" caption="VehicleType"></dxi-column>
+          <dxi-column dataField="VehicleNo" caption="VehicleNo"></dxi-column>
+          <dxi-column dataField="BiltyNo" caption="BiltyNo"></dxi-column>
+          <dxi-column dataField="NoOfBags" caption="Bags#" dataType="number"> </dxi-column>
+          <dxi-column dataField="VarietyName" caption="Verietry Name" dataType="string"></dxi-column>
+          <dxi-column dataField="CustomerName" caption="CustomerName" dataType="string"></dxi-column>
+          <dxi-column dataField="FactoryWeight" caption="FactoryWeight"></dxi-column>
+          <dxi-column dataField="Status" caption="Status" dataType="string"></dxi-column>
+          <dxi-column dataField="Container" caption="Container -1" dataType="string"></dxi-column>
+          <dxi-column dataField="Container1" caption="Container -2" dataType="string"></dxi-column>
+          <dxi-column dataField="WareHouseName" caption="WareHouseName" dataType="string"></dxi-column>
+          <dxi-column dataField="CityName" caption="CityName" dataType="string"></dxi-column>
+          <dxi-column dataField="OtherRemarks" caption="Remarks" dataType="string"></dxi-column>
+
+          <dxi-column
+            dataField="button"
+            [fixed]="true"
+            [fixedPosition]="'right'"
+            [width]="90"
+            alignment="right"
+            caption="Action"
+            [allowEditing]="false"
+            [allowExporting]="false"
+            [allowFiltering]="false"
+            [allowFixing]="false"
+            [allowGrouping]="false"
+            [allowHeaderFiltering]="false"
+            [allowHiding]="false"
+            [allowReordering]="false"
+            [allowResizing]="false"
+            [allowSearch]="false"
+            [allowSorting]="false"
+            cellTemplate="buttonTemplate"
+          ></dxi-column>
+          <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+            <div class="d-con-cell-action">
+              <dx-button type="danger" stylingMode="text" hint="290-GP Outward" (onClick)="onPrint(cellInfo.data)">
+                <i class="ri-printer-line"></i>
+              </dx-button>
+              <dx-button type="default" stylingMode="text" (onClick)="onEdit(cellInfo.data)">
+                <i class="ri-edit-2-line"></i>
+              </dx-button>
+            </div>
+          </div>
+          <dxo-summary>
+            <dxi-total-item column="OrderType" summaryType="count" displayFormat="Total Records: {0}"> </dxi-total-item>
+          </dxo-summary>
+          <dxo-scrolling [scrollByContent]="true" [scrollByThumb]="true" [showScrollbar]="'always'" [scrollLeft]="true" mode="infinite"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+      <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+      <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+    </div>
+    <div class="col-md-12">
+      <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+    </div>
+  </div>
+</div>
+
+

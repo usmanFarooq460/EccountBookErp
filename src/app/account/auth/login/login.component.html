@@ -1,0 +1,174 @@
+<div class="home-btn d-none d-sm-block">
+  <a routerLink=""><i class="mdi mdi-home-variant h2 text-white"></i></a>
+</div>
+<div>
+  <div class="SideLine"></div>
+  <div class="container-fluid p-0">
+    <div class="row no-gutters">
+      <div class="col-lg-4 line" [@fadeInLeft] *ngIf="!CompanySelectionPanelVisible">
+        <div class="authentication-page-content p-4 d-flex align-items-center min-vh-100">
+          <div class="w-100">
+            <div class="row justify-content-center">
+              <div class="col-lg-9">
+                <div>
+                  <div class="text-center">
+                    <div>
+                      <span style="font-size: x-large">&#8712;ccount&#914;ook <sup style="font-size: small">Cloud ERP</sup></span>
+                    </div>
+
+                    <h4 class="font-size-18 mt-4">Welcome Back !</h4>
+                    <p class="text-muted">Sign in to continue to &#8712;ccount&#914;ook.</p>
+                    <!-- <p class="text-muted">LET'S MAKE THE WORLD MORE PRODUCTIVE,Together!</p> -->
+                  </div>
+
+                  <div class="p-2 mt-5">
+                    <form class="form-horizontal" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                      <!-- (ngSubmit)="onSubmit()" -->
+                      <ngb-alert type="danger" *ngIf="error" [dismissible]="false">{{ error }}</ngb-alert>
+                      <div class="form-group auth-form-group-custom mb-4">
+                        <i class="ri-user-2-line auti-custom-input-icon"></i>
+                        <label for="username">Username</label>
+                        <input
+                          #LoginField
+                          formControlName="userName"
+                          class="form-control"
+                          id="username"
+                          placeholder="Username"
+                          [ngClass]="{
+                            'is-invalid': submitted && field.userName.errors
+                          }"
+                        />
+                        <div *ngIf="submitted && field.userName.errors" class="invalid-feedback">
+                          <div *ngIf="field.userName.errors.required">Username is required</div>
+                        </div>
+                      </div>
+
+                      <div class="form-group auth-form-group-custom mb-4">
+                        <i class="ri-lock-2-line auti-custom-input-icon"></i>
+                        <label for="password">Password</label>
+                        <input
+                          type="password"
+                          formControlName="password"
+                          class="form-control"
+                          id="password"
+                          placeholder="Password"
+                          [ngClass]="{
+                            'is-invalid': submitted && field.password.errors
+                          }"
+                        />
+
+                        <div *ngIf="submitted && field.password.errors" class="invalid-feedback">
+                          <div *ngIf="field.password.errors.required">Password is required</div>
+                        </div>
+                      </div>
+
+                      <div class="mt-4 text-center">
+                        <button [disabled]="LoggedIn" class="btn btn-primary w-md waves-effect waves-light" type="submit">
+                          {{ LoggedIn ? " Loging In" : "Log In" }} <i *ngIf="LoggedIn" class="fas fa-spinner fa-spin"></i>
+                        </button>
+                      </div>
+
+                      <div class="mt-4 text-center">
+                        <a routerLink="/account/reset-password" class="text-muted"><i class="mdi mdi-lock mr-1"></i> Forgot your password?</a>
+                      </div>
+                    </form>
+                  </div>
+
+                  <div class="mt-5 text-center">
+                    <p>
+                      Don't have an account ?
+                      <a routerLink="/account/signup" class="font-weight-medium text-primary"> Register </a>
+                    </p>
+                    <p>
+                      © 2022 &#8712;ccount&#914;ook.
+                      <i class="mdi mdi-heart text-danger"></i>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4" [@fadeInLeft] *ngIf="CompanySelectionPanelVisible">
+        <div class="authentication-page-content p-4 d-flex align-items-center min-vh-100">
+          <div class="w-100">
+            <div class="row justify-content-center">
+              <div class="col-lg-9">
+                <div>
+                  <div class="text-center">
+                    <div>
+                      <span style="font-size: x-large">&#8712;ccount&#914;ook <sup style="font-size: small">Cloud ERP</sup></span>
+                    </div>
+
+                    <h4 class="font-size-18 mt-5">Dear User !</h4>
+                    <p class="text-muted">Select Location to continue to &#8712;ccount&#914;ook.</p>
+                    <!-- <p class="text-muted">LET'S MAKE THE WORLD MORE PRODUCTIVE,Together!</p> -->
+                  </div>
+
+                  <div class="p-2 mt-5">
+                    <dx-form id="form" [formData]="CompanySelectionFormData" #CompanySelectionForm [showRequiredMark]="false">
+                      <dxi-item
+                        dataField="CompanyId"
+                        editorType="dxSelectBox"
+                        [editorOptions]="{
+                          placeholder: 'Location',
+                          items: CompanyList,
+                          searchEnabled: true,
+                          valueExpr: 'CompanyId',
+                          displayExpr: 'CompName',
+                          onInitialized: setFocus
+                        }"
+                      >
+                        <dxi-validation-rule type="required" message="Location is required"></dxi-validation-rule>
+                        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+                      </dxi-item>
+                    </dx-form>
+                    <div class="mt-4 text-center">
+                      <button class="btn btn-primary w-md waves-effect waves-light" (click)="saveCompany()">Continue</button>
+                    </div>
+                  </div>
+
+                  <div class="mt-5 text-center">
+                    <p>
+                      Back To
+                      <a (click)="NavigateBackToLogin()" style="cursor: pointer" class="font-weight-medium text-primary"> Login </a>
+                    </p>
+                    <p>
+                      © 2021 &#8712;ccount&#914;ook.
+                      <i class="mdi mdi-heart text-danger"></i>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-8" id="particle-canvas">
+        <div class="authentication-bg">
+          <div class="d-flex justify-content-end fixed-bottom p-4 pb-5">
+            <div class="SCSLOGO"></div>
+          </div>
+        </div>
+        <!-- <div class="sideImage"></div> -->
+
+          <ul class="animated-squares">
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+          </ul>
+  </div >
+
+    </div>
+  </div>
+</div>
+<!-- end page -->

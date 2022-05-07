@@ -1,0 +1,281 @@
+<div class="container-fluid">
+  <app-pagetitle title="Sample Log Register"></app-pagetitle>
+  <dx-button id="filter" class="ml-3 mb-3" type="default" text="Add New" icon="plus" (onClick)="addData()"> </dx-button>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <dx-data-grid
+          id="gridContainer"
+          #sampleLogRegisterGrid
+          [height]="gridHeight"
+          [dataSource]="dataSource"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnReordering]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="false"
+          (onToolbarPreparing)="onToolbarPreparing($event)"
+        >
+          <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-filter-row [visible]="filter"></dxo-filter-row>
+          <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+          <dxo-header-filter [visible]="filter"></dxo-header-filter>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('sampleLogRegisterGrid') }}"></dxo-state-storing>
+          <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+          <dxo-load-panel [enabled]="false"></dxo-load-panel>
+          <dxo-export [enabled]="true" fileName="sample Log Register" [allowExportSelectedData]="true">
+            <dxo-texts exportAll="Export All Rows"></dxo-texts>
+          </dxo-export>
+          <dxi-column dataField="" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+          <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+            <div class="d-con-cell-action">
+              <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+            </div>
+          </div>
+
+          <dxi-column dataField="Id" caption="Id" dataType="number" [visible]="false"></dxi-column>
+          <dxi-column dataField="ItemName" caption="Item Name" dataType="string"></dxi-column>
+          <dxi-column dataField="DescriptionCity" caption="City" dataType="string"></dxi-column>
+          <dxi-column dataField="CompanyNameSp" caption="Supplier" dataType="string"></dxi-column>
+          <dxi-column dataField="CompanyNameRp" caption="Refrence Party" dataType="string"></dxi-column>
+          <dxi-column dataField="Crop" caption="Crop" dataType=""></dxi-column>
+          <dxi-column dataField="LotDesc" caption="Job/Lot" dataType=""></dxi-column>
+          <dxi-column dataField="OtherRemarks" caption="Remarks" dataType=""></dxi-column>
+          <dxi-column dataField="UserName" caption="Entry User" dataType=""></dxi-column>
+          <dxi-column
+            dataField="button"
+            [fixed]="true"
+            [fixedPosition]="'right'"
+            [width]="90"
+            alignment="right"
+            caption="Action"
+            [allowEditing]="false"
+            [allowExporting]="false"
+            [allowFiltering]="false"
+            [allowFixing]="false"
+            [allowGrouping]="false"
+            [allowHeaderFiltering]="false"
+            [allowHiding]="false"
+            [allowReordering]="false"
+            [allowResizing]="false"
+            [allowSearch]="false"
+            [allowSorting]="false"
+            cellTemplate="buttonTemplate"
+          ></dxi-column>
+          <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+            <div class="d-con-cell-action">
+              <dx-button type="default" stylingMode="text" (onClick)="editPopup(cellInfo.data)">
+                <i class="ri-edit-2-line"></i>
+              </dx-button>
+            </div>
+          </div>
+
+          <dxo-summary>
+            <dxi-total-item column="ItemName" summaryType="count" displayFormat="Total Records: {0}"> </dxi-total-item>
+          </dxo-summary>
+
+          <dxo-scrolling [scrollByContent]="true" [scrollByThumb]="true" [showScrollbar]="'always'" [scrollLeft]="true" mode="infinite"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+      <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+      <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+    </div>
+    <div class="col-md-12">
+      <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+    </div>
+  </div>
+</div>
+
+<dx-popup
+  [width]="WidthOfPopupWithGrid - GetPercentageValue(40, WidthOfPopupWithGrid)"
+  [height]="HeightOfPopupWithGrid - GetPercentageValue(40, HeightOfPopupWithGrid)"
+  [position]="'center'"
+  [showTitle]="true"
+  titleTemplate="titleTemplate"
+  [dragEnabled]="true"
+  [showCloseButton]="true"
+  [closeOnOutsideClick]="false"
+  [(visible)]="SampleLogFormRegisterVisible"
+  [animation]="{ hide: { type: 'slideOut', direction: 'right', duration: 1000 }, show: { type: 'slideIn', direction: 'left', duration: 1500 } }"
+>
+  <div *dxTemplate="let content of 'titleTemplate'" class="d-flex justify-content-between">
+    <div class="">
+      <h4>Sample Log Register</h4>
+    </div>
+    <div class="d-flex justify-content-end">
+      <dx-button class="p-0 border-0" (onClick)="addData()" icon="close"></dx-button>
+    </div>
+  </div>
+
+  <div *dxTemplate="let data of 'content'">
+    <dx-scroll-view [showScrollbar]="'always'" [scrollByContent]="true" [scrollByThumb]="true">
+      <dx-form id="form" [formData]="sampleLogRegisterFormData" #sampleLogRegisterForm [showRequiredMark]="false" [colCountByScreen]="{ lg: 3, md: 2, sm: 2, xm: 1 }">
+        <dxi-item
+          dataField="SampleNo"
+          cssClass="px-1 m-0"
+          editorType="dxNumberBox"
+          [editorOptions]="{
+            placeholder: 'Sample No',
+            readOnly: true
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="SampleNo is required"></dxi-validation-rule
+        ></dxi-item>
+
+        <dxi-item
+          dataField="SampleDate"
+          cssClass="px-1 m-0"
+          editorType="dxDateBox"
+          [editorOptions]="{
+            placeholder: 'Sample Date',
+            displayFormat: 'dd-MMM-yyyy'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Sample Date  is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          dataField="SupplierCustomerId"
+          cssClass="px-1 m-0"
+          [colSpan]="2"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            dataSource: supplierList,
+            valueExpr: 'Id',
+            displayExpr: 'CompanyName',
+            placeholder: 'Supplier',
+            searchEnabled: true
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Supplier is required"></dxi-validation-rule>
+        </dxi-item>
+
+        <dxi-item
+          dataField="ReferencePartyId"
+          cssClass="px-1 m-0"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            dataSource: supplierList,
+            valueExpr: 'Id',
+            displayExpr: 'CompanyName',
+            placeholder: 'ReferenceParty',
+            searchEnabled: true
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+        <dxi-item
+          dataField="CityId"
+          cssClass="px-1 m-0"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: CityList,
+            valueExpr: 'Id',
+            displayExpr: 'CityName',
+            placeholder: 'City',
+            searchEnabled: true
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="City is required"></dxi-validation-rule>
+        </dxi-item>
+
+        <dxi-item
+          dataField="ItemId"
+          editorType="dxSelectBox"
+          cssClass="px-1 m-0"
+          [editorOptions]="{
+            dataSource: ItemsList,
+            valueExpr: 'Id',
+            displayExpr: 'ItemName',
+            placeholder: 'Item Name',
+            searchEnabled: true
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Item Name is required"></dxi-validation-rule>
+        </dxi-item>
+
+        <dxi-item
+          dataField="Crop"
+          cssClass="px-1 m-0"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: cropYearlist,
+            valueExpr: 'CropYear',
+            displayExpr: 'CropYear',
+            placeholder: 'Crop Year',
+            searchEnabled: true
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Crop Year is required"></dxi-validation-rule
+        ></dxi-item>
+        <dxi-item
+          dataField="JobLotId"
+          cssClass="px-1 m-0"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: jobLotList,
+            valueExpr: 'Id',
+            displayExpr: 'JobLotCode',
+            placeholder: 'job Lot',
+            searchEnabled: true
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Job #sampleLogRegisterGrid is required"></dxi-validation-rule
+        ></dxi-item>
+
+        <dxi-item
+          dataField="Qty"
+          cssClass="px-1 m-0"
+          editorType="dxNumberBox"
+          [editorOptions]="{
+            placeholder: 'Qty'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+
+        <dxi-item
+          dataField="Weight"
+          editorType="dxNumberBox"
+          cssClass="px-1 m-0"
+          [editorOptions]="{
+            placeholder: 'Weight'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+
+        <dxi-item
+          dataField="OtherRemarks"
+          [colSpan]="2"
+          cssClass="px-1 m-0"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            placeholder: 'Remarks'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+      </dx-form>
+      <div class="mt-4 d-flex justify-content-end">
+        <dx-button (onClick)="onSubmitButtonClick()" type="success" icon="save" text="{{ sampleLogRegisterFormData.Id > 0 ? 'Update' : 'Save' }}"></dx-button>
+      </div>
+    </dx-scroll-view>
+  </div>
+</dx-popup>

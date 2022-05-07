@@ -1,0 +1,207 @@
+<div class="container-fluid">
+  <!-- start page title -->
+  <app-pagetitle title="Sale Invoice Direct Register" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+  <!-- end page title -->
+  <div class="d-flex justify-content-between">
+    <div class="">
+      <dx-button id="filter" class="ml-3 mb-3" type="success" text="Search Criteria" (onClick)="toggle()" icon="search"> </dx-button>
+      <dx-button class="ml-3 mb-3" type="success" text="Filters" (onClick)="filtering()" icon="filter"></dx-button>
+    </div>
+    <div class="">
+      <dx-button class="ml-3 mb-3" type="default" text="302-SaleDirectRegister" (onClick)="ReportRegister302()" icon="print" style="background-color: #c300ff"></dx-button>
+      <dx-button class="ml-3 mb-3" type="default" text="Back" routerLink="/admin-panel/report-panel" icon="back" style="background-color: #ffa100"></dx-button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="dx-field">
+      <div class="dx-field-value-static">
+        <dx-popover target="#filter" position="right" [width]="600" [height]="270" [(visible)]="popoverVisible" (onShown)="setFocus()">
+          <dxo-animation>
+            <dxo-show type="pop" [from]="{ scale: 0 }" [to]="{ scale: 1 }"></dxo-show>
+            <dxo-hide type="fade" [from]="1" [to]="0"></dxo-hide>
+          </dxo-animation>
+          <div *dxTemplate="let data = model; of: 'content'">
+            <dx-form id="form" [formData]="SaleInvoiceDirectRegisterFormData" #SaleInvoiceDirectRegisterForm [showRequiredMark]="false">
+              <dxi-item itemType="group" cssClass="second-group" [colCount]="2">
+                <dxi-item
+                  dataField="FromDate"
+                  editorType="dxDateBox"
+                  [editorOptions]="{
+                    displayFormat: 'dd-MMM-yyyy',
+                    placeholder: 'GrnDateFrom'
+                  }"
+                >
+                  <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+                  <dxi-validation-rule type="required" message="GrnDateFrom is required"></dxi-validation-rule>
+                </dxi-item>
+                <dxi-item
+                  dataField="ToDate"
+                  editorType="dxDateBox"
+                  [editorOptions]="{
+                    displayFormat: 'dd-MMM-yyyy',
+                    placeholder: 'GrnDateTo'
+                  }"
+                >
+                  <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+                  <dxi-validation-rule type="required" message="GrnDateTo is required"></dxi-validation-rule>
+                </dxi-item>
+              </dxi-item>
+              <dxi-item itemType="group" cssClass="second-group" [colCount]="2">
+                <dxi-item
+                  dataField="ItemId"
+                  editorType="dxSelectBox"
+                  [editorOptions]="{
+                    items: ItemList,
+                    searchEnabled: true,
+                    valueExpr: 'Id',
+                    displayExpr: 'ItemName',
+                    placeholder: 'Item Name'
+                  }"
+                >
+                  <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+                </dxi-item>
+                <dxi-item
+                  dataField="JobLotId"
+                  editorType="dxSelectBox"
+                  [editorOptions]="{
+                    items: JobLotList,
+                    searchEnabled: true,
+                    valueExpr: 'Id',
+                    displayExpr: 'JobLotDescription',
+                    placeholder: 'Job Lot'
+                  }"
+                >
+                  <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+                </dxi-item>
+              </dxi-item>
+              <dxi-item itemType="group" cssClass="second-group" [colCount]="1">
+                <dxi-item
+                  dataField="SupplierCustomerId"
+                  editorType="dxSelectBox"
+                  [editorOptions]="{
+                    items: SupplierList,
+                    searchEnabled: true,
+                    valueExpr: 'Id',
+                    displayExpr: 'CompanyName',
+                    placeholder: 'Supplier'
+                  }"
+                >
+                  <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+                </dxi-item>
+              </dxi-item>
+            </dx-form>
+            <div style="display: flex; margin-top: 17px; justify-content: flex-end">
+              <dx-button type="success" (onClick)="onSubmit()" text="Show"></dx-button>
+              <div class="m-1"></div>
+              <dx-button type="danger" (onClick)="clear()" text="Clear"></dx-button>
+            </div>
+          </div>
+        </dx-popover>
+      </div>
+    </div>
+
+    <!-- end col -->
+
+    <div class="col-md-12">
+      <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+        <dx-data-grid
+          id="gridContainer"
+          [dataSource]="dataSource"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+          (onToolbarPreparing)="onToolbarPreparing($event)"
+        >
+          <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-filter-row [visible]="filter"></dxo-filter-row>
+          <dxo-header-filter [visible]="filter"></dxo-header-filter>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-load-panel [enabled]="true"></dxo-load-panel>
+          <dxo-export [enabled]="true" fileName="Estimates" [allowExportSelectedData]="true">
+            <dxo-texts exportAll="Export All Rows"></dxo-texts>
+          </dxo-export>
+          <dxo-selection mode="multiple" selectAllMode="page" showCheckBoxesMode="always"></dxo-selection>
+          <dxo-paging [enabled]="true"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true"></dxo-pager>
+          <dxi-column dataField="Id" caption="id" [visible]="false" dataType="number" [width]="80"></dxi-column>
+          <dxi-column dataField="DocNo" caption="Invoice No" dataType="number" [width]="80" alignment="left"></dxi-column>
+          <dxi-column dataField="DocDate" [format]="'dd-MMM-yyyy'" caption="Doc Date" dataType="date"></dxi-column>
+          <dxi-column dataField="ManualBillNo" caption="Manual Bill No" dataType="number"></dxi-column>
+          <dxi-column dataField="DueDays" caption="Due Days" dataType="number"></dxi-column>
+          <dxi-column dataField="DueDate" caption="Due Date" [format]="'dd-MMM-yyyy'" dataType="date"></dxi-column>
+          <dxi-column dataField="ManualBillNo" caption="Manual Bill No" dataType="number"></dxi-column>
+          <dxi-column dataField="BillAmount" caption="Bill Amount" dataType="string" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="CompanyName" caption="Customer Name" dataType="string"></dxi-column>
+          <dxi-column dataField="ItemName" caption="Item Name" dataType="string"></dxi-column>
+          <dxi-column dataField="CropYear" caption="Crop Year" dataType="string"></dxi-column>
+          <dxi-column dataField="ItemQty" caption="Item Qty" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="ItemUOM" caption="Item UOM" dataType="string"></dxi-column>
+          <dxi-column dataField="NetBillWeight" caption="Net Bill Weight" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="ItemRate" caption="Item Rate" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="UOMCode" caption="UOM" dataType="string"></dxi-column>
+          <dxi-column dataField="JobLotDescription" caption="Job Lot" dataType="string"></dxi-column>
+          <dxi-column dataField="RateCut" caption="Rate Cut" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="RateCutAmount" caption="Rate Cut Amount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="FreightAmount" caption="Freight Amount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="CommissionAmount" caption="Commission Amount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="ExpenseAmount" caption="Expense Amount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="JournalAmount" caption="Journal Amount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="ItemAmount" caption="Item Amount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+
+          <dxi-column
+            dataField="button"
+            [fixed]="true"
+            [fixedPosition]="'right'"
+            [width]="90"
+            alignment="center"
+            caption="Action"
+            [allowEditing]="false"
+            [allowExporting]="false"
+            [allowFiltering]="false"
+            [allowFixing]="false"
+            [allowGrouping]="false"
+            [allowHeaderFiltering]="false"
+            [allowHiding]="false"
+            [allowReordering]="false"
+            [allowResizing]="false"
+            [allowSearch]="false"
+            [allowSorting]="false"
+            cellTemplate="buttonTemplate"
+          ></dxi-column>
+          <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+            <div class="d-con-cell-action">
+              <dx-button type="success" stylingMode="text" hint="118-Sale Direct Voucher" (onClick)="AcRptVoucherSlip_118(cellInfo.data)">
+                <i class="ri-printer-line"></i>
+              </dx-button>
+              <dx-button type="success" stylingMode="text" hint="294-Sale Direct Slip" (onClick)="InvRptSaleBillDirectWithoutSO_294(cellInfo.data)">
+                <i class="ri-printer-line"></i>
+              </dx-button>
+            </div>
+          </div>
+
+          <dxo-export [enabled]="true" [allowExportSelectedData]="true"></dxo-export>
+
+          <dxo-summary>
+            <dxi-total-item column="ItemQty" summaryType="sum" displayFormat="{0}"> </dxi-total-item>
+            <dxi-total-item column="NetBillWeight" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+            <dxi-total-item column="ItemAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+            <dxi-total-item column="FreightAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+            <dxi-total-item column="ExpenseAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+            <dxi-total-item column="JournalAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+            <dxi-total-item column="CommissionAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+            <dxi-total-item column="BillAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+            <dxi-total-item column="ItemRate" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+            <dxi-total-item column="RateCutAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+          </dxo-summary>
+
+          <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- container-fluid -->

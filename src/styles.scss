@@ -1,0 +1,60 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Importing Bootstrap SCSS file. */
+// @import '~bootstrap/scss/bootstrap';
+
+body {
+  background-color: #fafafa !important;
+}
+
+.smsbody .dx-popup-content {
+  background-color: #fafafa;
+}
+
+.dx-texteditor div.dx-placeholder {
+  top: -12px;
+  bottom: 0px;
+  left: 0px;
+  opacity: 1;
+  display: block !important;
+  font-size: 0.8em;
+  transition: 0.3s ease all;
+}
+.dx-texteditor .dx-texteditor-input {
+  padding: 7px 9px 0px !important;
+}
+.dx-texteditor-empty .dx-texteditor-input {
+  padding: 7px 9px 8px !important;
+}
+.dx-texteditor-empty div.dx-placeholder {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  max-width: 100%;
+  width: auto;
+  height: 100%;
+  text-align: center i !important;
+  cursor: text;
+  pointer-events: none;
+  font-size: 1em;
+}
+
+.d-grid-editor.dx-texteditor.dx-editor-outlined {
+  height: 29px;
+  border: none;
+  border-radius: 0;
+  box-sizing: content-box;
+  background-color: transparent;
+}
+.d-grid-editor .dx-texteditor-input {
+  padding: 0px 7px 0px !important;
+  min-height: 28px !important;
+}
+.d-grid-editor.dx-texteditor.dx-editor-outlined.dx-state-focused {
+  border: 2px solid #2ca01c;
+  background-color: #fff;
+}
+
+// .d-grid-editor .dx-dropdowneditor-icon {
+//   visibility: hidden;
+// }

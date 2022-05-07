@@ -1,0 +1,166 @@
+<div class="container-fluid">
+  <app-pagetitle title="Pre Shipment Analysis History"></app-pagetitle>
+  <dx-button id="filter" class="ml-3 mb-3" type="default" text="Add New" icon="plus" (onClick)="gotoSaleOrderForm()"> </dx-button>
+  <div class="row">
+    <div class="col-md-12 mb-3">
+      <dx-form [formData]="PreShipmentSearchCritereasData" #PreShipmentSearchCritereas [colCountByScreen]="{ lg: 6, md: 3, sm: 2, xs: 2 }" [showRequiredMark]="false">
+        <dxi-item></dxi-item>
+        <dxi-item
+          cssClass="px-1 py -1 m-0"
+          [colSpan]="2"
+          dataField="ReportStatus"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: ApprovalStatusList,
+            valueExpr: 'Id',
+            displayExpr: 'Label',
+            placeholder: 'Report Status',
+            searchEnabled: true,
+            stylingMode: 'underlined',
+            onValueChanged: LoadAllRecords,
+            showClearButton: true
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 py -1 m-0"
+          [colSpan]="2"
+          dataField="InspectionStatus"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: InspectionStatusList,
+            valueExpr: 'Label',
+            displayExpr: 'Label',
+            placeholder: 'Inspection Status',
+            searchEnabled: true,
+            stylingMode: 'underlined',
+            onValueChanged: LoadAllRecords,
+            showClearButton: true
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+        <dxi-item cssClass="mt-2" [colSpan]="1">
+          <!-- <div *dxTemplate>
+            <dx-button type="success" class="btn-color" text="Show" (onClick)="History(null)"> </dx-button>
+          </div> -->
+        </dxi-item>
+      </dx-form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <dx-data-grid
+          id="gridContainer"
+          [dataSource]="dataSource"
+          [height]="gridHeight"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnReordering]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+          (onToolbarPreparing)="onToolbarPreparing($event)"
+        >
+          <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-filter-row [visible]="filter"></dxo-filter-row>
+          <dxo-header-filter [visible]="filter"></dxo-header-filter>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-load-panel [enabled]="false"></dxo-load-panel>
+          <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('ExportPreProductionLabHistoryGridState') }}"></dxo-state-storing>
+          <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+          <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+          <dxi-column dataField="Sr#" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+          <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+            <div class="d-con-cell-action">
+              <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+            </div>
+          </div>
+          <dxi-column dataField="Id" caption="Id" [visible]="false" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="ReportDate" caption="Report Date" [width]="100" dataType="date" alignment="left" [format]="'dd-MMM-yyyy'"></dxi-column>
+          <dxi-column dataField="ReportDocNo" caption="Report No" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="JobLotDescription" caption="Job/Lot" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="InsepectedByName" caption="Lab Name" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="LotRefNo" caption="Lot Ref No" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="ItemName" caption="Item Name" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="QtyKgs" caption="Qty" dataType="number" alignment="right"></dxi-column>
+          <dxi-column dataField="ReportRefNo" caption="Report Ref No" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="ConfirmationDate" caption="Confirmation Date" dataType="date" alignment="left" [format]="'dd-MMM-yyyy'"></dxi-column>
+          <dxi-column dataField="PendingDays" caption="Pending Days" dataType="number" [visible]="false" alignment="right"></dxi-column>
+          <dxi-column dataField="ReportStatus" caption="Confirmation" cellTemplate="ConfirmationTemplate"></dxi-column>
+          <dxi-column dataField="IsApproved" caption="Status" cellTemplate="statusTemplate"></dxi-column>
+          <dxi-column dataField="EntryDate" caption="Entry Date" [visible]="false" dataType="date" alignment="left" [format]="'dd-MMM-yyyy'"></dxi-column>
+          <dxi-column dataField="EntryUserName" [visible]="false" caption="Entry User" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="ApprovedDate" caption="Approved Date" [visible]="false" dataType="date" alignment="left" [format]="'dd-MMM-yyyy'"></dxi-column>
+          <dxi-column dataField="ApprovedUser" [visible]="false" caption="Approved User" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="InspectionRemarks" [visible]="false" caption="Remarks" dataType="string" alignment="left"></dxi-column>
+          <div *dxTemplate="let cellInfo of 'ConfirmationTemplate'">
+            <div *ngIf="cellInfo.text == 'Confirmed'; else falseStatus">
+              <span class="badge badge-info">Confirmed</span>
+            </div>
+            <ng-template #falseStatus class="badge badge-warning"> <span class="badge badge-warning">Pending</span></ng-template>
+          </div>
+          <div *dxTemplate="let cellInfo of 'statusTemplate'">
+            <div *ngIf="cellInfo.text == 'Approved'; else falseStatus">
+              <span class="badge badge-success">Approved</span>
+            </div>
+            <ng-template #falseStatus class="badge badge-danger"> <span class="badge badge-danger">Not Approved</span></ng-template>
+          </div>
+          <dxo-master-detail [enabled]="true" template="masterDetail"></dxo-master-detail>
+          <div *dxTemplate="let masterDetailItem of 'masterDetail'">
+            <pre-shipment-analysis-history-detial [key]="masterDetailItem.Id" [rowData]="masterDetailItem.data"></pre-shipment-analysis-history-detial>
+          </div>
+          <dxi-column
+            dataField="button"
+            [fixed]="true"
+            [fixedPosition]="'right'"
+            [width]="90"
+            alignment="right"
+            caption="Action"
+            [allowEditing]="false"
+            [allowExporting]="false"
+            [allowFiltering]="false"
+            [allowFixing]="false"
+            [allowGrouping]="false"
+            [allowHeaderFiltering]="false"
+            [allowHiding]="false"
+            [allowReordering]="false"
+            [allowResizing]="false"
+            [allowSearch]="false"
+            [allowSorting]="false"
+            cellTemplate="buttonTemplate"
+          ></dxi-column>
+          <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+            <div class="d-con-cell-action">
+              <dx-button type="default" stylingMode="text" (onClick)="onEdit(cellInfo.data)">
+                <i class="ri-edit-2-line"></i>
+              </dx-button>
+              <dx-button type="danger" stylingMode="text" hint="513-Pre Production Lab Slip" (onClick)="Slip513(cellInfo.data)">
+                <i class="ri-printer-line"></i>
+              </dx-button>
+            </div>
+          </div>
+          <dxo-summary>
+            <dxi-total-item column="LookUpName" summaryType="count" displayFormat="Total Records:{0}"> </dxi-total-item>
+            <dxi-total-item column="QtyKgs" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+          </dxo-summary>
+          <dxo-scrolling [scrollByContent]="true" [scrollByThumb]="true" [showScrollbar]="'always'" [scrollLeft]="true" mode="infinite"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+      <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+      <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+    </div>
+    <div class="col-md-12">
+      <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+    </div>
+  </div>
+</div>

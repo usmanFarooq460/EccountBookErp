@@ -1,0 +1,28 @@
+<dx-data-grid
+  [dataSource]="detailArray"
+  [showColumnLines]="false"
+  [showRowLines]="true"
+  [rowAlternationEnabled]="true"
+  [allowColumnResizing]="true"
+  [columnAutoWidth]="true"
+  [showBorders]="true"
+  [wordWrapEnabled]="false"
+>
+  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+  <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+  <dxo-group-panel [visible]="true"></dxo-group-panel>
+  <dxo-paging [enabled]="true"></dxo-paging>
+  <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15]" [showInfo]="true"></dxo-pager>
+  <dxi-column dataField="WareHouseName" caption="WareHouseName" dataType="string"></dxi-column>
+  <dxi-column dataField="ItemName" caption="Item" dataType="string"></dxi-column>
+  <dxi-column dataField="ItemUOM" caption="Item UOM" dataType="string"></dxi-column>
+  <dxi-column dataField="JobLot" caption="JobLot" dataType="string"></dxi-column>
+  <dxi-column dataField="ItemQty" caption="Qty" dataType="number" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+  <dxi-column dataField="ItemRate" caption="Rate" dataType="number" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+  <dxi-column dataField="ItemAmount" caption="Amount" dataType="number" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+  <dxo-summary>
+    <dxi-total-item column="ItemQty" summaryType="sum" name="NoOfUnit" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+    <dxi-total-item column="ItemAmount" summaryType="sum" name="RatePrice" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+  </dxo-summary>
+  <dxo-scrolling mode="infinite" [scrollByContent]="true" [scrollByThumb]="true"></dxo-scrolling>
+</dx-data-grid>

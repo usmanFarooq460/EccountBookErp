@@ -1,0 +1,32 @@
+<div class="card shadow-lg p-3 mb-5 bg-white rounded">
+  <dx-data-grid
+    id="gridContainer"
+    [showColumnLines]="false"
+    [dataSource]="dataSource"
+    [showRowLines]="true"
+    [rowAlternationEnabled]="true"
+    [allowColumnResizing]="true"
+    [columnAutoWidth]="true"
+    [showBorders]="true"
+    (onToolbarPreparing)="onToolbarPreparing($event)"
+  >
+    <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+    <dxo-group-panel [visible]="true"></dxo-group-panel>
+    <dxo-filter-row [visible]="filter"></dxo-filter-row>
+    <dxo-header-filter [visible]="filter"></dxo-header-filter>
+    <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+    <dxo-load-panel [enabled]="true"></dxo-load-panel>
+    <dxo-export [enabled]="true" fileName="{{ excelFileName }}" [allowExportSelectedData]="true">
+      <dxo-texts exportAll="Export All Rows"></dxo-texts>
+    </dxo-export>
+    <dxo-selection mode="multiple" selectAllMode="page" showCheckBoxesMode="always"></dxo-selection>
+    <dxo-paging [enabled]="true"></dxo-paging>
+    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true"></dxo-pager>
+    <dxi-column *ngFor="let column of columns" dataField="{{ column.dataField }}" caption="{{ column.caption }}" dataType="{{ column.dataType }}" [visible]="column.visible"> </dxi-column>
+    <dxo-summary>
+      <dxi-total-item *ngFor="let item of summary" column="{{ item.column }}" summaryType="{{ item.summaryType }}" valueFormat="#,##0.##"> </dxi-total-item>
+    </dxo-summary>
+    <dxo-export [enabled]="true" [allowExportSelectedData]="true"></dxo-export>
+    <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+  </dx-data-grid>
+</div>

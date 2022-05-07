@@ -1,0 +1,305 @@
+<div class="container-fluid">
+  <app-pagetitle [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+  <dx-form id="form" [formData]="InventoryDashboardTradeProFormData" #InventoryDashboardTradeProForm [showRequiredMark]="false">
+    <dxi-item itemType="group" cssClass="second-group" [colCount]="6">
+      <dxi-item> </dxi-item>
+
+      <dxi-item
+        dataField="dateType"
+        editorType="dxSelectBox"
+        [editorOptions]="{
+          placeholder: 'Date Type',
+          items: dateList,
+          valueExpr: 'Id',
+          displayExpr: 'name',
+          onInitialized: setFocus,
+          onValueChanged: datetypeChanged
+        }"
+      >
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      </dxi-item>
+      <dxi-item
+        cssClass="px-1 m-0 "
+        dataField="FromDate"
+        editorType="dxDateBox"
+        [editorOptions]="{
+          placeholder: 'From Date',
+          displayFormat: 'dd-MMM-yyyy'
+        }"
+      >
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        <dxi-validation-rule type="required" message="From Date is required"></dxi-validation-rule>
+      </dxi-item>
+
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="ToDate"
+        editorType="dxDateBox"
+        [editorOptions]="{
+          placeholder: 'To Date',
+          displayFormat: 'dd-MMM-yyyy'
+        }"
+      >
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        <dxi-validation-rule type="required" message="To Date is required"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item>
+        <dx-button class="btn-sm" style="margin-top: 10px" text="Show" type="success" (onClick)="onSubmit()"></dx-button>
+      </dxi-item>
+    </dxi-item>
+  </dx-form>
+</div>
+<!-- Start ProfitLoss Popup Here -->
+<dx-popup
+  [width]="InventoryPLPopupWidth"
+  [height]="InventoryPLPopupHeight"
+  position="center"
+  [showTitle]="true"
+  titleTemplate="titleTemplate"
+  [dragEnabled]="true"
+  [showCloseButton]="true"
+  [closeOnOutsideClick]="false"
+  [(visible)]="loadStatus"
+>
+  <div *dxTemplate="let content of 'titleTemplate'" class="d-flex justify-content-between">
+    <div class="">
+      <h4>Profit/Loss Report</h4>
+    </div>
+    <div class="d-flex justify-content-end">
+      <dx-button class="p-0 mr-1 border-0" type="transparent" (onClick)="filtering()" icon="filter"></dx-button>
+      <dx-button class="p-0 border-0" type="transparent" (onClick)="closeAccountsPopupGrid()" icon="close"></dx-button>
+    </div>
+  </div>
+  <div *dxTemplate="let data of 'content'">
+    <dx-form id="form" [formData]="InventoryDashboardTradeProFormData" #InventoryDashboardTradeProForm>
+      <dxi-item itemType="group" cssClass="second-group" [colCount]="6">
+        <dxi-item
+          cssClass="px-1 m-0 "
+          dataField="FromDate"
+          editorType="dxDateBox"
+          [editorOptions]="{
+            placeholder: 'From Date',
+            displayFormat: 'dd-MMM-yyyy'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <!-- <dxi-validation-rule type="required" message="From Date is required"></dxi-validation-rule> -->
+        </dxi-item>
+
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="ToDate"
+          editorType="dxDateBox"
+          [editorOptions]="{
+            placeholder: 'To Date',
+            displayFormat: 'dd-MMM-yyyy'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <!-- <dxi-validation-rule type="required" message="To Date is required"></dxi-validation-rule> -->
+        </dxi-item>
+      </dxi-item>
+
+      <dxi-item itemType="group" [colCount]="6" cssClass="mb-3">
+        <dxi-item
+          [colSpan]="2"
+          dataField="SupplierCustomerId"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: supplierList,
+            valueExpr: 'Id',
+            searchEnabled: true,
+            displayExpr: 'CompanyName',
+            placeholder: 'Customer'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="FromDocNo"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            placeholder: 'From Doc No'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="ToDocNo"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            placeholder: 'To Doc No'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+        <dxi-item [colSpan]="">
+          <div *dxTemplate class="d-flex mt-2">
+            <dx-button text="Search" type="success" icon="search" (onClick)="ShowDetailProfitLossReport()"></dx-button>
+            <dx-button type="default" text="Profit/Loss Register" (onClick)="ProfitLossReportpdfRegister()" icon="print" style="background-color: #c300ff"></dx-button>
+          </div>
+        </dxi-item>
+      </dxi-item>
+    </dx-form>
+    <!-- [width]="InventoryPLPopupGridWidth"
+      [height]
+      style="height: 550px" -->
+    <dx-data-grid
+      #popupGrid
+      id="gridContainer"
+      [dataSource]="popupDataSource"
+      [showColumnLines]="false"
+      [showRowLines]="true"
+      [rowAlternationEnabled]="true"
+      [allowColumnResizing]="true"
+      [columnAutoWidth]="true"
+      [showBorders]="true"
+    >
+      <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+      <dxo-group-panel [visible]="true"></dxo-group-panel>
+      <dxo-filter-row [visible]="filter"></dxo-filter-row>
+      <dxo-header-filter [visible]="filter"></dxo-header-filter>
+      <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+      <dxo-load-panel [enabled]="true"></dxo-load-panel>
+      <dxo-paging [enabled]="true"></dxo-paging>
+      <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 100, 500, 1000]" [showInfo]="true"></dxo-pager>
+
+      <dxi-column dataField="DocCodeNo" caption="DocNo" dataType="number" alignment="left"></dxi-column>
+      <dxi-column dataField="DocDate" caption="Doc Date" dataType="date" [format]="'dd-MMM-yyyy'" alignment="center" [width]="110"></dxi-column>
+      <dxi-column dataField="CustomerName" caption="Customer" dataType="string" alignment="left"></dxi-column>
+      <dxi-column dataField="ItemName" caption="ItemName" dataType="string" alignment="left"></dxi-column>
+      <dxi-column dataField="QtyOut" caption="QtyOut" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+      <dxi-column dataField="SaleRate" caption="SaleRate" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+      <dxi-column dataField="SaleAmount" caption="SaleAmount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+      <dxi-column dataField="CostRate" caption="CostRate" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+      <dxi-column dataField="CostAmount" caption="CostAmount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+      <dxi-column dataField="Profit_Loss" caption="Profit_Loss" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+
+      <dxo-summary>
+        <dxi-total-item column="SaleAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+        <dxi-total-item column="CostAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+        <dxi-total-item column="Profit_Loss" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+        <dxi-group-item column="SaleAmount" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+        <dxi-group-item column="CostAmount" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+        <dxi-group-item column="Profit_Loss" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+      </dxo-summary>
+
+      <!-- <dxi-column
+        dataField="button"
+        [fixed]="true"
+        [fixedPosition]="'right'"
+        [width]="100"
+        alignment="right"
+        caption="Action"
+        [allowEditing]="false"
+        [allowExporting]="false"
+        [allowFiltering]="false"
+        [allowFixing]="false"
+        [allowGrouping]="false"
+        [allowHeaderFiltering]="false"
+        [allowHiding]="false"
+        [allowReordering]="false"
+        [allowResizing]="false"
+        [allowSearch]="false"
+        [allowSorting]="false"
+        cellTemplate="buttonTemplate"
+      ></dxi-column> -->
+      <!-- <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+        <div class="d-con-cell-action"> -->
+      <!-- <dx-button type="default" stylingMode="text" hint="Approved Voucher" (onClick)="AeditClick(cellInfo.data)">
+            <i class="ri-checkbox-fill" style="height: 24px; width: 24px"></i>
+          </dx-button> -->
+
+      <!-- <dx-button type="danger" stylingMode="text" hint="102-Voucher Slip" (onClick)="onAccountReportPrint(cellInfo.data)">
+            <i class="ri-printer-line"></i>
+          </dx-button> -->
+      <!-- </div>
+      </div> -->
+      <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+    </dx-data-grid>
+  </div>
+</dx-popup>
+<!-- End ProfitLoss Popup Here -->
+<!-- ProfitLoss Grid Start-->
+<div class="card-body">
+  <div class="row">
+    <!-- end col -->
+    <div class="col-xl-6 col-md-6 col-sm-12">
+      <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+        <div class="card-header">
+          <div class="d-flex justify-content-between">
+            <div class="">
+              <h3>Trading Profit/Loss</h3>
+            </div>
+            <div class="">
+              <dx-button class="ml-3 mb-3" type="default" text="Detail Report" (onClick)="ShowProfitLossDetailReport()" style="background-color: #30ba52"></dx-button>
+            </div>
+          </div>
+
+          <dx-data-grid
+            style="height: 450px"
+            id="gridContainer"
+            [dataSource]="dataSource"
+            [showColumnLines]="false"
+            [showRowLines]="true"
+            [rowAlternationEnabled]="false"
+            [allowColumnResizing]="true"
+            [columnAutoWidth]="true"
+            [showBorders]="false"
+          >
+            <dxo-grouping [contextMenuEnabled]="false"></dxo-grouping>
+            <dxo-group-panel [visible]="false"></dxo-group-panel>
+            <dxo-filter-row [visible]="filter"></dxo-filter-row>
+            <dxo-header-filter [visible]="filter"></dxo-header-filter>
+            <dxo-column-chooser [enabled]="false"></dxo-column-chooser>
+            <dxo-load-panel [enabled]="false"></dxo-load-panel>
+
+            <dxi-column dataField="ItemName" caption="Item" dataType="string"></dxi-column>
+            <dxi-column dataField="SaleQty" caption="SaleQty" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+            <dxi-column dataField="SaleAmount" caption="SaleAmount" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+            <dxi-column dataField="CostAmount" caption="CostAmount" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+            <dxi-column dataField="Profit_Loss" caption="Profit_Loss" cellTemplate="cellTemplate" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+            <div *dxTemplate="let cell of 'cellTemplate'">
+              <div style="font-weight: bold">{{ cell.text }}</div>
+            </div>
+            <dxo-summary>
+              <dxi-total-item column="SaleAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+              <dxi-total-item column="CostAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+              <dxi-total-item column="Profit_Loss" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            </dxo-summary>
+            <!-- <dxi-column
+              dataField="button"
+              [fixedPosition]="'right'"
+              alignment="center"
+              caption="MoreDetail"
+              width="45"
+              [allowEditing]="false"
+              [allowExporting]="false"
+              [allowFiltering]="false"
+              [allowFixing]="false"
+              [allowGrouping]="false"
+              [allowHeaderFiltering]="false"
+              [allowHiding]="false"
+              [allowReordering]="false"
+              [allowResizing]="false"
+              [allowSearch]="false"
+              [allowSorting]="false"
+              cellTemplate="buttonTemplate"
+            ></dxi-column>
+            <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+              <div class="d-con-cell-action">
+                <dx-button type="success" stylingMode="text" (onClick)="ShowProfitLossDetailReport(cellInfo.data)">
+                  <i class="ri-edit-2-line"></i>
+                </dx-button>
+              </div>
+            </div> -->
+            <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+          </dx-data-grid>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ProfitLoss Grid END-->

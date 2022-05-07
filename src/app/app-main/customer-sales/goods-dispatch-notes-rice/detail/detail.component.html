@@ -1,0 +1,39 @@
+<dx-data-grid
+  [dataSource]="gridDataSource"
+  [showColumnLines]="false"
+  [showRowLines]="true"
+  [rowAlternationEnabled]="true"
+  [allowColumnResizing]="true"
+  [allowColumnReordering]="true"
+  [columnAutoWidth]="true"
+  [showBorders]="true"
+  [wordWrapEnabled]="false"
+>
+  <dxi-column dataField="SaleOrderNo" caption="Order No" dataType="number" alignment="left" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="WareHouseCode" caption="WareHouse" dataType="string" alignment="left"></dxi-column>
+  <dxi-column dataField="Item" caption="Item Name" dataType="string" alignment="left"></dxi-column>
+  <dxi-column dataField="PackingType" caption="Pack Type" dataType="string" alignment="left"></dxi-column>
+  <dxi-column dataField="CropYear" caption="Crop Year" dataType="string" alignment="left"></dxi-column>
+  <dxi-column dataField="JobLot" caption="JobLot" dataType="string" alignment="left"></dxi-column>
+  <dxi-column dataField="UOMEquivalent" caption="UOM" dataType="number" alignment="left"></dxi-column>
+  <dxi-column dataField="ItemQty" caption="Qty" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="GrossWeight" caption="Gross Weight" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="EBWPerUnit" caption="EBWPer Unit" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+  <dxi-column dataField="EBWTotal" caption="EBWTotal" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+  <dxi-column dataField="WtCut" caption="WtCut" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+  <dxi-column dataField="WtCutTotal" caption="WtCutTotal" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+  <dxi-column dataField="AdLsWeight" caption="Ad/Ls Weight" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+  <dxi-column dataField="NetBillWeight" caption="Bill Weight" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="StockWeight" caption="Stock Weight" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="LabReportRef" caption="Lab No" dataType="string" alignment="left"></dxi-column>
+  <dxi-column dataField="AreaCity" caption="AreaCity" dataType="string" alignment="left"></dxi-column>
+  <dxo-summary>
+    <dxi-total-item column="WtCutTotal" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+    <dxi-total-item column="NetBillWeight" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+    <dxi-total-item column="StockWeight" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+    <dxi-total-item column="GrossWeight" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+    <dxi-total-item column="ItemQty" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+    <dxi-total-item column="EBWTotal" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+  </dxo-summary>
+  <dxo-scrolling [scrollByContent]="true" [scrollByThumb]="true" [showScrollbar]="'always'" [scrollLeft]="true" mode="infinite"></dxo-scrolling>
+</dx-data-grid>

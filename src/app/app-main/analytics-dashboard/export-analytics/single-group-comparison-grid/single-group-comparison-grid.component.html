@@ -1,0 +1,95 @@
+<dx-popup
+  width="95%"
+  [height]="HeightOfPopupWithGrid"
+  [position]="'center'"
+  [showTitle]="true"
+  titleTemplate="titleTemplate"
+  [dragEnabled]="true"
+  [showCloseButton]="true"
+  [closeOnOutsideClick]="false"
+  [(visible)]="singleGroupComparisonReportPopupVisible"
+  [animation]="{ hide: { type: 'slideOut', direction: 'right', duration: 1000 }, show: { type: 'slideIn', direction: 'left', duration: 1500 } }"
+>
+  <div *dxTemplate="let content of 'titleTemplate'" class="d-flex justify-content-between">
+    <div class="">
+      <div class="text-center">
+        <h4 style="font-weight: bold; font-family: cursive">
+          {{ ComparisonName }}
+        </h4>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-end">
+      <!-- <dx-button class="p-0 mr-1 border-0" type="transparent" (onClick)="filtering()" icon="filter"></dx-button> -->
+      <dx-button class="p-0 border-0" type="transparent" (onClick)="ClosePopup()" icon="close"></dx-button>
+    </div>
+  </div>
+  <div *dxTemplate="let data of 'content'">
+    <dx-data-grid
+      #popupGrid
+      width="100%"
+      height="98%"
+      id="GridWithHeading"
+      [dataSource]="dataSource"
+      [showColumnLines]="false"
+      [showRowLines]="true"
+      [rowAlternationEnabled]="true"
+      [allowColumnResizing]="true"
+      [columnAutoWidth]="true"
+      [showBorders]="true"
+      (onToolbarPreparing)="singleGroupComparisonGridToolbarPreparing($event)"
+    >
+      <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+      <dxo-load-panel [enabled]="true"></dxo-load-panel>
+      <dxo-paging [enabled]="true"></dxo-paging>
+      <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, dataSource.length]" [showInfo]="true"></dxo-pager>
+      <dxo-filter-row [visible]="filter"></dxo-filter-row>
+      <dxo-header-filter [visible]="filter"></dxo-header-filter>
+      <div *dxTemplate="let data of 'ExportAnalyticsSingleGroupGridTemplate'">
+        <div class="HeadingDiv text-center">
+          <h4 class="Heading" style="font-weight: bold; color: whitesmoke">Total Export = {{ totalExport }} (M.Ton)</h4>
+          <!-- <h3 class="count">{{ OutstandingPaddyPurchaseOrderDataCount }}</h3> -->
+        </div>
+      </div>
+      <!-- <dxo-selection mode="multiple" selectAllMode="page" showCheckBoxesMode="always"></dxo-selection> -->
+      <dxi-column dataField="Id" caption="Id" dataType="number" [visible]="false"></dxi-column>
+      <!-- <dxi-column dataField="VarietyName" caption="VarietyName" dataType="string" alignment="left"></dxi-column> -->
+      <dxi-column dataField="GroupName" caption="{{ FirstGroupCaption }}" dataType="string" alignment="left"></dxi-column>
+      <dxi-column dataField="MTons" caption="MTons" cellTemplate="cellTemplate" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+      <dxi-column dataField="PrctExport" caption="% of T.Export" cellTemplate="SupplierNameTemplate" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+      <dxi-column dataField="FcyCode" caption="Fcy Code" cellTemplate="cellTemplate" dataType="string" alignment="left"></dxi-column>
+      <dxi-column dataField="AvgPrice" caption="Avg Fcy Rate" cellTemplate="cellTemplate" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+      <dxi-column dataField="Fcy_Amount" caption="Fcy Amount" cellTemplate="cellTemplate" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+      <dxi-column dataField="FcrAvgRate" caption="Avg Exchage Rate" cellTemplate="cellTemplate" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+      <dxi-column dataField="PKR_Amount" caption="PKR Amount" cellTemplate="cellTemplate" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+      <div *dxTemplate="let cell of 'cellTemplate'">
+        <div id="abcdedf">{{ cell.text }}</div>
+      </div>
+      <div *dxTemplate="let cell of 'SupplierNameTemplate'">
+        <div id="lkjfljdf">{{ cell.text }}</div>
+      </div>
+      <div *dxTemplate="let cell of 'GpNoTemplate'">
+        <div id="abcdedf" style="font-weight: bolder; font-size: medium">{{ cell.text }}</div>
+      </div>
+      <div *dxTemplate="let cellInfo of 'StatusTemplate'">
+        <div *ngIf="cellInfo.text == 'Open'">
+          <span class="badge badge-warning">Open</span>
+        </div>
+        <div *ngIf="cellInfo.text == 'Complete'">
+          <span class="badge badge-info">Complete</span>
+        </div>
+      </div>
+      <dxo-summary>
+        <dxi-total-item column="MTons" summaryType="sum" name="MTons" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+        <dxi-total-item column="PrctExport" summaryType="sum" name="PrctExport" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+        <dxi-total-item column="Fcy_Amount" summaryType="sum" name="Fcy_Amount" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+        <dxi-total-item column="PKR_Amount" summaryType="sum" name="PKR_Amount" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+        <dxi-group-item column="MTons" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+        <dxi-group-item column="PrctExport" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+        <dxi-group-item column="Fcy_Amount" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+        <dxi-group-item column="PKR_Amount" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+      </dxo-summary>
+      <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+    </dx-data-grid>
+  </div>
+</dx-popup>

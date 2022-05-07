@@ -1,0 +1,109 @@
+<div class="container-fluid">
+  <!-- start page title -->
+  <app-pagetitle title="Opening Balance" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+  <!-- end page title -->
+
+  <div class="row">
+    <!-- end col -->
+    <dx-button id="filter" class="ml-3 mb-3" type="default" text="Add New" icon="plus" (onClick)="addData()"> </dx-button>
+  </div>
+  <div class="row">
+    <div class="col-md-12" stickyGrid>
+      <div class="card p-2 rounded">
+        <dx-data-grid
+          [height]="gridHeight"
+          id="GridWithHeading"
+          [dataSource]="dataSource"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+          (onToolbarPreparing)="onToolbarPreparing($event)"
+        >
+          <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-load-panel [enabled]="true"></dxo-load-panel>
+          <dxo-filter-row [visible]="filter"></dxo-filter-row>
+          <dxo-header-filter [visible]="filter"></dxo-header-filter>
+          <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('AccountsOpeningBalanceHistoryGrid') }}"></dxo-state-storing>
+
+          <dxo-export [enabled]="true" fileName="AccountsOpeningBalance" [allowExportSelectedData]="true">
+            <dxo-texts exportAll="Export All Rows"></dxo-texts>
+          </dxo-export>
+          <dxo-paging [enabled]="true"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="lengthOfDataSource" [showInfo]="true"></dxo-pager>
+          <dxi-column dataField="Id" caption="Id" dataType="number" [visible]="false"></dxi-column>
+          <dxi-column dataField="AccountCode" caption="Account Code " dataType="number" alignment="left"></dxi-column>
+          <dxi-column dataField="ChartOfAccountTitle" caption="Account Title" dataType="string"></dxi-column>
+          <dxi-column dataField="YearObDebit" caption="Debit" cellTemplate="BoldTemplate" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="YearObCredit" caption="Credit" cellTemplate="BoldTemplate" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+
+          <div *dxTemplate="let cell of 'BoldTemplate'">
+            <div style="font-weight: bolder">{{ cell.text }}</div>
+          </div>
+
+          <dxo-summary>
+            <dxi-total-item column="YearObDebit" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="YearObCredit" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+          </dxo-summary>
+
+          <dxo-scrolling mode="infinite"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <dx-popup [width]="480" [height]="280" [showTitle]="true" title="Opening Balance" [dragEnabled]="true" [closeOnOutsideClick]="false" [(visible)]="formPopup" (onShown)="setFocus()">
+        <div *dxTemplate="let data of 'content'">
+          <dx-form id="form" [formData]="openingbalanceFormData" #openingbalanceForm>
+            <dxi-item itemType="group" cssClass="second-group" [colCount]="1">
+              <dxi-item
+                dataField="AccountName"
+                editorType="dxSelectBox"
+                [editorOptions]="{
+                  dataSource: accountList,
+                  valueExpr: 'Id',
+                  displayExpr: 'ChartOfAccountTitle',
+                  searchEnabled: true,
+                  onValueChanged: handleChange
+                }"
+              >
+                <dxi-validation-rule type="required" message="Account is required"></dxi-validation-rule>
+              </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group">
+              <dxi-item
+                dataField="Debit"
+                editorType="dxNumberBox"
+                [editorOptions]="{
+                  onValueChanged: handleDebitChange
+                }"
+              >
+                <dxi-validation-rule type="required" message="Debit Amount is required"></dxi-validation-rule>
+              </dxi-item>
+              <dxi-item
+                dataField="Credit"
+                editorType="dxNumberBox"
+                [editorOptions]="{
+                  onValueChanged: handleCreditChange
+                }"
+              >
+                <dxi-validation-rule type="required" message="Credit Amount is required"></dxi-validation-rule>
+              </dxi-item>
+            </dxi-item>
+          </dx-form>
+          <div class="mt-4 d-flex justify-content-end">
+            <dx-button (onClick)="Submit()" type="success" icon="save" text="Save"></dx-button>
+            <div class="m-1"></div>
+            <dx-button icon="remove" type="danger" text="Close" (onClick)="cancel()"></dx-button>
+          </div>
+        </div>
+      </dx-popup>
+    </div>
+  </div>
+</div>

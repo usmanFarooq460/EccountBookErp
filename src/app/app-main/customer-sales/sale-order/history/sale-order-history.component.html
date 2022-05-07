@@ -1,0 +1,142 @@
+<div class="container-fluid" #MAINPAGE>
+  <!-- start page title -->
+  <app-pagetitle title="Sale Order-Rice" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+  <!-- end page title -->
+  <div class="row">
+    <div class="col-md-12 d-flex justify-content-start">
+      <dx-button id="filter" class="ml-3 mb-3" type="default" text="Add New" icon="plus" (onClick)="GoToForm()"> </dx-button>
+      <!-- <dx-button class="ml-3 mb-3" type="success" text="Filters" (onClick)="filtering()" icon="filter"></dx-button> -->
+    </div>
+    <div class="col-md-12" [ngStyle]="{ height: gridColumnHeight }" #stickyGrid [class.sticky]="sticky">
+      <div class="card p-2 rounded">
+        <dx-data-grid
+          id="dataGrid"
+          #dataGrid
+          [height]="gridHeight"
+          [dataSource]="dataSource"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+          [allowColumnReordering]="true"
+          [noDataText]="'No Record Found'"
+          [focusedRowEnabled]="true"
+          keyExpr="Id"
+          [focusedRowIndex]="DataGridFocusedRowHandlerObject.FocusedRowIndex"
+          [allowColumnReordering]="true"
+          [autoNavigateToFocusedRow]="true"
+          (onKeyDown)="onKeyDown($event)"
+          (onRowDblClick)="handleRowDblClick($event)"
+          (onFocusedRowChanged)="setFocusedRowData($event)"
+          
+          
+          (onToolbarPreparing)="SaleOrderHistoryGridToolbarPreparing($event)"
+        >
+          <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-load-panel [enabled]="true"></dxo-load-panel>
+          <dxo-filter-row [visible]="filter"></dxo-filter-row>
+          <dxo-header-filter [visible]="filter"></dxo-header-filter>
+          <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('SaleOrderRiceHistoryGrid') }}"></dxo-state-storing>
+          <dxi-column dataField="Sr#" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+          <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+            <div class="d-con-cell-action">
+              <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+            </div>
+          </div>
+          <dxi-column dataField="Id" caption="Id" [visible]="false"></dxi-column>
+          <dxi-column dataField="DocNo" caption="Doc No." dataTaype="number" alignment="left"></dxi-column>
+          <dxi-column dataField="SupplierName" caption="Supplier Name" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="TermsDescription" caption="Payment Terms" cellTemplate="PaymentTermsTemplate" dataType="string" alignment="left"></dxi-column>
+          <div *dxTemplate="let cellInfo of 'PaymentTermsTemplate'">
+            <div class="d-block text-left align-items-center m-0" *ngIf="cellInfo.text == 'Cash'">
+              <span style="font-weight: bold">{{ cellInfo.text }} </span>
+              <span class="text-info" style="font-size: large; margin-left: 13px"><i class="ri-currency-fill"></i></span>
+            </div>
+            <div class="d-block text-left align-items-center m-0" *ngIf="cellInfo.text == 'Credit'">
+              <span style="font-weight: bold">{{ cellInfo.text }} </span>
+              <span class="text-warning" style="font-size: large; margin-left: 5px"><i class="ri-bank-card-line"></i></span>
+            </div>
+          </div>
+          <dxi-column dataField="DueDate" caption="Due Date" dataType="date" [format]="'dd-MMM-yyyy'" alignment="center" [width]="110"></dxi-column>
+          <dxi-column dataField="DueDays" caption="Due Days" dataType="number" alignment="right"></dxi-column>
+          <dxi-column dataField="DeliveryTerm" caption="Delivery Term" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="DeliveryStartDate" [visible]="false" caption="Delivery Start Date" dataType="date" [format]="'dd-MMM-yyyy'" alignment="center" [width]="110"></dxi-column>
+          <dxi-column dataField="OrderExpiryDate" caption="Order Expiry Date" dataType="date" [format]="'dd-MMM-yyyy'" alignment="center" [width]="110"></dxi-column>
+          <dxi-column dataField="DeliveryDays" caption="Delivery Days" dataType="number" alignment="right"></dxi-column>
+          <dxi-column dataField="CommissionType" caption="CommissionType" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="CommRate" caption="CommRate" dataType="number" alignment="right"></dxi-column>
+          <dxi-column dataField="CommAmount" caption="CommAmount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="CommissionRemarks" caption="CommRemarks" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="OrderStatus" cellTemplate="statusTemplate" caption="Status" dataType="string" alignment="left"></dxi-column>
+          <div *dxTemplate="let cellInfo of 'statusTemplate'">
+            <div *ngIf="cellInfo.text == 'Open'">
+              <span class="badge badge-warning">Open</span>
+            </div>
+            <div *ngIf="cellInfo.text == 'Complete'">
+              <span class="badge badge-success">Completed</span>
+            </div>
+            <div *ngIf="cellInfo.text == 'Cancel'">
+              <span class="badge badge-danger">Canceled</span>
+            </div>
+          </div>
+          <dxi-column dataField="IsAproved" caption="Approval" [width]="85" dataType="boolean" [fixed]="true" [fixedPosition]="'right'" cellTemplate="approvalTemplate" alignment="center"></dxi-column>
+          <div *dxTemplate="let cellInfo of 'approvalTemplate'">
+            <div *ngIf="cellInfo.value == true; else falseStatus">
+              <span class="badge badge-success">Approved</span>
+            </div>
+            <ng-template #falseStatus class="badge badge-danger"> <span class="badge badge-danger">UnApproved</span></ng-template>
+          </div>
+          <dxi-column dataField="RemarksHeader" caption="Remarks" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="UserName" caption="UserName" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="NoOfAttachments" caption="Attachments" dataType="any" alignment="right"></dxi-column>
+          <dxi-column
+            dataField="button"
+            [fixed]="true"
+            [fixedPosition]="'right'"
+            [width]="90"
+            alignment="center"
+            caption="Action"
+            [allowEditing]="false"
+            [allowExporting]="false"
+            [allowFiltering]="false"
+            [allowFixing]="false"
+            [allowGrouping]="false"
+            [allowHeaderFiltering]="false"
+            [allowHiding]="false"
+            [allowReordering]="false"
+            [allowResizing]="false"
+            [allowSearch]="false"
+            [allowSorting]="false"
+            cellTemplate="buttonTemplate"
+          ></dxi-column>
+          <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+            <div class="d-con-cell-action">
+              <dx-button type="default" stylingMode="text" (onClick)="onEdit(cellInfo.data)">
+                <i class="ri-edit-2-line"></i>
+              </dx-button>
+              <dx-button type="danger" stylingMode="text" (onClick)="onPrint(cellInfo.data)">
+                <i class="ri-printer-line"></i>
+              </dx-button>
+            </div>
+          </div>
+          <dxo-summary>
+            <dxi-total-item column="Sr#" summaryType="count" displayFormat="{0}"> </dxi-total-item>
+           </dxo-summary>
+          <dxo-export [enabled]="true" [allowExportSelectedData]="true"></dxo-export>
+          <!-- <dxo-scrolling [useNative]="false" [rowRenderingMode]="'standard'" [scrollByContent]="true" [mode]="'standard'" [scrollByThumb]="true" showScrollbar="always"></dxo-scrolling> -->
+          <dxo-scrolling mode="infinite" [scrollByContent]="true" [scrollByThumb]="true" [showScrollbar]="'always'"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="checkClick($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+<div class="custom-card p-0 m-0">
+    <div class="custom-card-header">
+      <div class="CompTitle">
+        <p class="p-0 m-0 text-truncate">
+          {{CardHeading}}
+        </p>
+      </div>
+    </div>
+    <div class="approval-numbers-cards" [ngClass]="MostUsedMethods.GetClassNameForCardBackground(Index+1, 'ClassForBackground')">
+      <h5 class="text-center">{{MostUsedMethods.FormatNumber(CardValue)}}</h5>
+    </div>
+    <!-- <div class="card-footer">
+      <p (click)="OpenApprovalDashboardByCompanyId(item)">
+        Approval Dashboard
+        <i class="ri-arrow-right-fill icons"  [ngClass]="MostUsedMethods.GetClassNameForCardBackground(i+1, 'ClassForIcon')"></i>
+      </p>
+    </div> -->
+  </div>

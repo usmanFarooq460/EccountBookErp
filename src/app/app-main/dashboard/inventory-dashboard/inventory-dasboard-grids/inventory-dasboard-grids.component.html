@@ -1,0 +1,287 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="row card m-0 p-0" *ngFor="let OrderDescription of DataSourceForOrdersByParentCategoryCards">
+        <hr />
+        <div class="col-md-12 d-flex justify-content-center m-0 p-0" *ngIf="mainCardTitleVisible" [@bounceInDown]>
+          <div class="m-0 p-0">
+            <h4 style="font-weight: bold; font-family: cursive; font-size: large; letter-spacing: 2px; margin: 0; padding: 0">{{ OrderDescription[0][0].OrderDescription }}</h4>
+          </div>
+        </div>
+        <hr />
+        <div class="col-md-12 card-body m-0 p-0">
+          <div class="row m-0 p-0">
+            <div class="col-md-6 col-sm-12" *ngFor="let OrderCategory of OrderDescription">
+              <div class="row">
+                <div class="col-xl-12 col-md-12">
+                  <div class="">
+                    <!-- end col -->
+
+                    <div class="card shadow-lg p-1 mb-2 bg-white rounded" *ngIf="getBounceInDownVisisbility(OrderCategory[0].OrderDescriptionId, OrderCategory[0].Id)" [@bounceInDown]>
+                      <!-- <div class="d-flex justify-content-center">
+              <div class="">
+                <h4 style="font-family: cursive; font-weight: bold">{{ "Purchase" }}</h4>
+              </div>
+            </div> -->
+                      <div class="card-header" [ngClass]="getClass(OrderCategory[0].OrderDescriptionId, OrderCategory[0].Id)">
+                        <h3>
+                          {{ OrderCategory[0].OrderCategory }}
+                          <!-- <dx-button type="danger" stylingMode="text" style="color: rgb(235, 235, 232)" id="totalExportToolTipButton" (onClick)="showFirstToolTip()">
+                  <i class="fa fa-question-circle"></i>
+                </dx-button> -->
+                        </h3>
+                        <!-- <dx-button class="ml-3 mb-3" (onClick)="showFirstToolTip()" icon="fa fa-question-circle" id="totalExportToolTipButton"></dx-button> -->
+                        <!-- <dx-tooltip target="#totalExportToolTipButton" [(visible)]="totalContractToolTipValue" [closeOnOutsideClick]="false">
+                <div *dxTemplate="let data = data; of: 'content'"></div>
+              </dx-tooltip> -->
+                        <dx-data-grid
+                          style="height: 120px"
+                          id="{{ getId(OrderCategory[0].OrderDescriptionId, OrderCategory[0].Id) }}"
+                          [dataSource]="OrderCategory"
+                          [showColumnLines]="false"
+                          [showRowLines]="true"
+                          [rowAlternationEnabled]="false"
+                          [allowColumnResizing]="true"
+                          [columnAutoWidth]="true"
+                          [showBorders]="false"
+                        >
+                          <dxi-column dataField="Id" caption="Id" dataType="number" [visible]="false"></dxi-column>
+                          <dxi-column dataField="OrderCategory" caption="OrderCategory" [visible]="false" dataType="string" alignment="left"></dxi-column>
+                          <dxi-column dataField="CropYear" caption="CropYear" dataType="string" alignment="center"></dxi-column>
+                          <dxi-column dataField="Qty" caption="Qty" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                          <dxi-column dataField="NetWeight" caption="NetWeight" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                          <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+                        </dx-data-grid>
+                        <a class="small-box-footer p-0 m-0" data-toggle="tooltip" data-placement="top" title="Click For Open Sales Contract Detail Report">
+                          More info <i id="footer-icon" class="fas fa-arrow-circle-right" style="color: white; cursor: pointer" (click)="OpenDetailReport(OrderCategory[0])"></i>
+                        </a>
+                      </div>
+                    </div>
+                    <div class="card shadow-lg p-1 mb-2 bg-white rounded" *ngIf="getBounceInUpVisibility(OrderCategory[0].OrderDescriptionId, OrderCategory[0].Id)" [@bounceInUp]>
+                      <!-- <div class="d-flex justify-content-center">
+              <div class="">
+                <h4 style="font-family: cursive; font-weight: bold">{{ "Purchase" }}</h4>
+              </div>
+            </div> -->
+                      <div class="card-header" [ngClass]="getClass(OrderCategory[0].OrderDescriptionId, OrderCategory[0].Id)">
+                        <h3>
+                          {{ OrderCategory[0].OrderCategory }}
+                          <!-- <dx-button type="danger" stylingMode="text" style="color: rgb(235, 235, 232)" id="totalExportToolTipButton" (onClick)="showFirstToolTip()">
+                  <i class="fa fa-question-circle"></i>
+                </dx-button> -->
+                        </h3>
+                        <!-- <dx-button class="ml-3 mb-3" (onClick)="showFirstToolTip()" icon="fa fa-question-circle" id="totalExportToolTipButton"></dx-button> -->
+                        <!-- <dx-tooltip target="#totalExportToolTipButton" [(visible)]="totalContractToolTipValue" [closeOnOutsideClick]="false">
+                <div *dxTemplate="let data = data; of: 'content'"></div>
+              </dx-tooltip> -->
+                        <dx-data-grid
+                          style="height: 120px"
+                          id="{{ getId(OrderCategory[0].OrderDescriptionId, OrderCategory[0].Id) }}"
+                          [dataSource]="OrderCategory"
+                          [showColumnLines]="false"
+                          [showRowLines]="true"
+                          [rowAlternationEnabled]="false"
+                          [allowColumnResizing]="true"
+                          [columnAutoWidth]="true"
+                          [showBorders]="false"
+                        >
+                          <dxi-column dataField="Id" caption="Id" dataType="number" [visible]="false"></dxi-column>
+                          <dxi-column dataField="OrderCategory" caption="OrderCategory" [visible]="false" dataType="string" alignment="left"></dxi-column>
+                          <dxi-column dataField="CropYear" caption="CropYear" dataType="string" alignment="center"></dxi-column>
+                          <dxi-column dataField="Qty" caption="Qty" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                          <dxi-column dataField="NetWeight" caption="NetWeight" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                          <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+                        </dx-data-grid>
+                        <a class="small-box-footer p-0 m-0" data-toggle="tooltip" data-placement="top" title="Click For Open Sales Contract Detail Report">
+                          More info <i id="footer-icon" class="fas fa-arrow-circle-right" style="color: white; cursor: pointer" (click)="OpenDetailReport(OrderCategory[0])"></i>
+                        </a>
+                      </div>
+                    </div>
+                    <div class="card shadow-lg p-1 mb-2 bg-white rounded" *ngIf="getBounceInLeftVisibility(OrderCategory[0].OrderDescriptionId, OrderCategory[0].Id)" [@bounceInLeft]>
+                      <!-- <div class="d-flex justify-content-center">
+              <div class="">
+                <h4 style="font-family: cursive; font-weight: bold">{{ "Purchase" }}</h4>
+              </div>
+            </div> -->
+                      <div class="card-header" [ngClass]="getClass(OrderCategory[0].OrderDescriptionId, OrderCategory[0].Id)">
+                        <h3>
+                          {{ OrderCategory[0].OrderCategory }}
+                          <!-- <dx-button type="danger" stylingMode="text" style="color: rgb(235, 235, 232)" id="totalExportToolTipButton" (onClick)="showFirstToolTip()">
+                  <i class="fa fa-question-circle"></i>
+                </dx-button> -->
+                        </h3>
+                        <!-- <dx-button class="ml-3 mb-3" (onClick)="showFirstToolTip()" icon="fa fa-question-circle" id="totalExportToolTipButton"></dx-button> -->
+                        <!-- <dx-tooltip target="#totalExportToolTipButton" [(visible)]="totalContractToolTipValue" [closeOnOutsideClick]="false">
+                <div *dxTemplate="let data = data; of: 'content'"></div>
+              </dx-tooltip> -->
+                        <dx-data-grid
+                          style="height: 120px"
+                          id="{{ getId(OrderCategory[0].OrderDescriptionId, OrderCategory[0].Id) }}"
+                          [dataSource]="OrderCategory"
+                          [showColumnLines]="false"
+                          [showRowLines]="true"
+                          [rowAlternationEnabled]="false"
+                          [allowColumnResizing]="true"
+                          [columnAutoWidth]="true"
+                          [showBorders]="false"
+                        >
+                          <dxi-column dataField="Id" caption="Id" dataType="number" [visible]="false"></dxi-column>
+                          <dxi-column dataField="OrderCategory" caption="OrderCategory" [visible]="false" dataType="string" alignment="left"></dxi-column>
+                          <dxi-column dataField="CropYear" caption="CropYear" dataType="string" alignment="center"></dxi-column>
+                          <dxi-column dataField="Qty" caption="Qty" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                          <dxi-column dataField="NetWeight" caption="NetWeight" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                          <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+                        </dx-data-grid>
+                        <a class="small-box-footer p-0 m-0" data-toggle="tooltip" data-placement="top" title="Click For Open Sales Contract Detail Report">
+                          More info <i id="footer-icon" class="fas fa-arrow-circle-right" style="color: white; cursor: pointer" (click)="OpenDetailReport(OrderCategory[0])"></i>
+                        </a>
+                      </div>
+                    </div>
+                    <div class="card shadow-lg p-1 mb-2 bg-white rounded" *ngIf="getBounceInRightVisibility(OrderCategory[0].OrderDescriptionId, OrderCategory[0].Id)" [@bounceInRight]>
+                      <!-- <div class="d-flex justify-content-center">
+              <div class="">
+                <h4 style="font-family: cursive; font-weight: bold">{{ "Purchase" }}</h4>
+              </div>
+            </div> -->
+                      <div class="card-header" [ngClass]="getClass(OrderCategory[0].OrderDescriptionId, OrderCategory[0].Id)">
+                        <h3>
+                          {{ OrderCategory[0].OrderCategory }}
+                          <!-- <dx-button type="danger" stylingMode="text" style="color: rgb(235, 235, 232)" id="totalExportToolTipButton" (onClick)="showFirstToolTip()">
+                  <i class="fa fa-question-circle"></i>
+                </dx-button> -->
+                        </h3>
+                        <!-- <dx-button class="ml-3 mb-3" (onClick)="showFirstToolTip()" icon="fa fa-question-circle" id="totalExportToolTipButton"></dx-button> -->
+                        <!-- <dx-tooltip target="#totalExportToolTipButton" [(visible)]="totalContractToolTipValue" [closeOnOutsideClick]="false">
+                <div *dxTemplate="let data = data; of: 'content'"></div>
+              </dx-tooltip> -->
+                        <dx-data-grid
+                          style="height: 120px"
+                          id="{{ getId(OrderCategory[0].OrderDescriptionId, OrderCategory[0].Id) }}"
+                          [dataSource]="OrderCategory"
+                          [showColumnLines]="false"
+                          [showRowLines]="true"
+                          [rowAlternationEnabled]="false"
+                          [allowColumnResizing]="true"
+                          [columnAutoWidth]="true"
+                          [showBorders]="false"
+                        >
+                          <dxi-column dataField="Id" caption="Id" dataType="number" [visible]="false"></dxi-column>
+                          <dxi-column dataField="OrderCategory" caption="OrderCategory" [visible]="false" dataType="string" alignment="left"></dxi-column>
+                          <dxi-column dataField="CropYear" caption="CropYear" dataType="string" alignment="center"></dxi-column>
+                          <dxi-column dataField="Qty" caption="Qty" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                          <dxi-column dataField="NetWeight" caption="NetWeight" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                          <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+                        </dx-data-grid>
+                        <a class="small-box-footer p-0 m-0" data-toggle="tooltip" data-placement="top" title="Click For Open Sales Contract Detail Report">
+                          More info <i id="footer-icon" class="fas fa-arrow-circle-right" style="color: white; cursor: pointer" (click)="OpenDetailReport(OrderCategory[0])"></i>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- ENd Aproval Cards Here -->
+                  <div class="card-footer center"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <dx-popup
+        [width]="ApprovalPopupWidth"
+        [height]="ApprovalPopupHeight"
+        [position]="'center'"
+        [showTitle]="true"
+        titleTemplate="titleTemplate"
+        [dragEnabled]="true"
+        [showCloseButton]="true"
+        [closeOnOutsideClick]="false"
+        [(visible)]="popupVisible"
+        [animation]="{ hide: { type: 'slideOut', direction: 'right', duration: 1000 }, show: { type: 'slideIn', direction: 'left', duration: 1500 } }"
+      >
+        <div *dxTemplate="let content of 'titleTemplate'" class="d-flex justify-content-between">
+          <div class="d-flex justify-content-center">
+            <div class="">
+              <h4 style="font-weight: bold; font-family: cursive">
+                {{
+                  detailDataSourceForOrdersByParentCategory.length > 0
+                    ? detailDataSourceForOrdersByParentCategory[0].OrderDescription + " (" + detailDataSourceForOrdersByParentCategory[0].InvParentCateDescription + ")"
+                    : ""
+                }}
+              </h4>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end">
+            <dx-button class="p-0 mr-1 border-0" type="transparent" (onClick)="filtering()" icon="filter"></dx-button>
+            <dx-button class="p-0 border-0" type="transparent" (onClick)="ClosePopup()" icon="close"></dx-button>
+          </div>
+        </div>
+        <div *dxTemplate="let data of 'content'">
+          <dx-data-grid
+            #popupGrid
+            [width]="ApprovalPopupGridWidth"
+            height="100%"
+            id="gridContainer"
+            [dataSource]="detailDataSourceForOrdersByParentCategory"
+            [showColumnLines]="false"
+            [showRowLines]="true"
+            [rowAlternationEnabled]="true"
+            [allowColumnResizing]="true"
+            [columnAutoWidth]="true"
+            [showBorders]="true"
+          >
+            <dxo-load-panel [enabled]="true"></dxo-load-panel>
+            <dxo-paging [enabled]="true"></dxo-paging>
+            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, detailDataSourceForOrdersByParentCategory.length]" [showInfo]="true"></dxo-pager>
+            <dxo-filter-row [visible]="filter"></dxo-filter-row>
+            <dxo-header-filter [visible]="filter"></dxo-header-filter>
+            <!-- <dxo-selection mode="multiple" selectAllMode="page" showCheckBoxesMode="always"></dxo-selection> -->
+            <dxi-column dataField="Id" caption="Id" dataType="number" [visible]="false"></dxi-column>
+            <!-- <dxi-column dataField="VarietyName" caption="VarietyName" dataType="string" alignment="left"></dxi-column> -->
+            <dxi-column dataField="DocDate" caption="Doc Date" dataType="date" [format]="'dd-MMM-yyyy'" alignment="center" [width]="110"></dxi-column>
+            <dxi-column dataField="DocNo" caption="DocNo" cellTemplate="GpNoTemplate" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+            <dxi-column dataField="CompanyName" caption="Party" cellTemplate="SupplierNameTemplate" dataType="string" alignment="left"></dxi-column>
+            <dxi-column dataField="ItemName" caption="Item" cellTemplate="SupplierNameTemplate" dataType="string" alignment="left"></dxi-column>
+            <dxi-column dataField="Crop" caption="Crop" cellTemplate="SupplierNameTemplate" dataType="string" alignment="center"></dxi-column>
+            <dxi-column dataField="ItemQty" caption="Qty" cellTemplate="cellTemplate" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+            <dxi-column dataField="NetWeight" caption="Net Weight" cellTemplate="cellTemplate" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+            <dxi-column
+              dataField="OrderStatus"
+              caption="DocType"
+              cellTemplate="StatusTemplate"
+              [fixed]="true"
+              [fixedPosition]="'right'"
+              alignment="center"
+              [width]="110"
+              dataType="string"
+            ></dxi-column>
+
+            <div *dxTemplate="let cell of 'cellTemplate'">
+              <div id="abcdedf">{{ cell.text }}</div>
+            </div>
+            <div *dxTemplate="let cell of 'SupplierNameTemplate'">
+              <div id="lkjfljdf">{{ cell.text }}</div>
+            </div>
+            <div *dxTemplate="let cell of 'GpNoTemplate'">
+              <div id="abcdedf" style="font-weight: bolder; font-size: medium">{{ cell.text }}</div>
+            </div>
+            <div *dxTemplate="let cellInfo of 'StatusTemplate'">
+              <div *ngIf="cellInfo.text == 'Open'">
+                <span class="badge badge-warning">Open</span>
+              </div>
+              <div *ngIf="cellInfo.text == 'Complete'">
+                <span class="badge badge-info">Complete</span>
+              </div>
+            </div>
+
+            <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+          </dx-data-grid>
+        </div>
+      </dx-popup>
+    </div>
+  </div>
+</div>

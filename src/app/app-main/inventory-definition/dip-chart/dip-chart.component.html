@@ -1,0 +1,276 @@
+<div class="container-fluid">
+  <!-- start page title -->
+  <app-pagetitle title="Dip Reading" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+  <!-- end page title -->
+  <dx-form id="form" [formData]="DipChartHistoryData" #DipChartHistoryForm [showRequiredMark]="false">
+    <dxi-item itemType="group" cssClass="second-group" [colCount]="6">
+      <dxi-item> </dxi-item>
+      <dxi-item
+        dataField="ItemId"
+        editorType="dxSelectBox"
+        [editorOptions]="{
+          items: itemList4History,
+          valueExpr: 'Id',
+          displayExpr: 'ItemName',
+          searchEnabled: true,
+          placeholder: 'Item'
+        }"
+      >
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        <dxi-validation-rule type="required" message="Item is required"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item
+        cssClass="px-1 m-0 "
+        dataField="FromDate"
+        editorType="dxDateBox"
+        [editorOptions]="{
+          placeholder: 'From Date',
+          displayFormat: 'dd-MMM-yyyy'
+        }"
+      >
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        <dxi-validation-rule type="required" message="From Date is required"></dxi-validation-rule>
+      </dxi-item>
+
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="ToDate"
+        editorType="dxDateBox"
+        [editorOptions]="{
+          placeholder: 'To Date',
+          displayFormat: 'dd-MMM-yyyy'
+        }"
+      >
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        <dxi-validation-rule type="required" message="To Date is required"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item>
+        <dx-button class="btn-sm" style="margin-top: 10px" text="Show" type="success" (onClick)="GetAllData()"></dx-button>
+      </dxi-item>
+    </dxi-item>
+  </dx-form>
+
+  <div class="row">
+    <dx-button id="filter" class="ml-3 mb-3" type="default" text="Add New" (onClick)="toggle()" icon="plus"> </dx-button>
+    <div class="dx-field">
+      <div class="dx-field-value-static">
+        <dx-popup
+          [width]="500"
+          [height]="430"
+          position="center"
+          [showTitle]="true"
+          titleTemplate="titleTemplate"
+          [dragEnabled]="true"
+          [showCloseButton]="true"
+          [closeOnOutsideClick]="false"
+          [(visible)]="optionsVisible"
+        >
+          <div *dxTemplate="let content of 'titleTemplate'" class="d-flex justify-content-between">
+            <div class="d-flex text-center">
+              <h4>Dip Reading</h4>
+            </div>
+            <!-- <div class="d-flex justify-content-end">
+          <dx-button class="p-0 mr-1 border-0" type="transparent" (onClick)="filtering()" icon="filter"></dx-button>
+          <dx-button class="p-0 border-0" type="transparent" (onClick)="closeAccountsPopupGrid()" icon="close"></dx-button>
+        </div> -->
+          </div>
+          <div *dxTemplate="let data of 'content'">
+            <dx-form id="form" [formData]="DipChartFormData" #DipChartForm [showRequiredMark]="false">
+              <dxi-item itemType="group" cssClass="second-group" [colCount]="2">
+                <dxi-item
+                  dataField="DocNo"
+                  editorType="dxNumberBox"
+                  [editorOptions]="{
+                    placeholder: 'Doc No',
+                    readOnly: true
+                  }"
+                >
+                  <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+                  <dxi-validation-rule type="required" message="Document No is required"></dxi-validation-rule>
+                </dxi-item>
+                <dxi-item
+                  dataField="DocDate"
+                  editorType="dxDateBox"
+                  [editorOptions]="{
+                    placeholder: 'DocDate',
+                    displayFormat: 'dd-MMM-yyyy'
+                  }"
+                >
+                  <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+                  <dxi-validation-rule type="required" message="Document Date is required"></dxi-validation-rule>
+                </dxi-item>
+              </dxi-item>
+              <dxi-item itemType="group" cssClass="second-group" [colCount]="1">
+                <dxi-item
+                  dataField="TankId"
+                  editorType="dxSelectBox"
+                  [editorOptions]="{
+                    placeholder: 'Tank Name',
+                    items: tankList,
+                    valueExpr: 'Id',
+                    displayExpr: 'name'
+                  }"
+                >
+                  <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+                  <dxi-validation-rule type="required" message="Tank is required"></dxi-validation-rule>
+                </dxi-item>
+              </dxi-item>
+              <dxi-item itemType="group" cssClass="second-group" [colCount]="2">
+                <dxi-item
+                  dataField="ItemId"
+                  editorType="dxSelectBox"
+                  [editorOptions]="{
+                    items: itemList,
+                    valueExpr: 'Id',
+                    displayExpr: 'ItemName',
+                    onValueChanged: GetUomByItemId,
+                    searchEnabled: true,
+                    placeholder: 'Item'
+                  }"
+                >
+                  <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+                  <dxi-validation-rule type="required" message="Item is required"></dxi-validation-rule>
+                </dxi-item>
+                <dxi-item
+                  dataField="ItemUomId"
+                  editorType="dxSelectBox"
+                  [editorOptions]="{
+                    items: uomList,
+                    valueExpr: 'Id',
+                    displayExpr: 'ScheduleUnitName',
+                    searchEnabled: true,
+                    placeholder: 'UOM'
+                  }"
+                >
+                  <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+                  <dxi-validation-rule type="required" message="UOM is required"></dxi-validation-rule>
+                </dxi-item>
+              </dxi-item>
+
+              <dxi-item itemType="group" cssClass="second-group" [colCount]="2">
+                <dxi-item dataField="BooksStock" editorType="dxNumberBox" [editorOptions]="{ onInput: calculateDifference, placeholder: 'BookStock' }">
+                  <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+                </dxi-item>
+                <dxi-item dataField="DipReadingStock" editorType="dxNumberBox" [editorOptions]="{ onInput: calculateDifference, placeholder: 'DipStock' }">
+                  <dxo-label text=" " location="top" [showColon]="false"> </dxo-label>
+                </dxi-item>
+              </dxi-item>
+              <dxi-item itemType="group" cssClass="second-group" [colCount]="2">
+                <dxi-item dataField="Difference" editorType="dxNumberBox" [editorOptions]="{ readOnly: true, placeholder: 'Difference' }">
+                  <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+                  <dxi-validation-rule type="required" message="Difference is required"></dxi-validation-rule
+                ></dxi-item>
+                <dxi-item dataField="StockTakenBy" editorType="dxTextBox" [editorOptions]="{ placeholder: 'StockTakenBy' }">
+                  <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+                  <dxi-validation-rule type="required" message="Stock Taker is required"></dxi-validation-rule
+                ></dxi-item>
+              </dxi-item>
+              <dxi-item itemType="group" cssClass="second-group" [colCount]="2">
+                <dxi-item
+                  [colSpan]="2"
+                  dataField="Remarks"
+                  editorType="dxTextBox"
+                  [editorOptions]="{
+                    placeholder: 'Remarks'
+                  }"
+                >
+                  <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+                  <dxi-validation-rule type="required" message="Remarks is required"></dxi-validation-rule>
+                </dxi-item>
+              </dxi-item>
+            </dx-form>
+            <div class="mt-4 d-flex justify-content-end">
+              <dx-button type="success" (onClick)="onSubmit()" icon="save" text="{{ DipChartParamsId ? 'Update' : 'Save' }}"> </dx-button>
+              <div class="m-1"></div>
+              <dx-button icon="close" text="Close" type="danger" (onClick)="clear()"></dx-button>
+            </div>
+          </div>
+        </dx-popup>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="card">
+        <dx-data-grid
+          id="gridContainer"
+          [dataSource]="dataSource"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+          (onToolbarPreparing)="onToolbarPreparing($event)"
+        >
+          <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-load-panel [enabled]="true"></dxo-load-panel>
+          <dxo-export [enabled]="true" fileName="Estimates" [allowExportSelectedData]="true">
+            <dxo-texts exportAll="Export All Rows"></dxo-texts>
+          </dxo-export>
+          <dxo-selection mode="multiple" selectAllMode="page" showCheckBoxesMode="always"></dxo-selection>
+          <dxo-paging [enabled]="true"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="lengthOfDataSource" [showInfo]="true"></dxo-pager>
+          <dxi-column dataField="" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+          <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+            <div class="d-con-cell-action">
+              <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+            </div>
+          </div>
+          <dxi-column dataField="DocNo" caption="DocNo" dataType="number" alignment="left"></dxi-column>
+          <dxi-column dataField="DocDate" caption="Doc Date" dataType="date" [format]="'dd-MMM-yyyy'"></dxi-column>
+          <dxi-column dataField="ItemName" caption="Item" dataType="string"></dxi-column>
+          <dxi-column dataField="ItemUOM" caption="UOM" dataType="string"></dxi-column>
+          <dxi-column dataField="BooksStock" caption="Books Stock" alignment="right" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="DipReadingStock" caption="Dip Stock" alignment="right" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="DiffStock" caption="Difference" alignment="right" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="StockTakenBy" caption="StockTaker" alignment="left" dataType="string"></dxi-column>
+          <dxi-column dataField="Remarks" caption="Remarks" alignment="left" dataType="string"></dxi-column>
+          <dxo-summary>
+            <dxi-total-item column="BooksStock" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="DipReadingStock" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-group-item column="BooksStock" summaryType="sum" displayFormat="{0}" [showInGroupFooter]="true" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+            <dxi-group-item column="DipReadingStock" summaryType="sum" displayFormat="{0}" [showInGroupFooter]="true" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+            <dxi-group-item column="DiffStock" summaryType="sum" displayFormat="{0}" [showInGroupFooter]="true" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+          </dxo-summary>
+          <dxi-column
+            dataField="button"
+            [fixed]="true"
+            [fixedPosition]="'right'"
+            [width]="70"
+            alignment="right"
+            caption="Action"
+            [allowEditing]="false"
+            [allowExporting]="false"
+            [allowFiltering]="false"
+            [allowFixing]="false"
+            [allowGrouping]="false"
+            [allowHeaderFiltering]="false"
+            [allowHiding]="true"
+            [allowReordering]="false"
+            [allowResizing]="false"
+            [allowSearch]="false"
+            [allowSorting]="false"
+            cellTemplate="buttonTemplate"
+          ></dxi-column>
+          <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+            <div class="d-con-cell-action">
+              <dx-button type="default" stylingMode="text" (onClick)="onEdit(cellInfo.data)">
+                <i class="ri-edit-2-line"></i>
+              </dx-button>
+              <dx-button type="danger" stylingMode="text" hint="296-Dip Reading Slip" (onClick)="InvDipReadingSlip296Slip(cellInfo.data)">
+                <i class="ri-printer-line"></i>
+              </dx-button>
+            </div>
+          </div>
+
+          <dxo-export [enabled]="true" [allowExportSelectedData]="true"></dxo-export>
+
+          <dxo-summary> </dxo-summary>
+          <dxo-scrolling [mode]="'infinite'"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+    </div>
+    <!-- end col -->
+  </div>
+</div>

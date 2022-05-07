@@ -1,0 +1,10 @@
+#abcdedf:hover {
+  transform: scale(1.2);
+  font-weight: bolder;
+  background-color: rgba(180, 252, 255, 0.857);
+}
+
+::ng-deep .dx-datagrid-rowsview .dx-master-detail-row:not(.dx-datagrid-edit-form) > .dx-datagrid-group-space,
+::ng-deep .dx-datagrid-rowsview .dx-master-detail-row:not(.dx-datagrid-edit-form) .dx-master-detail-cell {
+  background-color: rgba(207, 199, 199, 0.35) !important;
+}

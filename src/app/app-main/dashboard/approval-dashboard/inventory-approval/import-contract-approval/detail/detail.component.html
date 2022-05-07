@@ -1,0 +1,33 @@
+<dx-data-grid
+  [dataSource]="detailArray"
+  [showColumnLines]="false"
+  [showRowLines]="true"
+  [rowAlternationEnabled]="true"
+  [allowColumnResizing]="true"
+  [columnAutoWidth]="true"
+  [showBorders]="true"
+  [wordWrapEnabled]="false"
+>
+  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+  <dxo-grouping [contextMenuEnabled]="false"></dxo-grouping>
+  <dxo-group-panel [visible]="false"></dxo-group-panel>
+  <dxo-paging [enabled]="true"></dxo-paging>
+  <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15]" [showInfo]="true"></dxo-pager>
+  <dxi-column dataField="ItemName" caption="Item"></dxi-column>
+  <dxi-column dataField="ItemPackTypeDesc" caption="Pack Type"></dxi-column>
+
+  <dxi-column dataField="ItemNetWeight" caption="Qty/M.Ton" dataType="number"></dxi-column>
+  <dxi-column dataField="otrUomCode" caption="Pack Unit"></dxi-column>
+  <dxi-column dataField="NoOfUnit" caption="No Of Bags"></dxi-column>
+  <dxi-column dataField="RatePrice" caption="Cost/M.Ton" dataType="number"></dxi-column>
+
+  <dxi-column dataField="rtuomEquivalent" caption="Cost UOM"></dxi-column>
+  <dxi-column dataField="ItemAmount" caption="Total Amount" dataType="number" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+  <dxi-column dataField="ItemOtherDescription" caption="Special Desc"></dxi-column>
+  <dxo-summary>
+    <dxi-total-item column="NoOfUnit" summaryType="sum" name="NoOfUnit" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+    <dxi-total-item column="ItemNetWeight" summaryType="sum" name="NetWeight" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+    <dxi-total-item column="ItemAmount" summaryType="sum" name="RatePrice" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+  </dxo-summary>
+  <dxo-scrolling mode="infinite" [scrollByContent]="true" [scrollByThumb]="true"></dxo-scrolling>
+</dx-data-grid>

@@ -1,0 +1,147 @@
+<div class="container-fluid">
+  <!-- start page title -->
+  <app-pagetitle title="Item Pricing Schedule" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+  <!-- end page title -->
+  <div class="d-flex justify-content-between">
+    <div class="">
+      <dx-button id="filter" class="ml-3 mb-3" type="default" text="Add New" icon="plus" (onClick)="addData()"> </dx-button>
+    </div>
+  </div>
+  <div class="row">
+    <!-- end col -->
+    <div class="col-md-12">
+      <div class="card">
+        <dx-data-grid
+          id="gridContainer"
+          [dataSource]="dataSource"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="false"
+          (onToolbarPreparing)="onToolbarPreparing($event)"
+        >
+          <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-filter-row [visible]="filter"></dxo-filter-row>
+          <dxo-header-filter [visible]="filter"></dxo-header-filter>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-load-panel [enabled]="true"></dxo-load-panel>
+          <dxo-export [enabled]="true" fileName="Estimates" [allowExportSelectedData]="true">
+            <dxo-texts exportAll="Export All Rows"></dxo-texts>
+          </dxo-export>
+          <dxo-paging [enabled]="true"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true"></dxo-pager>
+          <dxi-column dataField="Id" caption="Id" dataType="number" [visible]="false"></dxi-column>
+          <dxi-column dataField="" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+          <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+            <div class="d-con-cell-action">
+              <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+            </div>
+          </div>
+          <dxi-column dataField="ScheduleDesc" caption="ScheduleDesc " dataType=" "></dxi-column>
+          <dxi-column dataField="ItemName" caption="ItemName" dataType=" "></dxi-column>
+          <dxi-column dataField="ItemPriceTypeDesc" caption="ItemPriceTypeDesc" dataType=""></dxi-column>
+          <dxi-column dataField="Price" caption="Price" dataType=""></dxi-column>
+          <dxi-column dataField="Equivalent" caption="Equivalent" dataType=""></dxi-column>
+          <dxi-column dataField="EffectedDate" caption="EffectedDate" dataType="date" [format]="'dd-MMM-yyyy'"></dxi-column>
+          <dxi-column
+            dataField="button"
+            [fixed]="true"
+            [fixedPosition]="'right'"
+            [width]="65"
+            alignment="left"
+            caption="Action"
+            [allowEditing]="false"
+            [allowExporting]="false"
+            [allowFiltering]="false"
+            [allowFixing]="false"
+            [allowGrouping]="false"
+            [allowHeaderFiltering]="false"
+            [allowHiding]="false"
+            [allowReordering]="false"
+            [allowResizing]="false"
+            [allowSearch]="false"
+            [allowSorting]="false"
+            cellTemplate="buttonTemplate"
+          ></dxi-column>
+          <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+            <div class="d-con-cell-action">
+              <dx-button type="default" stylingMode="text" (onClick)="editPopup(cellInfo.data)">
+                <i class="ri-edit-2-line"></i>
+              </dx-button>
+            </div>
+          </div>
+          <dxo-export [enabled]="true" [allowExportSelectedData]="true"></dxo-export>
+          <dxo-scrolling [mode]="'infinite'"></dxo-scrolling>
+        </dx-data-grid>
+        <dx-popup [width]="700" [height]="310" [showTitle]="true" title="Item Pricing Schedule" [dragEnabled]="true" [closeOnOutsideClick]="false" [(visible)]="formPopup" (onShown)="setFocus()">
+          <dx-form id="form" [formData]="ItemPricingScheduleFormData" #ItemPricingScheduleForm>
+            <dxi-item itemType="group" cssClass="second-group" [colCount]="3">
+              <dxi-item dataField="EffectedDate" editorType="dxDateBox" [editorOptions]="{ displayFormat: 'dd-MMM-yyyy' }">
+                <dxo-label text="EffectedDate" location="top"></dxo-label>
+                <dxi-validation-rule type="required" message="EffectedDate  is required"></dxi-validation-rule>
+              </dxi-item>
+              <dxi-item dataField="ScheduleDesc" editorType="dxTextBox">
+                <dxo-label text="Description" location="top"></dxo-label>
+                <dxi-validation-rule type="required" message="Description  is required"></dxi-validation-rule>
+              </dxi-item>
+              <dxi-item
+                dataField="ItemId"
+                editorType="dxSelectBox"
+                [editorOptions]="{
+                  items: itemList,
+                  valueExpr: 'Id',
+                  displayExpr: 'ItemName',
+                  onValueChanged: GetUomByItemId,
+                  searchEnabled: true
+                }"
+              >
+                <dxo-label text="Item" location="top"></dxo-label>
+                <dxi-validation-rule type="required" message="Item is required"></dxi-validation-rule>
+              </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" cssClass="second-group" [colCount]="3">
+              <dxi-item
+                dataField="ItemPriceTypeId"
+                editorType="dxSelectBox"
+                [editorOptions]="{
+                  items: priceTypeList,
+                  valueExpr: 'Id',
+                  displayExpr: 'ItemPriceTypeDesc',
+                  searchEnabled: true
+                }"
+              >
+                <dxo-label text="Price Type" location="top"></dxo-label>
+                <dxi-validation-rule type="required" message="Price Type is required"></dxi-validation-rule>
+              </dxi-item>
+              <dxi-item dataField="Price" editorType="dxTextBox">
+                <dxo-label text="Price" location="top"></dxo-label>
+                <dxi-validation-rule type="required" message="Price is required"></dxi-validation-rule>
+              </dxi-item>
+              <dxi-item
+                dataField="UomSchIdPrice"
+                editorType="dxSelectBox"
+                [editorOptions]="{
+                  items: uomList,
+                  valueExpr: 'Id',
+                  displayExpr: 'Equivalent',
+                  searchEnabled: true
+                }"
+              >
+                <dxo-label text="Rate UOM" location="top"></dxo-label>
+                <dxi-validation-rule type="required" message="Rate UOM is required"></dxi-validation-rule>
+              </dxi-item>
+            </dxi-item>
+          </dx-form>
+          <div class="mt-4 d-flex justify-content-end">
+            <dx-button type="success" (onClick)="submit()" icon="save" text="{{ editFieldId > 0 ? 'Update' : 'Save' }}"></dx-button>
+            <div class="m-1"></div>
+            <dx-button icon="remove" type="danger" text="Close" (onClick)="cancel()"></dx-button>
+          </div>
+        </dx-popup>
+      </div>
+    </div>
+  </div>
+</div>

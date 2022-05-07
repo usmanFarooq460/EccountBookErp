@@ -1,0 +1,193 @@
+{
+	"Purchase_Trading": {
+		"Purchase_Bill": {
+			"Atachments": "附件",
+			"Form": {
+				"Calculations": "计算",
+				"Load_Caption": "从采购订单加载",
+				"Loader_Title": "采购订单加载",
+				"Payment_Due_Schedule": "付款条件"
+			},
+			"Stock_Party": "股票派对"
+		},
+		"purchase_Trading_Return": {
+			"Comm_Amount": "佣金金额",
+			"comm_Remarks": "佣金备注"
+		},
+		"purchase_invoice_trading": {
+			"ItemAddLess": "为项目添加或减少",
+			"creditAccount": "帐户信用",
+			"debitToItem": "按项目收费",
+			"suppAddLess": "供应商 少加"
+		},
+		"purchase_order": {
+			"DeliveryStartDate": "交货开始日期",
+			"OrderExpiryDate": "订单到期日",
+			"RefNo": "参考编号",
+			"catSerail": "类别系列",
+			"orderCat": "订单类别",
+			"termsDescription": "条款说明",
+			"validateDate": "验证日期"
+		}
+	},
+	"SharedGridCaptions": {
+		"Grid_Message": "将列标题拖到此处以按该列分组",
+		"SR_": "序列号",
+		"Total_Records": "总记录",
+		"action": "行动",
+		"noRecordAdded": "没有添加记录",
+		"noRecordFound": "没有找到记录",
+		"open": "打开",
+		"sum": "和"
+	},
+	"Stock_Reports": {
+		"Item_ledger": {
+			"Add_Less_weight": "减轻重量",
+			"Amount_In": "金额",
+			"Amount_Out": "金额",
+			"Balance_Weight": "平衡重量",
+			"Bill_Weight_Out": "账单重量",
+			"Bill_Weight_in": "帐单重量",
+			"Expense_Amount_in": "\n费用金额"
+		},
+		"Stock_reports_With_Average_Rates": {
+			"Retail_Rate": "零售价",
+			"Retail_Sale_Value": "零售价值",
+			"Whole_Sale_Rate": "批发率",
+			"Whole_Sale_Value": "整体销售价值"
+		},
+		"Transaction_Stock_Rice": {
+			"Balance_Out": "平衡"
+		},
+		"stock_reports": {
+			"Closing": "结束",
+			"Main_Type": "主要类型",
+			"Report_Type": "报告类型",
+			"Variety_Type": "品种类型"
+		}
+	},
+	"Titles": {
+		"Purchase_Bill_History_Title": "采购单",
+		"Purchase_Trading": {
+			"Purchase_Bill_Form_Title": "采购单表格",
+			"Purchase_Return_form": "退货表格",
+			"purchaseInvoiceTradingFormTitle": "采购发票形式",
+			"purchaseOrderHistoryTitle": "采购订单",
+			"purchase_Invoice_Trading_History_Title": "采购发票",
+			"purchase_Order_From": "采购订单表格",
+			"purchase_Return_History": "退货"
+		},
+		"StockReports": {
+			"ItemLedger": "项目分类帐",
+			"Item_Ledger_TradePro": "项目分类帐贸易专业版",
+			"Stock_Report_TradePro": "股票报告贸易专业版",
+			"Stock_Reports_With_Average_Rates": "具有平均利率的股票报告",
+			"Transactio_Stock_Rice": "交易库存大米",
+			"stock_Report": "库存报告"
+		}
+	},
+	"sharedBtnsCaptions": {
+		"Clear": "清除",
+		"Close": "关",
+		"Go_Back": "回去",
+		"Load": "加载",
+		"Reset": "重启",
+		"Search": "搜索",
+		"add": "加",
+		"add_new": "添新",
+		"filter": "过滤",
+		"generate": "产生",
+		"save": "保存",
+		"show": "显示",
+		"update": "更新"
+	},
+	"sharedFormHistoryCaptions": {
+		"Account": "帐户",
+		"Amount": "量",
+		"Average_Rate": "平均率",
+		"Balance": "平衡",
+		"Balance_Qty": "余额数量",
+		"Balance_Weight": "平衡重量",
+		"Bill_Amount": "比尔金额",
+		"Bill_Number": "账单号码",
+		"Branch": "分店名称",
+		"Closing_Balance": "期末余额",
+		"Comm_Rate": "佣金率",
+		"Commission_Amount": "佣金金额",
+		"Commission_Remarks": "佣金备注",
+		"Crop_Year": "作物年份",
+		"Current_Amount_In": "当前金额",
+		"Current_Quantity_In": "当前数量",
+		"Current_Quantity_Out": "当前数量",
+		"Current_Weight_in": "当前重量",
+		"Current_weight_Out": "当前重量输出",
+		"Date": "日期",
+		"DeliveryDays": "交货日",
+		"Delivery_Term": "交货期限",
+		"Description": "描述",
+		"Doc_Type": "文件类型",
+		"DocumentDate": "文件日期",
+		"Document_Code": "文件代码",
+		"Due_Date": "截止日期",
+		"Due_Days": "到期日",
+		"Due_Percent": "到期百分比",
+		"From_Date": "从日期",
+		"GP_No": "全科医生号码",
+		"Gp_Date": "全科医生日期",
+		"Is_Required": "是必须的",
+		"Item_Category": "项目类别",
+		"Item_Code": "项目代码",
+		"Item_Quantity": "项目数量",
+		"Item_Type": "物品种类",
+		"Job/Lot": "工作/批次",
+		"Manual_Bill": "手动账单号",
+		"Net_Weight": "净重",
+		"Opening_Balance": "期初余额",
+		"Opening_In": "期初余额",
+		"Opening_Out": "期初余额",
+		"Opening_Weight": "开口重量",
+		"Order_Category": "订单类别",
+		"Order_Number": "订单号",
+		"Pack_Type": "包装类型",
+		"Payment_Term": "付款",
+		"Project_Name": "项目名",
+		"Qty_In": "数量",
+		"Qty_Out": "数量输出",
+		"Quantity": "数量",
+		"Rate": "价钱",
+		"Rate_UOM": "计量单位的比率",
+		"Record_Number": "记录编号",
+		"Remarks": "备注",
+		"Stock_Price": "股票价格",
+		"Stock_Quantity": "库存数量",
+		"Stock_Value": "股票价值",
+		"Stock_Weight": "库存重量",
+		"Supplier_Customer": "供应商/客户",
+		"Tax": "税 %",
+		"Tax_Amount": "税额",
+		"To_Date": "至今",
+		"Total_Amount": "总金额",
+		"Total_Quantity": "总数（量",
+		"Type": "类型",
+		"UOM": "测量单位",
+		"UOM_Code": "计量单位代码",
+		"User_Name": "用户名",
+		"Vehicle_No": "车号",
+		"Voucher": "代金券",
+		"Warehouse": "仓库",
+		"Weight_In": "重量",
+		"Weight_Out": "减重",
+		"commAgent": "佣金代理",
+		"commType": "佣金类型",
+		"credit": "信用",
+		"debit": "借方",
+		"docNo": "文件编号",
+		"expenseAmount": "费用金额",
+		"freightAmount": "运费金额",
+		"itemName": "项目名称",
+		"percentage": "百分比",
+		"status": "状态",
+		"supplierName": "供应商名称",
+		"userName": "用户名"
+	}
+}

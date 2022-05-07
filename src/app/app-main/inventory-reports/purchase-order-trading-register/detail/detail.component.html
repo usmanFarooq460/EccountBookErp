@@ -1,0 +1,24 @@
+<dx-data-grid
+  [dataSource]="detailArray"
+  [showColumnLines]="false"
+  [showRowLines]="true"
+  [rowAlternationEnabled]="true"
+  [allowColumnResizing]="true"
+  [columnAutoWidth]="true"
+  [showBorders]="true"
+  [wordWrapEnabled]="false"
+>
+  <dxo-paging [enabled]="true"></dxo-paging>
+  <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15]" [showInfo]="true"></dxo-pager>
+  <dxi-column dataField="ItemName" caption="Item"></dxi-column>
+  <dxi-column dataField="JobLotDescription" caption="JobLot"></dxi-column>
+  <dxi-column dataField="OrderItemQty" caption="Qty" dataType="number" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+  <dxi-column dataField="OrderItemRate" caption="Rate" dataType="number" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+  <dxi-column dataField="Amount" caption="Amount" dataType="number" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+  <dxi-column dataField="OrderRemarks" caption="Remarks"></dxi-column>
+  <dxo-summary>
+    <dxi-total-item column="OrderItemQty" summaryType="sum" name="NoOfUnit" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+    <dxi-total-item column="Amount" summaryType="sum" name="RatePrice" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+  </dxo-summary>
+  <dxo-scrolling [scrollByContent]="true" [scrollByThumb]="true" [showScrollbar]="'always'" [scrollLeft]="true" mode="infinite"></dxo-scrolling>
+</dx-data-grid>

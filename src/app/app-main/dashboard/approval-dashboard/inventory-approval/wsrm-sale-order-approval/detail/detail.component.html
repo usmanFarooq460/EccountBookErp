@@ -1,0 +1,35 @@
+<dx-data-grid
+  [dataSource]="detailArray"
+  [showColumnLines]="false"
+  [showRowLines]="true"
+  [rowAlternationEnabled]="true"
+  [allowColumnResizing]="true"
+  [columnAutoWidth]="true"
+  [showBorders]="true"
+  [wordWrapEnabled]="false"
+>
+  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+  <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+  <dxo-group-panel [visible]="true"></dxo-group-panel>
+  <dxo-paging [enabled]="true"></dxo-paging>
+  <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15]" [showInfo]="true"></dxo-pager>
+  <dxi-column dataField="ItemName" caption="Item Name" dataType="string"></dxi-column>
+  <dxi-column dataField="Equivalent" caption="Pack Size" dataType="number"></dxi-column>
+  <dxi-column dataField="ItemQty" caption="Qty" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="ItemRate" caption="Rate" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="ItemDiscount" caption="Item Discount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="DiscountPerItem" caption="Discount Per Item" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="TotalDiscount" caption="Total Discount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="GstPrcnt" caption="Gst Prcnt" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="ItemAmount" caption="Item Amount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="RemarksDetail" caption="Remarks" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxo-summary>
+    <dxi-total-item column="ItemQty" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+    <dxi-total-item column="ItemDiscount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+    <dxi-total-item column="DiscountPerItem" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+    <dxi-total-item column="TotalDiscount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+    <dxi-total-item column="GstPrcnt" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+    <dxi-total-item column="ItemAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+  </dxo-summary>
+  <dxo-scrolling mode="infinite" [scrollByContent]="true" [scrollByThumb]="true"></dxo-scrolling>
+</dx-data-grid>

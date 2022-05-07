@@ -1,0 +1,15 @@
+<div class="fixed-bottom" [ngClass]="isMenuOpened ? 'otherPadding' : 'Padding75px'">
+  <div class="main-layout">
+    <div class="upper-layout" [ngStyle]="{ display: showHideToolTip ? 'block' : 'none' }">
+      <div class="header">
+        <div class="div"></div>
+        <div class="button" (click)="handleToolTipVisibility()">-</div>
+      </div>
+      <div class="upper-layout-body">Upper Layout</div>
+    </div>
+    <div class="lower-layout" [ngStyle]="{ display: showHideToolTip ? 'none' : 'flex' }">
+      <div>This area is for writing something</div>
+      <div class="button" (click)="handleToolTipVisibility()">+</div>
+    </div>
+  </div>
+</div>

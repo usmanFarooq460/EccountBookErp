@@ -1,0 +1,29 @@
+<dx-data-grid
+  [dataSource]="detailArray"
+  [showColumnLines]="false"
+  [showRowLines]="true"
+  [rowAlternationEnabled]="true"
+  [allowColumnResizing]="true"
+  [columnAutoWidth]="true"
+  [showBorders]="true"
+  [wordWrapEnabled]="false"
+>
+  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+  <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+  <dxo-group-panel [visible]="true"></dxo-group-panel>
+  <dxo-paging [enabled]="true"></dxo-paging>
+  <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 15]" [showInfo]="true"></dxo-pager>
+  <dxi-column dataField="ItemName" caption="Item Name" dataType="string"></dxi-column>
+  <dxi-column dataField="PackingType" caption="Packing Type" dataType="string"></dxi-column>
+  <dxi-column dataField="UOMCode" caption="Item UOM" dataType="string"></dxi-column>
+  <dxi-column dataField="Qty" caption="Qty" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="ItemRate" caption="Rate" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="NetWeightDetail" caption="Net Weight" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="ItemAmount" caption="Item Amount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxo-summary>
+    <dxi-total-item column="Qty" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+    <dxi-total-item column="NetWeightDetail" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+    <dxi-total-item column="ItemAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+  </dxo-summary>
+  <dxo-scrolling mode="infinite" [scrollByContent]="true" [scrollByThumb]="true"></dxo-scrolling>
+</dx-data-grid>

@@ -1,0 +1,181 @@
+<div class="container-fluid">
+  <!-- start page title -->
+  <app-pagetitle title="Bank Definition" *ngIf="SomeElementsVisible" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+  <!-- end page title -->
+  <div class="row">
+    <!-- end col -->
+    <dx-button id="filter" class="ml-3 mb-3" type="default" text="Add New" icon="plus" (onClick)="addData()"> </dx-button>
+    <dx-button class="ml-3 mb-3" type="success" text="Filters" (onClick)="filtering()" icon="filter"></dx-button>
+    <div class="col-md-12">
+      <div class="card">
+        <dx-data-grid
+          id="gridContainer"
+          [height]="IsLoadedInPopup == false ? gridHeight : gridHeightInPopupWithGrid"
+          [dataSource]="dataSource"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+          (onToolbarPreparing)="onToolbarPreparing($event)"
+        >
+          <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-filter-row [visible]="filter"></dxo-filter-row>
+          <dxo-header-filter [visible]="filter"></dxo-header-filter>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-load-panel [enabled]="true"></dxo-load-panel>
+          <dxo-export [enabled]="true" fileName="Estimates" [allowExportSelectedData]="true">
+            <dxo-texts exportAll="Export All Rows"></dxo-texts>
+          </dxo-export>
+          <dxo-paging [enabled]="true"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true"></dxo-pager>
+          <dxi-column dataField="Id" caption="Id" dataType="number" [visible]="false"></dxi-column>
+          <dxi-column dataField="BranchCode" caption="Branch Code " dataType="string"></dxi-column>
+          <dxi-column dataField="BranchName" caption="Branch Name" dataType="string"></dxi-column>
+          <dxi-column dataField="Country" caption="Country" dataType="string"></dxi-column>
+          <dxi-column dataField="Contact3Mobile" caption="Contact" dataType="string"></dxi-column>
+          <dxi-column dataField="IsHomeland" caption="Home land" dataType="string"></dxi-column>
+          <dxi-column dataField="emailPrimery" caption="Email" dataType="string"></dxi-column>
+          <dxi-column dataField="BranchAddress" caption="Branch Address" dataType="string"></dxi-column>
+          <dxi-column dataField="AccountTitle" caption="Account Title" dataType=" "></dxi-column>
+          <dxi-column
+            dataField="button"
+            [fixed]="true"
+            [fixedPosition]="'right'"
+            [width]="90"
+            alignment="right"
+            caption="Action"
+            [allowEditing]="false"
+            [allowExporting]="false"
+            [allowFiltering]="false"
+            [allowFixing]="false"
+            [allowGrouping]="false"
+            [allowHeaderFiltering]="false"
+            [allowHiding]="false"
+            [allowReordering]="false"
+            [allowResizing]="false"
+            [allowSearch]="false"
+            [allowSorting]="false"
+            cellTemplate="buttonTemplate"
+          ></dxi-column>
+          <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+            <div class="d-con-cell-action">
+              <dx-button type="default" stylingMode="text" (onClick)="editPopup(cellInfo.data)">
+                <i class="ri-edit-2-line"></i>
+              </dx-button>
+            </div>
+          </div>
+          <dxo-export [enabled]="true" [allowExportSelectedData]="true"></dxo-export>
+          <dxo-summary> </dxo-summary>
+          <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+        </dx-data-grid>
+        <dx-popup [width]="850" [height]="450" [showTitle]="true" title="Define Bank" [dragEnabled]="true" [closeOnOutsideClick]="true" [(visible)]="formPopup" (onShown)="setFocus()">
+          <div *dxTemplate="let data of 'content'">
+            <dx-form id="form" [formData]="bankFormData" #bankForm>
+              <dxi-item itemType="group" cssClass="second-group" [colCount]="2">
+                <dxi-item dataField="BranchName" editorType="dxTextBox">
+                  <dxi-validation-rule type="required" message="Bank Name is required"></dxi-validation-rule>
+                  <dxo-label text="Branch Name" location="left" [showColon]="false"></dxo-label>
+                </dxi-item>
+                <dxi-item dataField="BranchCode" editorType="dxTextBox">
+                  <dxi-validation-rule type="required" message="Branch Code is required"> </dxi-validation-rule>
+                  <dxo-label text="Branch Code" location="left" [showColon]="false"></dxo-label>
+                </dxi-item>
+              </dxi-item>
+              <dxi-item itemType="group" cssClass="second-group" [colCount]="2">
+                <dxi-item
+                  dataField="IsHomeland"
+                  editorType="dxSelectBox"
+                  [editorOptions]="{
+                    items: homelandList,
+                    valueExpr: 'name',
+                    displayExpr: 'name',
+                    searchEnabled: true
+                  }"
+                >
+                  <dxi-validation-rule type="required" message="HomeLand is required"></dxi-validation-rule>
+                  <dxo-label text="Homeland" location="left" [showColon]="false"></dxo-label>
+                </dxi-item>
+                <dxi-item
+                  dataField="CountryId"
+                  editorType="dxSelectBox"
+                  [editorOptions]="{
+                    items: countryNameList,
+                    valueExpr: 'Id',
+                    displayExpr: 'Description',
+                    searchEnabled: true,
+                    onValueChanged: cityGetAll
+                  }"
+                >
+                  <dxi-validation-rule type="required" message="Country is required"></dxi-validation-rule>
+                  <dxo-label text="Country" location="left" [showColon]="false"></dxo-label>
+                </dxi-item>
+              </dxi-item>
+              <dxi-item itemType="group" cssClass="second-group" [colCount]="2">
+                <dxi-item
+                  dataField="BranchCity"
+                  editorType="dxSelectBox"
+                  [editorOptions]="{
+                    items: cityNameList,
+                    valueExpr: 'Id',
+                    displayExpr: 'CityName',
+                    searchEnabled: true
+                  }"
+                >
+                  <dxi-validation-rule type="required" message="City is required"></dxi-validation-rule>
+                  <dxo-label text="City" location="left" [showColon]="false"></dxo-label>
+                </dxi-item>
+                <dxi-item dataField="Contact1Tel" editorType="dxTextBox">
+                  <dxo-label text="Phone No" location="left" [showColon]="false"></dxo-label>
+                </dxi-item>
+              </dxi-item>
+              <dxi-item itemType="group" cssClass="second-group" [colCount]="2">
+                <dxi-item dataField="Contact2Tel" editorType="dxTextBox">
+                  <dxo-label text="Phone No- 2" location="left" [showColon]="false"></dxo-label>
+                </dxi-item>
+                <dxi-item dataField="Contact3Mobile" editorType="dxTextBox">
+                  <dxo-label text="Cell No " location="left" [showColon]="false"></dxo-label>
+                  <dxi-validation-rule type="required" message="Cell No is required"></dxi-validation-rule>
+                </dxi-item>
+              </dxi-item>
+              <dxi-item itemType="group" cssClass="second-group" [colCount]="2">
+                <dxi-item dataField="emailPrimery" editorType="dxTextBox">
+                  <dxi-validation-rule type="required" message="Email is required"> </dxi-validation-rule>
+                  <dxo-label text="Email " location="left" [showColon]="false"></dxo-label
+                ></dxi-item>
+                <dxi-item dataField="emailAlternate" editorType="dxTextBox">
+                  <dxo-label text="Alter Email " location="left" [showColon]="false"></dxo-label>
+                </dxi-item>
+              </dxi-item>
+              <dxi-item itemType="group" cssClass="second-group" [colCount]="2">
+                <dxi-item dataField="BranchAddress" editorType="dxTextBox">
+                  <dxo-label text="Address " location="left" [showColon]="false"></dxo-label>
+                </dxi-item>
+                <dxi-item
+                  dataField="ChartOfAccountId"
+                  editorType="dxSelectBox"
+                  [editorOptions]="{
+                    items: accountList,
+                    valueExpr: 'Id',
+                    displayExpr: 'AccountTitle',
+                    searchEnabled: true
+                  }"
+                >
+                  <dxo-label text="GL Account " location="left" [showColon]="false"></dxo-label>
+                  <dxi-validation-rule type="required" message="GL Account is required"></dxi-validation-rule>
+                </dxi-item>
+              </dxi-item>
+            </dx-form>
+            <div class="mt-4 d-flex justify-content-end">
+              <dx-button (onClick)="Save()" type="success" icon="save" text="Save"></dx-button>
+              <div class="m-1"></div>
+              <dx-button icon="remove" type="danger" text="Close" (onClick)="cancel()"></dx-button>
+            </div>
+          </div>
+        </dx-popup>
+      </div>
+    </div>
+  </div>
+</div>

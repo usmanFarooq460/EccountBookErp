@@ -1,0 +1,356 @@
+<div class="container-fluid">
+  <!-- start page title -->
+  <div class="row">
+    <div class="col-md-12">
+      <div class="d-flex justify-content-between">
+        <div class="">
+          <app-pagetitle [title]="'Pre Shipment Analysis'"></app-pagetitle>
+        </div>
+        <div class="">
+          <dx-button class="mr-2" [hint]="'Add New'" type="default" icon="plus" (onClick)="resetForm()"> </dx-button>
+          <dx-button icon="refresh" type="success" [hint]="'Reload Form Fields'" (onClick)="FetchData()"></dx-button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-8">
+      <dx-form [formData]="PreProductionLabFormData" #PreProductionLabForm [colCountByScreen]="{ lg: 3, md: 2, sm: 2, xs: 2 }" [showRequiredMark]="false">
+        <dxi-item
+          cssClass="px-1 py -1 m-0"
+          dataField="InspectedByLabId"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: InspectionLabNameList,
+            valueExpr: 'Id',
+            displayExpr: 'LookUpName',
+            placeholder: 'Inspection Status',
+            searchEnabled: true,
+            onInitialized: setFocus,
+            readOnly: ParamsId > 0 ? (EditType == 2 ? true : false) : false
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Inspection Lab is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="ReportDocNo"
+          editorType="dxNumberBox"
+          [editorOptions]="{
+            placeholder: 'Doc No.',
+            readOnly: true
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label> </dxi-item
+        >F
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="ReportDate"
+          editorType="dxDateBox"
+          [editorOptions]="{
+            placeholder: 'Doc Date',
+            displayFormat: 'dd-MMM-yyyy',
+            readOnly: ParamsId > 0 ? (EditType == 2 ? true : false) : false
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Date is required"></dxi-validation-rule>
+        </dxi-item>
+
+        <dxi-item
+          cssClass="px-1 py -1 m-0"
+          dataField="JobLotId"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: jobLotList,
+            valueExpr: 'Id',
+            displayExpr: 'JobLotCode',
+            placeholder: 'Job/Lot',
+            searchEnabled: true,
+            readOnly: ParamsId > 0 ? (EditType == 2 ? true : false) : false,
+            onValueChanged: onjobLotLeave
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Inspection Lab is required"></dxi-validation-rule>
+        </dxi-item>
+
+        <!-- <dxi-item
+          cssClass="px-1 m-0"
+          dataField="LotRefNo"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            placeholder: 'Lot Ref No.',
+            readOnly: true
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Lot Ref No is required"></dxi-validation-rule>
+        </dxi-item> -->
+
+        <dxi-item
+          cssClass="px-1 m-0"
+          [colSpan]="2"
+          dataField="ItemId"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            dataSource: ItemList,
+            valueExpr: 'Id',
+            displayExpr: 'ItemName',
+            placeholder: 'Item Name',
+            searchEnabled: true,
+            readOnly: ParamsId > 0 ? (EditType == 2 ? true : false) : false
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="ItemName is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="QtyKgs"
+          editorType="dxNumberBox"
+          [editorOptions]="{
+            placeholder: 'Qty Kgs',
+            readOnly: ParamsId > 0 ? (EditType == 2 ? true : false) : false
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Qty Kgs is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="ReportRefNo"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            placeholder: 'Report Ref No.'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="ConfirmationDate"
+          editorType="dxDateBox"
+          [editorOptions]="{
+            placeholder: 'Confirmation Date',
+            displayFormat: 'dd-MMM-yyyy'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <!-- <dxi-validation-rule type="required" message="Date is required"></dxi-validation-rule> -->
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          [colSpan]="2"
+          dataField="InspectionRemarks"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            placeholder: 'Remarks'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+      </dx-form>
+    </div>
+    <div class="col-4">
+      <dx-form id="form" [formData]="PreProductionLabFormData" [showRequiredMark]="false" [colCountByScreen]="{ lg: 1, md: 1, sm: 1, xs: 1 }">
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="ProductSpecification"
+          editorType="dxTextArea"
+          [editorOptions]="{
+            placeholder: ' ',
+            height: 150
+          }"
+        >
+          <dxo-label text="Product Specification" location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+      </dx-form>
+    </div>
+  </div>
+
+  <hr />
+  <!-- <div class="">
+    <dx-form id="form" [formData]="PreProductionLabFormData" [showRequiredMark]="false" [colCountByScreen]="{ lg: 1, md: 1, sm: 1, xs: 1 }">
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="ProductSpecification"
+        editorType="dxTextArea"
+        [editorOptions]="{
+          placeholder: ' ',
+          height: 90
+        }"
+      >
+        <dxo-label text="Product Specification" location="top" [showColon]="false"></dxo-label>
+      </dxi-item>
+    </dx-form>
+  </div> -->
+
+  <hr />
+  <dx-form [formData]="PreProductionLabDetailFormData" [colCountByScreen]="{ lg: 6, md: 4, sm: 3, xs: 2 }" #PreProductionLabDetailForm [showRequiredMark]="false">
+    <!-- <dxi-item itemType="group" cssClass="shadow mt-2 p-1"> -->
+    <dxi-item
+      cssClass="px-1 m-0"
+      [colSpan]="2"
+      dataField="SupplierCustomerId"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        dataSource: supplierNameList,
+        valueExpr: 'Id',
+        displayExpr: 'CompanyName',
+        placeholder: 'Customer',
+        searchEnabled: true,
+        onValueChanged: getOrderNo
+      }"
+    >
+      <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+      <dxi-validation-rule type="required" message="Customer is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      editorType="dxSelectBox"
+      dataField="ContractId"
+      [editorOptions]="{
+        items: OrderNoList,
+        valueExpr: 'Id',
+        displayExpr: 'LcOrderNo',
+        placeholder: 'Contract No',
+        searchEnabled: true
+      }"
+    >
+      <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+      <dxi-validation-rule type="required" message="Contract No is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      [colSpan]="1"
+      cssClass="px-1 m-0"
+      dataField="Qty"
+      editorType="dxNumberBox"
+      [editorOptions]="{
+        placeholder: 'QTy'
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Qty is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="Status"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        items: StatusList,
+        valueExpr: 'name',
+        displayExpr: 'name',
+        placeholder: 'Status',
+        searchEnabled: true
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Status is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="SubLot"
+      editorType="dxTextBox"
+      [editorOptions]="{
+        placeholder: 'Sub Lot'
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+    </dxi-item>
+    <dxi-item
+      [colSpan]="2"
+      cssClass="px-1 m-0"
+      dataField="SubRemarks"
+      editorType="dxTextBox"
+      [editorOptions]="{
+        placeholder: 'Remarks'
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+    </dxi-item>
+    <dxi-item cssClass="mt-2" [colSpan]="2">
+      <div *dxTemplate>
+        <dx-button type="default" [visible]="ParamsId > 0 ? (EditType == 1 ? true : false) : true" icon="plus" text="{{ detailEditMode ? 'Update' : 'Add' }}" (onClick)="addDetailRecord2Grid()">
+        </dx-button>
+      </div>
+    </dxi-item>
+  </dx-form>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card mt-4">
+        <dx-data-grid
+          id="gridContainer"
+          [dataSource]="dataSource"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+        >
+          <dxo-load-panel [enabled]="true"></dxo-load-panel>
+          <dxo-editing mode="cell" [allowAdding]="false" [allowUpdating]="true" [useIcons]="false"> </dxo-editing>
+          <dxi-column dataField="SupplierCustomerId" caption="SupplierCustomerId" [visible]="false"></dxi-column>
+          <dxi-column dataField="ContractId" caption="ItemId" [visible]="false"></dxi-column>
+          <dxi-column dataField="SupplierCustomer" caption="Supplier Customer" [visible]="true" [allowEditing]="false"></dxi-column>
+          <dxi-column dataField="ContractNo" caption="Contract No" [visible]="true" [allowEditing]="false"></dxi-column>
+          <dxi-column dataField="Qty" caption="Qty" [visible]="true" [allowEditing]="false"></dxi-column>
+          <dxi-column dataField="Status" caption="Status" [visible]="true" [allowEditing]="false"></dxi-column>
+          <dxi-column dataField="SubLot" caption="Sub Lot" [visible]="true" [allowEditing]="false"></dxi-column>
+          <dxi-column dataField="SubRemarks" caption="Remarks" [allowEditing]="false"></dxi-column>
+          <dxi-column
+            dataField="button"
+            [fixed]="true"
+            [fixedPosition]="'right'"
+            [width]="110"
+            [visible]="ParamsId > 0 ? (EditType == 1 ? true : false) : false"
+            alignment="right"
+            caption="Action"
+            [allowEditing]="false"
+            [allowExporting]="false"
+            [allowFiltering]="false"
+            [allowFixing]="false"
+            [allowGrouping]="false"
+            [allowHeaderFiltering]="false"
+            [allowHiding]="false"
+            [allowReordering]="false"
+            [allowResizing]="false"
+            [allowSearch]="false"
+            [allowSorting]="false"
+            cellTemplate="buttonTemplate"
+          ></dxi-column>
+          <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+            <div class="d-con-cell-action">
+              <dx-button type="default" stylingMode="text" icon="edit" (onClick)="editDetailRecordRow(cellInfo.data, cellInfo.rowIndex)"> </dx-button>
+              <dx-button type="danger" stylingMode="text" icon="trash" (onClick)="deleteDetailRecordRow(cellInfo.rowIndex)"> </dx-button>
+            </div>
+          </div>
+          <dxo-summary>
+            <dxi-total-item column="Qty" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+          </dxo-summary>
+          <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+      <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+      <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+    </div>
+    <div class="col-md-12">
+      <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+    </div>
+    <div class="col-md-12">
+      <div class="d-flex justify-content-end fixed-bottom p-4 pb-6">
+        <dx-button icon="save" text="{{ ParamsId > 0 ? 'Update' : 'Save' }}" type="success" (onClick)="onSave()"></dx-button>
+        <div class="m-1"></div>
+        <dx-button icon="close" text="Close" type="danger" routerLink="/cus-sales/pre-production-history"></dx-button>
+      </div>
+    </div>
+  </div>
+</div>

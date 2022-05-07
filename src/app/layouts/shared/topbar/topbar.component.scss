@@ -1,0 +1,83 @@
+.comp-time {
+  box-shadow: 0 0.7px 0.7px 0.7px rgba(41, 40, 40, 0.397);
+  border-radius: 5px;
+  padding: 0;
+  margin: 0;
+  @media only screen and (max-width: 720px) {
+    visibility: hidden;
+  }
+  p {
+    padding: 3px 6px;
+    margin: 0;
+  }
+  h6 {
+    padding: 3px 6px;
+    margin: 0;
+  }
+}
+
+.profile-image {
+  border-left: 2px solid rgba(7, 7, 7, 0.11);
+  border-right: 2px solid rgba(7, 7, 7, 0.11);
+  .image {
+    background: url("../../../../assets/images/Administration/companyDummyLogo.jpg");
+    display: flex;
+    align-self: center;
+    background-size: cover;
+    background-position: center;
+    height: 75px;
+    width: 100px;
+    border-radius: 50%;
+    box-shadow: 2px 2px 2px rgba(7, 7, 7, 0.1);
+    justify-content: center;
+    align-items: center;
+    // img {
+    //   width: 70px;
+    //   height: 70px;
+    //   // object-fit:contain;
+    //   border-radius: 50%;
+    //   border: 2px solid rgba(7, 7, 7, 0.11);
+    //   padding: 2px;
+    //   box-shadow: 2px 2px 2px rgba(7, 7, 7, 0.1);
+    // }
+  }
+  .image-detail {
+    h6{
+      text-align: center; 
+      white-space: normal;
+      padding-left:2px ;
+      padding-right:2px ;
+      text-shadow: 2px 2px 2px rgba(7, 7, 7, 0.1);
+    }
+    p {
+      margin-top: -4px;
+      text-align: center;
+      font-size: 12px;
+      padding-left: 0px;
+      white-space: normal;
+    }
+  }
+}
+
+.contact-detail {
+  margin-top: 30px;
+  position: absolute;
+  bottom: 12px;
+  right: 0;
+  p {
+    padding: 0;
+    margin: 0;
+    font-size: 15px;
+  }
+}
+.company-detail {
+  margin-top: 30px;
+  position: absolute;
+  bottom: 12px;
+  left: 0;
+  p {
+    padding: 0;
+    margin: 0;
+    font-size: 15px;
+  }
+}

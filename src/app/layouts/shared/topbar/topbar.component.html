@@ -1,0 +1,580 @@
+<header id="page-topbar">
+  <div class="navbar-header justify-content-between">
+    <div class="d-flex">
+      <!-- LOGO -->
+      <div class="navbar-brand-box">
+        <a href="javasript:void(0)" class="logo logo-dark">
+          <span class="logo-sm">
+            <!-- <img src="assets/images/logo-sm-dark.png" alt="" height="22" /> -->
+            <span style="font-size: xx-large">&#8712;&#914;</span>
+          </span>
+          <span class="logo-lg">
+            <!-- <img src="assets/images/logo-dark.png" alt="" height="20" /> -->
+            <span style="font-size: large">&#8712;ccount&#914;ook <sup>Cloud ERP</sup></span>
+          </span>
+        </a>
+
+        <a href="javasript:void(0)" class="logo logo-light">
+          <span class="logo-sm">
+            <!-- <img src="assets/images/logo-sm-light.png" alt="" height="22"> -->
+            <span style="font-size: x-large; color: #fff">&#8712;&#914;</span>
+          </span>
+          <span class="logo-lg">
+            <!-- <img src="assets/images/logo-light.png" alt="" height="20"> -->
+            <span style="font-size: large; color: #fff">&#8712;ccount&#914;ook <sup>Cloud ERP</sup></span>
+          </span>
+        </a>
+      </div>
+
+      <!-- <div class="navbar-brand-box">
+        <a href="/" class="logo logo-dark">
+       <span class="logo-sm">
+            <img src="assets/images/logo-sm-dark.png" alt="" height="22" />
+          </span>
+          <span class="logo-lg">
+            <img src="assets/images/logo-dark.png" alt="" height="20" />
+          </span>
+        </a>
+
+        <a href="/" class="logo logo-light">
+          <span class="logo-sm">
+            <img src="assets/images/logo-sm-light.png" alt="" height="22" />
+          </span>
+          <span class="logo-lg">
+            <img src="assets/images/logo-light.png" alt="" height="20" />
+          </span>
+        </a>
+      </div> -->
+
+      <button type="button" class="btn btn-sm px-3 mt-2 font-size-24 header-item waves-effect" id="vertical-menu-btn" (click)="toggleMobileMenu($event)">
+        <i class="ri-menu-2-line align-middle">asdfadsf</i>
+      </button>
+
+      <!-- App Search-->
+      <div class="app-search d-none d-lg-block">
+        <dx-form [formData]="TopBarFormData" #TopBarForm [showRequiredMark]="false">
+          <dxi-item
+            cssClass="p-0 mb-2"
+            [colSpan]="2"
+            dataField="NavigationBox"
+            editorType="dxSelectBox"
+            [editorOptions]="{
+              dataSource: FilterBoxList,
+              valueExpr: 'link',
+              displayExpr: 'label',
+              hint: 'Press Shift+N to Search',
+              placeholder: 'Navigate...',
+              searchEnabled: true,
+              onValueChanged: navigateToSelectedScreen
+            }"
+          >
+            <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+          </dxi-item>
+        </dx-form>
+      </div>
+
+      <!-- <form class="app-search d-none d-lg-block">
+        <div class="position-relative">
+          <select class="form-control" placeholder="{{ 'HEADER.SEARCH' | translate }}">
+            <span class="ri-search-line"></span>
+          </select>
+        </div>
+      </form> -->
+
+      <!-- <div class="dropdown dropdown-mega d-none d-lg-block ml-2" ngbDropdown>
+        <button ngbDropdownToggle type="button" class="btn header-item waves-effect" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">
+          {{ "HEADER.MEGA_MENU" | translate }}
+          <i class="mdi mdi-chevron-down"></i>
+        </button>
+        <div class="dropdown-menu dropdown-megamenu" ngbDropdownMenu>
+          <div class="row">
+            <div class="col-sm-8">
+              <div class="row">
+                <div class="col-md-4">
+                  <h5 class="font-size-14 mt-0">
+                    {{ "HEADER.UI.TITLE" | translate }}
+                  </h5>
+                  <ul class="list-unstyled megamenu-list">
+                    <li>
+                      <a href="javascript:void(0);">{{ "HEADER.UI.LIGHTBOX" | translate }}</a>
+                    </li>
+                    <li>
+                      <a href="javascript:void(0);">{{ "HEADER.UI.RANGE_SLIDER" | translate }}</a>
+                    </li>
+                    <li>
+                      <a href="javascript:void(0);">{{ "HEADER.UI.SWEET_ALERT" | translate }}</a>
+                    </li>
+                    <li>
+                      <a href="javascript:void(0);">{{ "HEADER.UI.RATING" | translate }}</a>
+                    </li>
+                    <li>
+                      <a href="javascript:void(0);">{{ "HEADER.UI.FORMS" | translate }}</a>
+                    </li>
+                    <li>
+                      <a href="javascript:void(0);">{{ "HEADER.UI.TABLES" | translate }}</a>
+                    </li>
+                    <li>
+                      <a href="javascript:void(0);">{{ "HEADER.UI.CHARTS" | translate }}</a>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="col-md-4">
+                  <h5 class="font-size-14 mt-0">
+                    {{ "HEADER.APPLICATIONS.TITLE" | translate }}
+                  </h5>
+                  <ul class="list-unstyled megamenu-list">
+                    <li>
+                      <a href="javascript:void(0);">{{ "HEADER.APPLICATIONS.ECOMMERCE" | translate }}</a>
+                    </li>
+                    <li>
+                      <a href="javascript:void(0);">{{ "HEADER.APPLICATIONS.CALENDAR" | translate }}</a>
+                    </li>
+                    <li>
+                      <a href="javascript:void(0);">{{ "HEADER.APPLICATIONS.EMAIL" | translate }}</a>
+                    </li>
+                    <li>
+                      <a href="javascript:void(0);">{{ "HEADER.APPLICATIONS.PROJECTS" | translate }}</a>
+                    </li>
+                    <li>
+                      <a href="javascript:void(0);">{{ "HEADER.APPLICATIONS.TASKS" | translate }}</a>
+                    </li>
+                    <li>
+                      <a href="javascript:void(0);">{{ "HEADER.APPLICATIONS.CONTACTS" | translate }}</a>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="col-md-4">
+                  <h5 class="font-size-14 mt-0">
+                    {{ "HEADER.EXTRA_PAGES.TITLE" | translate }}
+                  </h5>
+                  <ul class="list-unstyled megamenu-list">
+                    <li>
+                      <a href="javascript:void(0);">{{ "HEADER.EXTRA_PAGES.LIGHT_SIDEBAR" | translate }}</a>
+                    </li>
+                    <li>
+                      <a href="javascript:void(0);">{{ "HEADER.EXTRA_PAGES.COMPACT_SIDEBAR" | translate }}</a>
+                    </li>
+                    <li>
+                      <a href="javascript:void(0);">{{ "HEADER.EXTRA_PAGES.HORIZONTAL_LAYOUT" | translate }}</a>
+                    </li>
+                    <li>
+                      <a href="javascript:void(0);">{{ "HEADER.EXTRA_PAGES.MAINTENANCE" | translate }}</a>
+                    </li>
+                    <li>
+                      <a href="javascript:void(0);">{{ "HEADER.EXTRA_PAGES.COMING SOON" | translate }}</a>
+                    </li>
+                    <li>
+                      <a href="javascript:void(0);">{{ "HEADER.EXTRA_PAGES.TIMELINE" | translate }}</a>
+                    </li>
+                    <li>
+                      <a href="javascript:void(0);">{{ "HEADER.EXTRA_PAGES.FAQ" | translate }}</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h5 class="font-size-14 mt-0">
+                    {{ "HEADER.UI.TITLE" | translate }}
+                  </h5>
+                  <ul class="list-unstyled megamenu-list">
+                    <li>
+                      <a href="javascript:void(0);">{{ "HEADER.UI.LIGHTBOX" | translate }}</a>
+                    </li>
+                    <li>
+                      <a href="javascript:void(0);">{{ "HEADER.UI.RANGE_SLIDER" | translate }}</a>
+                    </li>
+                    <li>
+                      <a href="javascript:void(0);">{{ "HEADER.UI.SWEET_ALERT" | translate }}</a>
+                    </li>
+                    <li>
+                      <a href="javascript:void(0);">{{ "HEADER.UI.RATING" | translate }}</a>
+                    </li>
+                    <li>
+                      <a href="javascript:void(0);">{{ "HEADER.UI.FORMS" | translate }}</a>
+                    </li>
+                    <li>
+                      <a href="javascript:void(0);">{{ "HEADER.UI.TABLES" | translate }}</a>
+                    </li>
+                    <li>
+                      <a href="javascript:void(0);">{{ "HEADER.UI.CHARTS" | translate }}</a>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="col-sm-5">
+                  <div>
+                    <img src="assets/images/megamenu-img.png" alt="" class="img-fluid mx-auto d-block" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> -->
+    </div>
+    <div class="d-lg-inline-block text-center" id="company-profile">
+      <div class="comp-time" (mouseenter)="showPopUp()" (mouseleave)="showPopUp()">
+        <p><i class="mr-1 text-danger ri-map-pin-line"></i> {{CompanyName}}</p>
+        <h6>{{ time | date: "hh:mm:ss a" }}</h6>
+      </div>
+
+    </div>
+    <div class="d-flex">
+      <div class="dropdown d-inline-block d-lg-none ml-2" ngbDropdown>
+        <button type="button" ngbDropdownToggle class="btn header-item noti-icon waves-effect" id="page-header-search-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="ri-search-line"></i>
+        </button>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right p-0" aria-labelledby="page-header-search-dropdown" ngbDropdownMenu>
+          <dx-form [formData]="TopBarFormData" #TopBarForm [showRequiredMark]="false">
+            <dxi-item
+              cssClass="px-1 m-0"
+              [colSpan]="2"
+              dataField="NavigationBox"
+              editorType="dxSelectBox"
+              [editorOptions]="{
+                dataSource: FilterBoxList,
+                valueExpr: 'link',
+                displayExpr: 'label',
+                placeholder: 'Navigate...',
+                searchEnabled: true,
+                onValueChanged: navigateToSelectedScreen
+              }"
+            >
+              <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+            </dxi-item>
+          </dx-form>
+        </div>
+      </div>
+
+      <!-- <div class="dropdown d-inline-block" ngbDropdown>
+        <div class="dropdown d-none d-lg-inline-block ml-1">
+        </div>
+        <button type="button" class="btn header-item" id="page-header-user-dropdown" ngbDropdownToggle>
+          <img *ngIf="SelectedLanguageFlagValue != undefined && SelectedLanguageFlagValue!=null" src="{{SelectedLanguageFlagValue}}" alt="Language" height="16" />
+          <span class="ml-1">{{ SelectedLangugeCountryName }}</span>
+          <img *ngIf="flagvalue === undefined" src="{{ valueset }}" alt="Header Language" height="16" />
+          <span *ngIf="flagvalue === undefined" class="ml-1">English</span>
+        </button>
+        <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+          <a
+            href="javascript:void(0);"
+            class="dropdown-item notify-item"
+            *ngFor="let item of listLang"
+            (click)="setLanguage(item.text, item.lang, item.flag)"
+            [ngClass]="{ active: cookieValue === item.lang }"
+          >
+            <img src="{{ item.flag }}" alt="user-image" class="mr-1" height="12" />
+            <span class="align-middle">{{ item.text }}</span>
+          </a>
+       
+        </div>
+      </div> -->
+      
+      <!-- <div class="dropdown d-inline-block" ngbDropdown>
+        <button type="button" class="btn header-item" id="page-header-user-dropdown" ngbDropdownToggle>
+          <img *ngIf="flagvalue !== undefined" src="{{ flagvalue }}" alt="Header Language" height="16" />
+          <span class="ml-1">{{ countryName }}</span>
+          <img *ngIf="flagvalue === undefined" src="{{ valueset }}" alt="Header Language" height="16" />
+          <span *ngIf="flagvalue === undefined" class="ml-1">English</span>
+        </button>
+        <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+   
+          <a
+            href="javascript:void(0);"
+            class="dropdown-item notify-item"
+            *ngFor="let item of listLang"
+            (click)="setLanguage(item.text, item.lang, item.flag)"
+            [ngClass]="{ active: cookieValue === item.lang }"
+          >
+            <img src="{{ item.flag }}" alt="user-image" class="mr-1" height="12" />
+            <span class="align-middle">{{ item.text }}</span>
+          </a>
+    
+        </div>
+      </div> -->
+      <div class="dropdown d-inline-block" ngbDropdown>
+        <!-- <div class="dropdown d-none d-lg-inline-block ml-1">
+          <div class="d-flex justify-content-center align-items-center mt-3 timeWrape">
+            <div class="time">
+              <h6 class="pt-1">{{ time | date: "hh:mm:ss a" }}</h6>
+            </div>
+          </div>
+        </div> -->
+        <!-- <div class="dropdown d-none d-lg-inline-block ml-1 timeWrape">
+          <button type="button" class="header-item ">
+          
+          </button>
+        </div> -->
+
+        <!-- <div class="container">
+          <div class="inner d-flex justify-content-center align-items-center">
+            <p class="text-white">7:25 pm</p>
+          </div>
+        </div> -->
+
+        <!-- <button type="button" class="btn header-item" id="page-header-user-dropdown" ngbDropdownToggle>
+          <img *ngIf="flagvalue !== undefined" src="{{ flagvalue }}" alt="Header Language" height="16" />
+          <span class="ml-1">{{ countryName }}</span>
+          <img *ngIf="flagvalue === undefined" src="{{ valueset }}" alt="Header Language" height="16" />
+          <span *ngIf="flagvalue === undefined" class="ml-1">English</span>
+        </button> -->
+        <!-- <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+       
+          <a
+            href="javascript:void(0);"
+            class="dropdown-item notify-item"
+            *ngFor="let item of listLang"
+            (click)="setLanguage(item.text, item.lang, item.flag)"
+            [ngClass]="{ active: cookieValue === item.lang }"
+          >
+            <img src="{{ item.flag }}" alt="user-image" class="mr-1" height="12" />
+            <span class="align-middle">{{ item.text }}</span>
+          </a>
+       
+        </div> -->
+      </div>
+      <div class="d-lg-inline-block">
+        <button type="button" class="btn header-item noti-icon waves-effect" (click)="openUtilitiesPopup(1)">
+          <i class="ri-tools-fill"></i>
+        </button>
+        <!-- <dx-button class="btn header-item noti-icon waves-effect" icon="tool" text="dxButton"></dx-button> -->
+        <!-- <system-utitlities [DefinationsPopupVisible]="showUtilities" (closeSubDefinationsPopup)="openUtilitiesPopup($event)"></system-utitlities> -->
+      </div>
+
+      <div class="dropdown d-none d-lg-inline-block ml-1">
+        <button type="button" class="btn header-item noti-icon waves-effect" (click)="fullscreen()">
+          <i class="ri-fullscreen-line"></i>
+        </button>
+      </div>
+
+      <div class="dropdown d-inline-block" ngbDropdown>
+        <button
+          type="button"
+          ngbDropdownToggle
+          class="btn header-item noti-icon waves-effect"
+          id="page-header-notifications-dropdown"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          <i class="ri-notification-3-line"></i>
+          <span *ngIf="notificationList.length > 0" class="noti-dot"></span>
+        </button>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right p-0" ngbDropdownMenu aria-labelledby="page-header-notifications-dropdown">
+          <div class="p-3">
+            <div class="row align-items-center">
+              <div class="col">
+                <h6 class="m-0">
+                  {{ "HEADER.NOTIFICATIONS.TITLE" | translate }}
+                </h6>
+              </div>
+              <div class="col-auto">
+                <a href="javascript: void(0);" class="small">{{ notificationList.length }}</a>
+              </div>
+            </div>
+          </div>
+          <perfect-scrollbar style="position: relative; height: 230px" [config]="configData">
+            <div (mouseleave)="ChangeNotificationStatus(item.NotificationId)" *ngFor="let item of notificationList" class="text-reset notification-item m-0 p-0">
+              <div class="media">
+                <div class="avatar-xs mr-3">
+                  <span [ngClass]="['avatar-title', 'rounded-circle', 'font-size-16', item.NotificationIconBg]">
+                    <i class="{{ item.NotificationIcon_Remix }}"></i>
+                  </span>
+                </div>
+                <div class="media-body">
+                  <h6 class="mt-0 mb-1">{{ item.NotificationTitle }}</h6>
+                  <div class="font-size-12 text-muted">
+                    <p class="mb-1">{{ item.NotificationBody }}</p>
+                    <p class="mb-0">
+                      <i class="mdi mdi-clock-outline"></i>
+                      {{ item.NotifiationTime }}
+                    </p>
+                    <p class="mb-0 float-right" style="font-size: 20px">
+                      <i style="cursor: pointer" (click)="RemoveFromNotification(item.NotificationId)" class="ri-close-circle-fill"></i>
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <hr class="m-0 p-0" />
+            </div>
+            <!-- <a href="" class="text-reset notification-item">
+              <div class="media">
+                <img src="assets/images/users/avatar-3.jpg" class="mr-3 rounded-circle avatar-xs" alt="user-pic" />
+                <div class="media-body">
+                  <h6 class="mt-0 mb-1">
+                    {{ "HEADER.NOTIFICATIONS.SECOND.TITLE" | translate }}
+                  </h6>
+                  <div class="font-size-12 text-muted">
+                    <p class="mb-1">
+                      {{ "HEADER.NOTIFICATIONS.SECOND.TEXT" | translate }}
+                    </p>
+                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i>{{ "HEADER.NOTIFICATIONS.SECOND.TIME" | translate }}</p>
+                  </div>
+                </div>
+              </div>
+            </a>
+            <a href="" class="text-reset notification-item">
+              <div class="media">
+                <div class="avatar-xs mr-3">
+                  <span class="avatar-title bg-success rounded-circle font-size-16">
+                    <i class="ri-checkbox-circle-line"></i>
+                  </span>
+                </div>
+                <div class="media-body">
+                  <h6 class="mt-0 mb-1">
+                    {{ "HEADER.NOTIFICATIONS.THIRD.TITLE" | translate }}
+                  </h6>
+                  <div class="font-size-12 text-muted">
+                    <p class="mb-1">
+                      {{ "HEADER.NOTIFICATIONS.THIRD.TEXT" | translate }}
+                    </p>
+                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i>{{ "HEADER.NOTIFICATIONS.THIRD.TIME" | translate }}</p>
+                  </div>
+                </div>
+              </div>
+            </a>
+            <a href="" class="text-reset notification-item">
+              <div class="media">
+                <img src="assets/images/users/avatar-4.jpg" class="mr-3 rounded-circle avatar-xs" alt="user-pic" />
+                <div class="media-body">
+                  <h6 class="mt-0 mb-1">
+                    {{ "HEADER.NOTIFICATIONS.FOUR.TITLE" | translate }}
+                  </h6>
+                  <div class="font-size-12 text-muted">
+                    <p class="mb-1">
+                      {{ "HEADER.NOTIFICATIONS.FOUR.TEXT" | translate }}
+                    </p>
+                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i>{{ "HEADER.NOTIFICATIONS.FOUR.TIME" | translate }}</p>
+                  </div>
+                </div>
+              </div>
+            </a> -->
+          </perfect-scrollbar>
+          <!-- <div class="p-2 border-top">
+            <a class="btn btn-sm btn-link font-size-14 btn-block text-center" href="javascript:void(0)">
+              <i class="mdi mdi-arrow-right-circle mr-1"></i>
+              {{ "HEADER.NOTIFICATIONS.LOAD_MORE" | translate }}
+            </a>
+          </div> -->
+        </div>
+      </div>
+      <div class="d-flex d-inline-block">
+        <button class="btn header-item">
+          <i class="fas fa-wifi" id="wifi-icon" style="color: #00e000"></i>
+        </button>
+      </div>
+      <div class="dropdown d-inline-block user-dropdown" ngbDropdown>
+        <button type="button" ngbDropdownToggle class="btn header-item waves-effect" id="page-header-user-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <!-- <img class="rounded-circle header-profile-user" src="assets/images/users/avatar-2.jpg" alt="Header Avatar" /> -->
+          <span class="d-none d-xl-inline-block ml-1">{{ UserName }}</span>
+          <!-- <span class="d-none d-xl-inline-block ml-1">Sufian Arshad</span> -->
+          <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+        </button>
+
+        <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+          <!-- <a class="dropdown-item" href="javascript: void(0);"><i class="ri-user-line align-middle mr-1"></i> {{ "HEADER.LOGIN.PROFILE" | translate }}</a>
+          <a class="dropdown-item" href="javascript: void(0);"><i class="ri-wallet-2-line align-middle mr-1"></i>{{ "HEADER.LOGIN.MY_WALLET" | translate }}</a>
+          <a class="dropdown-item d-block" href="javascript: void(0);"
+            ><span class="badge badge-success float-right mt-1">11</span><i class="ri-settings-2-line align-middle mr-1"></i>{{ "HEADER.LOGIN.SETTINGS" | translate }}
+          </a>
+          <a class="dropdown-item" href="javascript: void(0);"><i class="ri-lock-unlock-line align-middle mr-1"></i> {{ "HEADER.LOGIN.LOCK_SCREEN" | translate }}</a> -->
+          <a class="dropdown-item text-warning" href="javascript: void(0)" (click)="resetPassword()"> <i class="ri-key-2-line align-middle mr-1 text-warning"></i> Reset Password </a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item text-danger" href="javascript: void(0);" (click)="logout()">
+            <i class="ri-shut-down-line align-middle mr-1 text-danger"></i> Logout</a
+          >
+        </div>
+      </div>
+
+      <!-- <div class="dropdown d-inline-block">
+        <button type="button" class="btn header-item noti-icon right-bar-toggle waves-effect" (click)="toggleRightSidebar()">
+          <i class="ri-settings-2-line"></i>
+        </button>
+      </div> -->
+    </div>
+  </div>
+</header>
+
+<dx-popup [width]="400" [height]="265" [showTitle]="true" title="Password Reset" [dragEnabled]="true" [closeOnOutsideClick]="false" [(visible)]="resetPasswordPopup">
+  <div *dxTemplate="let data of 'content'">
+    <dx-form id="form" [formData]="resetPasswordFormData" #resetPasswordForm>
+      <dxi-item dataField="OldPassword" editorType="dxTextBox" [editorOptions]="{}">
+        <dxi-validation-rule type="required" message="Old Password is required"></dxi-validation-rule>
+        
+      </dxi-item>
+      <dxi-item dataField="Password1" editorType="dxTextBox" [editorOptions]="{}">
+        <dxo-label text="New Password" location="left" [showColon]="false"></dxo-label>
+        <dxi-validation-rule type="required" message="New Password is required"></dxi-validation-rule>
+        <dxi-validation-rule type="custom" [validationCallback]="matchPassword1" message="New Password is not same!"> </dxi-validation-rule>
+        <dxi-validation-rule type="custom" [validationCallback]="validateformat" message="Password Must Contain Specail Characters!"> </dxi-validation-rule>
+        <dxi-validation-rule type="custom" [validationCallback]="validatelength" message="Password Must be greater than 5 characters!"> </dxi-validation-rule>
+      </dxi-item>
+      <dxi-item dataField="Password" editorType="dxTextBox" [editorOptions]="{}">
+        <dxo-label text="Confirm Password" location="left" [showColon]="false"></dxo-label>
+
+        <dxi-validation-rule type="required" message="New Password is required"></dxi-validation-rule>
+        <dxi-validation-rule type="custom" [validationCallback]="validateformat" message="Password Must Contain Specail Characters!"> </dxi-validation-rule>
+        <dxi-validation-rule type="custom" [validationCallback]="validatelength" message="Password Must be greater than 5 characters!"> </dxi-validation-rule>
+        <dxi-validation-rule type="custom" [validationCallback]="matchPassword" message="Password didn't match!"> </dxi-validation-rule>
+      </dxi-item>
+    </dx-form>
+    <div class="mt-4 d-flex justify-content-end">
+      <dx-button (onClick)="Submit()" type="success" icon="save" text="Update"></dx-button>
+    </div>
+    <div class="col-md-12">
+      <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+    </div>
+  </div>
+</dx-popup>
+<dx-tooltip target="#company-profile" [width]="800" [closeOnOutsideClick]="true" [(visible)]="showCompanyProfile">
+  <div *dxTemplate="let data = data; of: 'content'">
+    <div class="row">
+      <div class="col-4">
+        <div class="contact-detail">
+          <p class="text-right text-truncate" style="word-wrap: break-word">
+            {{ companyProfileDetail?.CompEmailA }}<span><i class="text-danger ri-mail-line ml-2"></i></span>
+          </p>
+          <p class="text-right text-truncate">
+            {{ companyProfileDetail?.CompContactPerson }} <span><i class="text-danger ri-shield-user-line ml-2"></i></span>
+          </p>
+          <p class="text-right text-truncate">
+            {{ companyProfileDetail?.CompMobileA }}<span><i class="text-danger ri-phone-line ml-2"></i></span>
+          </p>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="profile-image ">
+          <div class="ml-3">
+                    <div class="image ml-5" >
+        
+          </div>
+          </div>
+  
+          <div class="text-center image-detail">
+            <h6 class="text-info text-center pt-1">{{ companyProfileDetail?.CompName }}</h6>
+            <p>{{ companyProfileDetail?.CompAddress }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="company-detail">
+          <p class="text-left">
+            <span><i class="text-danger ri-global-line mr-2"></i></span> {{companyProfileDetail?.CompCountry}}
+          </p>
+          <p class="text-left">
+            <span><i class="ri-money-dollar-circle-line text-danger mr-2"></i></span> {{companyProfileDetail?.CompBaseCurr}}
+          </p>
+          <p class="text-left">
+            <span><i class="ri-typhoon-line text-danger mr-2"></i></span> {{companyProfileDetail?.CompType}}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</dx-tooltip>
+<notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>

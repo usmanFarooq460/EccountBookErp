@@ -1,0 +1,477 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 d-flex justify-content-between">
+      <div class="">
+  <h4>Receivables Report</h4>
+      </div>
+      <div class="">
+        <dx-button type="default" hint="Add Followup"  icon="add" (onClick)="handleReceivableFollowupFormVisiblility(0)" text="Add Followup"></dx-button>
+      </div>
+    
+    </div>
+  </div>
+  <dx-form id="form" [visible]="!IsLoadedInPopup" [formData]="ReceivablesReportFormData" #ReceivablesReportForm [showRequiredMark]="false" [colCountByScreen]="{ lg: 5, md: 3, sm: 2, xs: 1 }">
+    <dxi-item
+      dataField="BrancheId"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        placeholder: 'Branch Name',
+        items: branchList,
+        searchEnabled: true,
+        valueExpr: 'Id',
+        displayExpr: 'BranchName',
+        showClearButton: 'true',
+        stylingMode: 'underlined'
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Branch is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      dataField="ProjectId"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        placeholder: 'Project Name',
+        items: projectList,
+        searchEnabled: true,
+        valueExpr: 'Id',
+        displayExpr: 'ProjectName',
+        showClearButton: 'true',
+        stylingMode: 'underlined'
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Project is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item dataField="FromDate" editorType="dxDateBox" [editorOptions]="{ displayFormat: 'dd-MMM-yyyy', placeholder: 'From Date', showClearButton: 'true', stylingMode: 'underlined' }">
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="From Date is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item dataField="ToDate" editorType="dxDateBox" [editorOptions]="{ displayFormat: 'dd-MMM-yyyy', placeholder: 'To Date', showClearButton: 'true', stylingMode: 'underlined' }">
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="To Date is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      dataField="AccountTypeId"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        placeholder: 'Account Type',
+        items: AccountTypesList,
+        searchEnabled: true,
+        valueExpr: 'Id',
+        displayExpr: 'AccountType',
+        showClearButton: 'true',
+        stylingMode: 'underlined',
+        onValueChanged: handleAccountTypeChanged
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Account Type is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      dataField="BalanceFrom"
+      editorType="dxNumberBox"
+      [editorOptions]="{
+        placeholder: 'Balance From',
+        showClearButton: 'true',
+        stylingMode: 'underlined'
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <!-- <dxi-validation-rule type="required" message="Balance From is required"></dxi-validation-rule> -->
+    </dxi-item>
+    <dxi-item
+      dataField="BalanceTo"
+      editorType="dxNumberBox"
+      [editorOptions]="{
+        placeholder: 'Balance To',
+        showClearButton: 'true',
+        stylingMode: 'underlined'
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <!-- <dxi-validation-rule type="required" message="Balance To is required"></dxi-validation-rule> -->
+    </dxi-item>
+    <dxi-item
+      dataField="CityId"
+      cssClass="px-1 m-0"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        items: CityList,
+        valueExpr: 'Id',
+        displayExpr: 'CityName',
+        searchEnabled: true,
+        placeholder: 'City',
+        showClearButton: 'true',
+        stylingMode: 'underlined'
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <!-- <dxi-validation-rule type="required" message="City is required"></dxi-validation-rule> -->
+    </dxi-item>
+    <dxi-item [colSpan]="2">
+      <div *dxTemplate class="d-flex mt-2">
+        <div class="dx-field-value" style="width: 140% !important">
+          <dx-drop-down-box
+            [(value)]="selectedAccountsTypeCodes"
+            valueExpr="AccountCode"
+            displayExpr="AccountTitle"
+            [stylingMode]="'underlined'"
+            placeholder="Select Receivable Account"
+            [dataSource]="ParentAccountList"
+            [showClearButton]="true"
+          >
+            <div *dxTemplate="let data of 'content'">
+              <dx-data-grid
+                [dataSource]="ParentAccountList"
+                [columns]="['AccountCode', 'AccountTitle']"
+                [selection]="{ mode: 'multiple' }"
+                [hoverStateEnabled]="true"
+                [paging]="{ enabled: true, pageSize: 5 }"
+                [filterRow]="{ visible: true }"
+                [scrolling]="{ mode: 'virtual' }"
+                [height]="280"
+                [(selectedRowKeys)]="selectedAccountsTypeCodes"
+              >
+              </dx-data-grid>
+            </div>
+          </dx-drop-down-box>
+        </div>
+      </div>
+    </dxi-item>
+  </dx-form>
+  <div *ngIf="!IsLoadedInPopup" class="d-flex justify-content-end mt-1">
+    <div class="m-0 p-1">
+      <dx-button type="success" (onClick)="FetchReceivablesData()" text="Show"></dx-button>
+    </div>
+  </div>
+  <div class="row" >
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header text-center">
+          <h4 style="font-weight: bold; font-family: cursive">Receivables Totals Info</h4>
+        </div>
+        <div class="card-body" style="min-height: 220px;">
+          <div class="row d-flex justify-content-center">
+            <div class="col-md-4 col-6 p-o m-0 my-2" *ngFor="let item of ReceivablesTotalsArray; let i = index">
+              <app-info-card-with-heading-and-value [Index]="i" [CardHeading]="i==0?'Total Receivables':'Last Received'" [CardValue]="item.value"></app-info-card-with-heading-and-value>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" >
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header text-center">
+          <h4 style="font-weight: bold; font-family: cursive">Top Receivables Info</h4>
+        </div>
+        <div class="card-body" style="max-height: 440px; min-height: 220px;">
+          <dx-scroll-view [showScrollbar]="'always'" [scrollByContent]="true" [scrollByThumb]="true">
+            <div class="row d-flex justify-content-center">
+            <div class="col-md-4 col-6 p-o m-0 my-2" *ngFor="let item of TopThreeReceivablesArray; let i = index">
+              <app-info-cards-with-top-or-lowest-values [Index]="i" (MoreInfoClicked)="HandleCustomerInofPopupVisibility($event)" [UniqueId]="item" [Heading]="item.Index" [Title]="item.name" [SubTitle]="item.city" [Value]="item.value"></app-info-cards-with-top-or-lowest-values>
+            </div>
+          </div>
+          </dx-scroll-view>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" >
+    <div class="col-md-12">
+      <div class="card" style="min-height: 350px">
+        <div class="card-header d-flex justify-content-center">
+          <div class="">
+            <h4 style="font-family: cursive; font-weight: bold">Graphical View Of City Wise Receivables</h4>
+          </div>
+        </div>
+        <div class="card-body">
+          <app-pie-chart
+            *ngIf="DataForCityWiseChart"
+            [ChartTitle]=""
+            (OnChartClick)="handleChartClicked($event)"
+            [ChartSeriesName]="'Receivables'"
+            [ChartLegendList]="DataForCityWiseChart?.Legends"
+            [ChartSeriesData]="DataForCityWiseChart?.Sereis"
+          >
+          </app-pie-chart>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card p-2 rounded">
+        <dx-data-grid
+          id="gridContainer"
+          #ReceivablesReportGrid
+          [dataSource]="ReceivablesReportDataSource"
+          [height]="IsLoadedInPopup == false ? gridHeight : gridHeightInPopupWithGrid"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [allowColumnReordering]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+          (onToolbarPreparing)="ReceivablesReportGridToolbar($event)"
+        >
+          <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-filter-row [visible]="filter"></dxo-filter-row>
+          <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+          <dxo-header-filter [visible]="filter"></dxo-header-filter>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-load-panel [enabled]="false"></dxo-load-panel>
+          <dxo-export [enabled]="true" fileName="GeneralLedgerDetailRpt" [allowExportSelectedData]="true">
+            <dxo-texts exportAll="Export All Rows"></dxo-texts>
+          </dxo-export>
+          <!-- <dxo-selection mode="multiple" selectAllMode="page" showCheckBoxesMode="always"></dxo-selection> -->
+          <dxo-paging [enabled]="true"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true"></dxo-pager>
+          <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('ReceivablesReportGridState') }}"></dxo-state-storing>
+          <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+          <dxi-column dataField="" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+          <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+            <div class="d-con-cell-action">
+              <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+            </div>
+          </div>
+          <dxi-column dataField="AccountCode" caption="Account Code" [allowSearch]="true" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="AccountTitle" caption="Account Title" [allowSearch]="true" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="CityName" caption="City" [allowSearch]="true" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="Opening" caption="Opening" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="ObDebit" caption="Debit" dataType="number" [allowSearch]="true" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="ObCredit" caption="Credit" dataType="number" [allowSearch]="true" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="ClDebit" caption="Closing" dataType="number" [allowSearch]="true" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          
+          <dxi-column dataField="FollowupDate" [allowSearch]="true" caption="Followup Date" [format]="'dd-MMM-yyyy'" [width]="110" dataType="date"></dxi-column>
+          <dxi-column dataField="PromiseDate" [allowSearch]="true" caption="Promise Date" [format]="'dd-MMM-yyyy'" [width]="110" dataType="date"></dxi-column>
+          <dxi-column dataField="LastBillDate" [allowSearch]="true" caption="Last Bill Date" [format]="'dd-MMM-yyyy'" [width]="110" dataType="date"></dxi-column>
+          <dxi-column dataField="LastBillsAmount" caption="Last Bill Amount" [allowSearch]="true" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="BillDays" caption="Bill Days" dataType="number" [allowSearch]="true" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="LastRcvdDate" caption="Last Receieved Date" [format]="'dd-MMM-yyyy'" [width]="110" dataType="date"></dxi-column>
+          <dxi-column dataField="LastRcvdAmount" caption="Last Receieved Amount" [allowSearch]="true" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="RcvdDays" caption="RcvdDays" [allowSearch]="true" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxo-summary>
+            <!-- valueFormat="#0.##;(#0.##)", -->
+            <dxi-total-item column="Opening" summaryType="count" displayFormat="Total Records: {0}"> </dxi-total-item>
+            <dxi-total-item column="ClDebit" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-group-item column="Opening" summaryType="sum" displayFormat="{0}" [showInGroupFooter]="true" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+            <dxi-group-item column="ClDebit" summaryType="sum" displayFormat="{0}" [showInGroupFooter]="true" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+          </dxo-summary>
+          <dxi-column
+            dataField="button"
+            [fixed]="true"
+            [fixedPosition]="'right'"
+            [width]="90"
+            alignment="right"
+            caption="Action"
+            [allowEditing]="false"
+            [allowExporting]="false"
+            [allowFiltering]="false"
+            [allowFixing]="false"
+            [allowGrouping]="false"
+            [allowHeaderFiltering]="false"
+            [allowHiding]="false"
+            [allowReordering]="false"
+            [allowResizing]="false"
+            [allowSearch]="false"
+            [allowSorting]="false"
+            cellTemplate="buttonTemplate"
+          ></dxi-column>
+          <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+            <div class="d-con-cell-action">
+              <dx-button type="danger" stylingMode="text" hint="View Detail" (onClick)="HandleCustomerInofPopupVisibility(cellInfo.data)">
+                <i class="ri-search-eye-line" style="height: 24px; width: 24px"></i>
+              </dx-button>
+              <dx-button type="danger" hint="293-Supplier/Customer Slip" stylingMode="text" (onClick)="onPrint(cellInfo.data)">
+                <i class="ri-printer-line"></i>
+              </dx-button>
+            </div>
+          </div>
+          <dxo-scrolling [mode]="'infinite'" [scrollByContent]="true" [scrollByThumb]="true"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <app-supplier-customer-info-card
+        *ngIf="CustomerInfoVisible"
+        [CompanyId]="CompanyIdForCustomerInfo"
+        [SupplierCustomerId]="SupplierCustomerIdForCustomerInfo"
+        (ClosePopup)="HandleCustomerInofPopupVisibility($event)"
+        [FolowupButtonVisible]="true"
+        (FollowupButtonClick)="handleReceivableFollowupFormVisiblility($event)"
+      ></app-supplier-customer-info-card>
+    </div>
+  </div>
+  <div class="row" >
+    <div class="col-md-12">
+
+      <app-custom-styled-popup-with-dynamic-height-width
+      [PopupHeading]="'Recceivables Detail By City'"
+      [PopupVisible]="ReceivablesDetailChartsPopupVisible"
+      (ClosePopup)="handleReceivablesDetailChartsPopupVisibility($event)"
+      >
+      <ng-template >
+
+        <div class="card" *ngFor="let item of ReceivablesDataBreakupByCityList">
+          <div class="card-header d-flex justify-content-center">
+            <div class="">
+              <h4 style="font-family: cursive; font-weight: bold">
+                {{ "Detail of " + item.CityWiseReceivablesDetailPopupHeading }}
+              </h4>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-12">
+                <app-pie-chart
+                  [ChartTitle]=""
+                  (OnChartClick)="MakeCustomerInfoPopupVisibleOnChartPalleteClick($event)"
+                  [ChartSeriesName]="'Receivables'"
+                  [ChartLegendList]="item.CityWiseReceivablesDetailChartData?.Legends"
+                  [ChartSeriesData]="item.CityWiseReceivablesDetailChartData?.Series"
+                >
+                </app-pie-chart>
+              </div>
+              <div class="col-md-12">
+                <dx-data-grid
+                  #ImportContractApprovalGrid
+                  [height]="350"
+                  id="GridWithHeading"
+                  [dataSource]="item.CityWiseReceivablesDetailDataSource"
+                  [showColumnLines]="false"
+                  [showRowLines]="true"
+                  [allowColumnReordering]="true"
+                  [rowAlternationEnabled]="true"
+                  [allowColumnResizing]="true"
+                  [columnAutoWidth]="true"
+                  [showBorders]="true"
+                  (onToolbarPreparing)="ApprovalPopupGridToolbarPreparing($event)"
+                >
+                  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+                  <dxo-load-panel [enabled]="true"></dxo-load-panel>
+                  <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+                  <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+                  <dxo-filter-row [visible]="filter"></dxo-filter-row>
+                  <dxo-header-filter [visible]="filter"></dxo-header-filter>
+                  <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('ReceivablesCityWiseDetailGridState') }}"></dxo-state-storing>
+                  <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+                  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+                  <div *dxTemplate="let data of 'CardDetailGridHeadingTemplate'">
+                    <div class="HeadingDiv">
+                      <h4 class="Heading" style="font-weight: bold; color: whitesmoke">{{ "Tabular View" }}</h4>
+                    </div>
+                  </div>
+                  <dxi-column dataField="Sr#" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+                  <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+                    <div class="d-con-cell-action">
+                      <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+                    </div>
+                  </div>
+                  <dxi-column dataField="AccountCode" [visible]="false" caption="Account Code" [allowSearch]="true" dataType="string" alignment="left"></dxi-column>
+                  <dxi-column dataField="AccountTitle" caption="Account Title" [allowSearch]="true" dataType="string" alignment="left"></dxi-column>
+                  <dxi-column dataField="CityName" [visible]="false" caption="City" [allowSearch]="true" dataType="string" alignment="left"></dxi-column>
+                  <dxi-column dataField="Opening" caption="Opening" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                  <dxi-column dataField="ObDebit" caption="Debit" dataType="number" [allowSearch]="true" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                  <dxi-column dataField="ObCredit" caption="Credit" dataType="number" [allowSearch]="true" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                  <dxi-column dataField="ClDebit" caption="Closing" dataType="number" [allowSearch]="true" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                  <dxi-column dataField="LastBillDate" [visible]="false" [allowSearch]="true" caption="Last Bill Date" [format]="'dd-MMM-yyyy'" [width]="110" dataType="date"></dxi-column>
+                  <dxi-column
+                    dataField="LastBillsAmount"
+                    [visible]="false"
+                    caption="Last Bill Amount"
+                    [allowSearch]="true"
+                    dataType="number"
+                    [format]="{ type: 'fixedPoint', precision: 0 }"
+                  ></dxi-column>
+                  <dxi-column dataField="BillDays" [visible]="false" caption="Bill Days" dataType="number" [allowSearch]="true" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                  <dxi-column dataField="LastRcvdDate" [visible]="false" caption="Last Receieved Date" [format]="'dd-MMM-yyyy'" [width]="110" dataType="date"></dxi-column>
+                  <dxi-column dataField="LastRcvdAmount" caption="Last Receieved Amount" [allowSearch]="true" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                  <dxi-column dataField="RcvdDays" caption="RcvdDays" [allowSearch]="true" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                  <dxi-column
+                    dataField="button"
+                    [fixed]="true"
+                    [fixedPosition]="'right'"
+                    [width]="90"
+                    alignment="right"
+                    caption="Action"
+                    [allowEditing]="false"
+                    [allowExporting]="false"
+                    [allowFiltering]="false"
+                    [allowFixing]="false"
+                    [allowGrouping]="false"
+                    [allowHeaderFiltering]="false"
+                    [allowHiding]="false"
+                    [allowReordering]="false"
+                    [allowResizing]="false"
+                    [allowSearch]="false"
+                    [allowSorting]="false"
+                    cellTemplate="buttonTemplate"
+                  ></dxi-column>
+                  <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+                    <div class="d-con-cell-action">
+                      <dx-button type="danger" stylingMode="text" hint="View Detail" (onClick)="HandleCustomerInofPopupVisibility(cellInfo.data)">
+                        <i class="ri-search-eye-line" style="height: 24px; width: 24px"></i>
+                      </dx-button>
+                      <dx-button type="danger" hint="293-Supplier/Customer Slip" stylingMode="text" (onClick)="onPrint(cellInfo.data)">
+                        <i class="ri-printer-line"></i>
+                      </dx-button>
+                    </div>
+                  </div>
+                  <dxo-scrolling [mode]="'infinite'" [showScrollbar]="'always'" [scrollByContent]="true" [scrollByThumb]="true" [scrollLeft]="true"></dxo-scrolling>
+                  <dxo-summary>
+                    <!-- valueFormat="#0.##;(#0.##)", -->
+                    <dxi-total-item column="Sr#" summaryType="count" displayFormat="{0}"> </dxi-total-item>
+                    <dxi-total-item column="ClDebit" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+                    <dxi-group-item column="Opening" summaryType="sum" displayFormat="{0}" [showInGroupFooter]="true" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+                    <dxi-group-item column="ClDebit" summaryType="sum" displayFormat="{0}" [showInGroupFooter]="true" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+                  </dxo-summary>
+                </dx-data-grid>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+      
+    </app-custom-styled-popup-with-dynamic-height-width>
+
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-21">
+      <app-custom-styled-popup-with-dynamic-height-width
+        [PopupVisible]="ReceivableFollowupFormVisible"
+        (ClosePopup)="handleReceivableFollowupFormVisiblility($event)"
+        [PopupHeading]="'Receivable Followup'"
+      >
+      <ng-template>
+        <receivable-follow-up-form
+        *ngIf="ReceivableFollowupFormVisible"
+        [IsLoadedInPopup]="true"
+               [CompanyId]="CompanyIdForReceivableFollowupForm"
+               [AccountId]="AccountIdForReceivableFollowupForm"
+       ></receivable-follow-up-form>
+      </ng-template>
+      </app-custom-styled-popup-with-dynamic-height-width>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+      <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+      <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+    </div>
+    <div class="col-md-12">
+      <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+    </div>
+  </div>
+</div>
+

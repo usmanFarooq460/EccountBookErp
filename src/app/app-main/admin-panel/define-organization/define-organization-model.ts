@@ -1,0 +1,19 @@
+export class defineOrganizationModel {
+  Id: number; //   Id
+  OrgCode: string; //   OrgCode
+  OrgName: string; //   OrgName
+  OrgReportingTitle: string; //   OrgReportingTitle
+  OrgContactPerson: string; //   OrgContactPerson
+  OrgEmailA: string; //   OrgEmailA
+  OrgEmailB: string; //   OrgEmailB
+  OrgTel: string; //   OrgTel
+  OrgMobileA: string; //   OrgMobileA
+  OrgMobileB: string; //   OrgMobileB
+  OrgMobileC: string; //   OrgMobileC
+  OrgAddress: string; //   OrgAddress
+  OrgLogo: string; //   OrgLogo
+  OrgCountry: string; //   OrgCountry
+  OrgState: string; //   OrgState
+  OrgBaseCurr: string; //   OrgBaseCurr
+  AllowedLocationsCount: number; //   AllowedLocationsCount
+}

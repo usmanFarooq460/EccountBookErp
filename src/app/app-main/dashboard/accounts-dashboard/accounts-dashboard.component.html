@@ -1,0 +1,979 @@
+<div class="container-fluid">
+  <app-pagetitle [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+  <dx-form id="form" [formData]="DashboardFormData" #DashboardForm [showRequiredMark]="false">
+    <dxi-item itemType="group" cssClass="second-group" [colCount]="6">
+      <dxi-item> </dxi-item>
+
+      <dxi-item
+        dataField="dateType"
+        editorType="dxSelectBox"
+        [editorOptions]="{
+          placeholder: 'Date Type',
+          items: dateList,
+          valueExpr: 'Id',
+          displayExpr: 'name',
+          onInitialized: setFocus,
+          onValueChanged: datetypeChanged
+        }"
+      >
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      </dxi-item>
+      <dxi-item
+        cssClass="px-1 m-0 "
+        dataField="fromDate"
+        editorType="dxDateBox"
+        [editorOptions]="{
+          placeholder: 'From Date',
+          displayFormat: 'dd-MMM-yyyy'
+        }"
+      >
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        <dxi-validation-rule type="required" message="From Date is required"></dxi-validation-rule>
+      </dxi-item>
+
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="toDate"
+        editorType="dxDateBox"
+        [editorOptions]="{
+          placeholder: 'To Date',
+          displayFormat: 'dd-MMM-yyyy'
+        }"
+      >
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        <dxi-validation-rule type="required" message="To Date is required"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item>
+        <dx-button class="btn-sm" style="margin-top: 10px" text="Show" type="success" (onClick)="onSubmit()"></dx-button>
+      </dxi-item>
+    </dxi-item>
+  </dx-form>
+</div>
+<!-- Popup For Accounts Balances -->
+<dx-popup
+  [width]="1200"
+  [height]="'auto'"
+  [position]="{ my: 'left top', at: 'left top', of: 'form', offset: '100 100' }"
+  [showTitle]="true"
+  title="{{ dashboardTitle }}"
+  [dragEnabled]="true"
+  [closeOnOutsideClick]="false"
+  [(visible)]="loadStatus"
+>
+  <div *dxTemplate="let data of 'content'">
+    <dx-data-grid
+      #popupGrid
+      style="height: 770px"
+      id="gridContainer"
+      [dataSource]="popupDataSource"
+      [showColumnLines]="false"
+      [showRowLines]="true"
+      [rowAlternationEnabled]="true"
+      [allowColumnResizing]="true"
+      [columnAutoWidth]="true"
+      [showBorders]="true"
+    >
+      <dxo-load-panel [enabled]="true"></dxo-load-panel>
+      <!-- <dxo-selection mode="multiple" selectAllMode="page" showCheckBoxesMode="always"></dxo-selection> -->
+      <dxi-column dataField="AccountCode" caption="Ac_Code"></dxi-column>
+      <dxi-column dataField="AccountType" caption="Ac_Type"></dxi-column>
+      <dxi-column dataField="AccountTitle" caption="Ac_Title"></dxi-column>
+      <dxi-column dataField="ObDebit" caption="Ob Debit" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+      <dxi-column dataField="ObCredit" caption="Ob Credit" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+      <dxi-column dataField="CurrDebit" caption="Curr Debit" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+      <dxi-column dataField="CurrCredit" caption="Curr Credit" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+      <dxi-column dataField="ClDebit" caption="Cl Debit" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+      <dxi-column dataField="ClCredit" caption="Cl Credit" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+      <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+      <dxo-summary>
+        <dxi-total-item column="ObDebit" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+        <dxi-total-item column="ObCredit" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+        <dxi-total-item column="CurrDebit" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+        <dxi-total-item column="CurrCredit" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+        <dxi-total-item column="ClDebit" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+        <dxi-total-item column="ClCredit" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+
+        <dxi-group-item column="ClDebit" summaryType="sum" displayFormat="{0}" [showInGroupFooter]="true" [alignByColumn]="true"> </dxi-group-item>
+        <dxi-group-item column="ClCredit" summaryType="sum" displayFormat="{0}" [showInGroupFooter]="true" [alignByColumn]="true"> </dxi-group-item>
+        <dxi-group-item column="CurrCredit" summaryType="sum" displayFormat="{0}" [showInGroupFooter]="true" [alignByColumn]="true"> </dxi-group-item>
+        <dxi-group-item column="CurrDebit" summaryType="sum" displayFormat="{0}" [showInGroupFooter]="true" [alignByColumn]="true"> </dxi-group-item>
+        <dxi-group-item column="ObCredit" summaryType="sum" displayFormat="{0}" [showInGroupFooter]="true" [alignByColumn]="true"> </dxi-group-item>
+        <dxi-group-item column="ObDebit" summaryType="sum" displayFormat="{0}" [showInGroupFooter]="true" [alignByColumn]="true"> </dxi-group-item>
+      </dxo-summary>
+    </dx-data-grid>
+  </div>
+</dx-popup>
+
+<div class="d-flex p-0 m-0 text-center"><h1>Accounts</h1></div>
+
+<div class="row">
+  <!--  **************************************** FIRST CARD START **************************************  -->
+  <div class="col-lg-3 col-md-6 col-sm-12">
+    <div class="small-box">
+      <div class="inner">
+        <div class="d-flex justify-content-center align-items-center text-center m-0 p-0">
+          <div class="m-0 p-0" id="small-box-header">
+            <h4 class="p-0 m-0">Today Business</h4>
+          </div>
+        </div>
+        <table class="table table-sm table-borderless m-0 p-0">
+          <tr>
+            <td>Opening</td>
+            <td>{{ tbOpening }}</td>
+          </tr>
+          <tr>
+            <td>Current Dr</td>
+            <td>{{ tbCurrDr }}</td>
+          </tr>
+          <tr>
+            <td>Current CR</td>
+            <td>{{ tbCurrCr }}</td>
+          </tr>
+          <tr>
+            <td>Closing</td>
+            <td>{{ tbClosing }}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="icon">
+        <i class="fas fa-money-bill-wave"></i>
+      </div>
+      <a routerLink="/account-reports/activity-summary" class="small-box-footer p-0 m-0"> More info <i id="footer-icon" class="fas fa-arrow-circle-right"></i> </a>
+    </div>
+  </div>
+  <!--  **************************************** FIRST CARD END ****************************************  -->
+  <!--  **************************************** SECOND CARD START *************************************  -->
+  <div class="col-lg-3 col-md-6 col-sm-12">
+    <div class="small-box" style="background: #28a745">
+      <div class="inner">
+        <div class="d-flex justify-content-center align-items-center text-center m-0 p-0">
+          <div class="m-0 p-0">
+            <h4 class="p-0 m-0">Cash Balances</h4>
+          </div>
+        </div>
+        <table class="table table-sm table-borderless m-0 p-0">
+          <tr>
+            <td>Opening</td>
+            <td>{{ cashOpening }}</td>
+          </tr>
+          <tr>
+            <td>Current Dr</td>
+            <td>{{ cashCurrDr }}</td>
+          </tr>
+          <tr>
+            <td>Current CR</td>
+            <td>{{ cashCurrCr }}</td>
+          </tr>
+          <tr>
+            <td>Closing</td>
+            <td>{{ cashClosing }}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="icon">
+        <i class="fas fa-dollar-sign"></i>
+      </div>
+      <a routerLink="/account-reports/cash-balances" class="small-box-footer p-0 m-0"> More info <i id="footer-icon" class="fas fa-arrow-circle-right"></i> </a>
+    </div>
+  </div>
+  <!--  **************************************** SECOND CARD END ****************************************  -->
+  <!--  **************************************** 3rd CARD Start *****************************************  -->
+  <div class="col-lg-3 col-md-6 col-sm-12">
+    <div class="small-box" style="background: #dc3545">
+      <div class="inner">
+        <div class="d-flex justify-content-center align-items-center text-center m-0 p-0">
+          <div class="m-0 p-0">
+            <h4 class="p-0 m-0">Bank Balances</h4>
+          </div>
+        </div>
+        <table class="table table-sm table-borderless m-0 p-0">
+          <tr>
+            <td>Opening</td>
+            <td>{{ bankOpening }}</td>
+          </tr>
+          <tr>
+            <td>Current Dr</td>
+            <td>{{ bankCurrDr }}</td>
+          </tr>
+          <tr>
+            <td>Current CR</td>
+            <td>{{ bankCurrCr }}</td>
+          </tr>
+          <tr>
+            <td>Closing</td>
+            <td>{{ bankClosing }}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="icon">
+        <i class="fas fa-university"></i>
+      </div>
+      <a routerLink="/account-reports/bank-balances" class="small-box-footer p-0 m-0"> More info <i id="footer-icon" class="fas fa-arrow-circle-right"></i> </a>
+    </div>
+  </div>
+  <!--  **************************************** 3rd CARD END *******************************************  -->
+  <!--  **************************************** 4th CARD Start *****************************************  -->
+  <div class="col-lg-3 col-md-6 col-sm-12">
+    <div class="small-box" style="background: #17a2b8">
+      <div class="inner">
+        <div class="d-flex justify-content-center align-items-center text-center m-0 p-0">
+          <div class="m-0 p-0">
+            <h4 class="p-0 m-0">Payables</h4>
+          </div>
+        </div>
+        <table class="table table-sm table-borderless m-0 p-0">
+          <tr>
+            <td>Opening</td>
+            <td>{{ payableOpening }}</td>
+          </tr>
+          <tr>
+            <td>Current Dr</td>
+            <td>{{ payableCurrDr }}</td>
+          </tr>
+          <tr>
+            <td>Current CR</td>
+            <td>{{ payableCurrCr }}</td>
+          </tr>
+          <tr>
+            <td>Closing</td>
+            <td>{{ payableClosing }}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="icon">
+        <i class="fas fa-wallet"></i>
+      </div>
+      <a routerLink="/account-reports/payable" class="small-box-footer p-0 m-0"> More info <i id="footer-icon" class="fas fa-arrow-circle-right"></i> </a>
+    </div>
+  </div>
+  <!--  **************************************** 4th CARD END ****************************************  -->
+  <!--  **************************************** 5th CARD Start ****************************************  -->
+  <div class="col-lg-3 col-md-6 col-sm-12">
+    <div class="small-box" style="background: #ffc107">
+      <div class="inner">
+        <div class="d-flex justify-content-center align-items-center text-center m-0 p-0">
+          <div class="m-0 p-0">
+            <h4 class="p-0 m-0" id="SecondRowCardHeading">Recievables</h4>
+          </div>
+        </div>
+        <table class="table table-sm table-borderless m-0 p-0">
+          <tr>
+            <td>Opening</td>
+            <td>{{ receivablesOpening }}</td>
+          </tr>
+          <tr>
+            <td>Current Dr</td>
+            <td>{{ receivablesCurrDr }}</td>
+          </tr>
+          <tr>
+            <td>Current CR</td>
+            <td>{{ receivablesCurrCr }}</td>
+          </tr>
+          <tr>
+            <td>Closing</td>
+            <td>{{ receivablesClosing }}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="icon" id="recievableIcon">
+        <i class="fas fa-shopping-cart"></i>
+      </div>
+      <a routerLink="/account-reports/receivable" class="small-box-footer p-0 m-0"> More info <i id="footer-icon" class="fas fa-arrow-circle-right"></i> </a>
+    </div>
+  </div>
+  <!--  **************************************** 5th CARD END ****************************************  -->
+  <div class="col-lg-3 col-md-6 col-sm-12">
+    <div class="small-box" style="background: #1285af">
+      <div class="inner">
+        <div class="d-flex justify-content-center align-items-center text-center m-0 p-0">
+          <div class="m-0 p-0">
+            <h4 class="p-0 m-0" id="SecondRowCardHeading">Staff Receivable</h4>
+          </div>
+        </div>
+        <table class="table table-sm table-borderless m-0 p-0">
+          <tr>
+            <td>Opening</td>
+            <td>{{ StaffReceivablesOpening }}</td>
+          </tr>
+          <tr>
+            <td>Current Dr</td>
+            <td>{{ StaffReceivablesCurrentDr }}</td>
+          </tr>
+          <tr>
+            <td>Current CR</td>
+            <td>{{ StaffReceivablesCurrentCr }}</td>
+          </tr>
+          <tr>
+            <td>Closing</td>
+            <td>{{ StaffReceivablesClosing }}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="icon">
+        <i class="fas fa-wallet"></i>
+      </div>
+      <!-- <a href="#" class="small-box-footer p-0 m-0"> More info <i id="footer-icon" class="fas fa-arrow-circle-right"></i> </a> -->
+      <a class="small-box-footer p-0 m-0">
+        <button class="btn btn-sm" style="background-color: transparent; color: white" (click)="GoToSelectedTrialBalanceFromStaffReceivables()">
+          More info
+          <i id="footer-icon" class="fas fa-arrow-circle-right"></i>
+        </button>
+      </a>
+    </div>
+  </div>
+  <!--  **************************************** 6th CARD Start ****************************************  -->
+  <div class="col-lg-3 col-md-6 col-sm-12">
+    <div class="small-box" style="background: #8a9198">
+      <div class="inner">
+        <div class="d-flex justify-content-center align-items-center text-center m-0 p-0">
+          <div class="m-0 p-0">
+            <h4 class="p-0 m-0" id="SecondRowCardHeading">Export Payables</h4>
+          </div>
+        </div>
+        <table class="table table-sm table-borderless m-0 p-0">
+          <tr>
+            <td>Opening</td>
+            <td>{{ EximPayableOpening }}</td>
+          </tr>
+          <tr>
+            <td>Current Dr</td>
+            <td>{{ EximPayableCurrDr }}</td>
+          </tr>
+          <tr>
+            <td>Current CR</td>
+            <td>{{ EximPayableCurrCr }}</td>
+          </tr>
+          <tr>
+            <td>Closing</td>
+            <td>{{ EximPayableClosing }}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="icon">
+        <i class="fas fa-shipping-fast"></i>
+      </div>
+      <a href="#" class="small-box-footer p-0 m-0"> More info <i id="footer-icon" class="fas fa-arrow-circle-right"></i> </a>
+    </div>
+  </div>
+  <!--  **************************************** 6th CARD END ****************************************  -->
+  <!--  **************************************** 7th CARD Start ****************************************  -->
+  <div class="col-lg-3 col-md-6 col-sm-12">
+    <div class="small-box" style="background: #46da2f">
+      <div class="inner">
+        <div class="d-flex justify-content-center align-items-center text-center m-0 p-0">
+          <div class="m-0 p-0">
+            <h4 class="p-0 m-0" id="SecondRowCardHeading">Export Recievables</h4>
+          </div>
+        </div>
+        <table class="table table-sm table-borderless m-0 p-0">
+          <tr>
+            <td>Opening</td>
+            <td>{{ EximReceivablesOpening }}</td>
+          </tr>
+          <tr>
+            <td>Current Dr</td>
+            <td>{{ EximReceivablesCurrDr }}</td>
+          </tr>
+          <tr>
+            <td>Current CR</td>
+            <td>{{ EximReceivablesCurrCr }}</td>
+          </tr>
+          <tr>
+            <td>Closing</td>
+            <td>{{ EximReceivablesClosing }}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="icon">
+        <i class="fas fa-truck"></i>
+      </div>
+      <a href="#" class="small-box-footer p-0 m-0"> More info <i id="footer-icon" class="fas fa-arrow-circle-right"></i> </a>
+    </div>
+  </div>
+  <!--  **************************************** 7th CARD END ****************************************  -->
+  <!--  **************************************** 7thA CARD Start ****************************************  -->
+  <div class="col-lg-3 col-md-6 col-sm-12 d-none">
+    <div class="small-box" style="background: #ffc107">
+      <div class="inner">
+        <div class="d-flex justify-content-center align-items-center text-center m-0 p-0">
+          <div class="m-0 p-0">
+            <h4 class="p-0 m-0" id="SecondRowCardHeading">Extra Card</h4>
+          </div>
+        </div>
+        <table class="table table-sm table-borderless m-0 p-0">
+          <tr>
+            <td>Opening</td>
+            <td>{{ EximReceivablesOpening }}</td>
+          </tr>
+          <tr>
+            <td>Current Dr</td>
+            <td>{{ EximReceivablesCurrDr }}</td>
+          </tr>
+          <tr>
+            <td>Current CR</td>
+            <td>{{ EximReceivablesCurrCr }}</td>
+          </tr>
+          <tr>
+            <td>Closing</td>
+            <td>{{ EximReceivablesClosing }}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="icon">
+        <i class="fas fa-truck"></i>
+      </div>
+      <a href="#" class="small-box-footer p-0 m-0"> More info <i id="footer-icon" class="fas fa-arrow-circle-right"></i> </a>
+    </div>
+  </div>
+  <!--  **************************************** 7thA CARD END ****************************************  -->
+  <!--  **************************************** 8rd CARD Start ****************************************  -->
+
+  <!--  **************************************** 8rd CARD END ****************************************  -->
+  <!--  **************************************** 10th CARD Start ****************************************  -->
+  <!--  **************************************** SECOND CARD END ****************************************  -->
+
+  <!-- <div class="col-lg-3 col-md-6 col-sm-12">
+    <div class="firma-card row">
+      <div class="col-md-12" style="background-image: linear-gradient(109.6deg, rgb(241, 154, 14) 11.2%, rgb(240, 137, 34) 91.1%)">
+        <div class="firma-aciklama card-body">
+          <h4>Sales Tax Payables</h4>
+          <dt>
+            <tr class="d-flex justify-content-between">
+              <td>Opening</td>
+              <td>56446545</td>
+            </tr>
+            <tr class="d-flex justify-content-between">
+              <td>Current DR</td>
+              <td>641215449</td>
+            </tr>
+
+            <tr class="d-flex justify-content-between">
+              <td>Current CR</td>
+              <td>2131389451</td>
+            </tr>
+
+            <tr class="d-flex justify-content-between">
+              <td>Closing</td>
+              <td>233688445</td>
+            </tr>
+          </dt>
+        </div>
+      </div>
+    </div>
+  </div>  -->
+</div>
+
+<div class="row">
+  <div class="col-lg-3 col-md-6 col-sm-12">
+    <div class="small-box" style="background: #dcc51e">
+      <div class="inner">
+        <div class="d-flex justify-content-center align-items-center text-center m-0 p-0">
+          <div class="m-0 p-0">
+            <h4 class="p-0 m-0">Purchases</h4>
+          </div>
+        </div>
+        <table class="table table-sm table-borderless m-0 p-0">
+          <tr>
+            <td>Opening</td>
+            <td>{{ PurchaseOpening }}</td>
+          </tr>
+          <tr>
+            <td>Current Dr</td>
+            <td>{{ PurchaseCurrentDr }}</td>
+          </tr>
+          <tr>
+            <td>Current CR</td>
+            <td>{{ PurchaseCurrentCr }}</td>
+          </tr>
+          <tr>
+            <td>Closing</td>
+            <td>{{ PurchaseClosing }}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="icon">
+        <i class="fas fa-university"></i>
+      </div>
+      <a class="small-box-footer p-0 m-0">
+        <button class="btn btn-sm" style="background-color: transparent; color: white" (click)="GoToSelectedTrialBalanceFromPurchases()">
+          More info
+          <i id="footer-icon" class="fas fa-arrow-circle-right"></i>
+        </button>
+      </a>
+    </div>
+  </div>
+  <div class="col-lg-3 col-md-6 col-sm-12">
+    <div class="small-box" style="background: #ff851b">
+      <div class="inner">
+        <div class="d-flex justify-content-center align-items-center text-center m-0 p-0">
+          <div class="m-0 p-0">
+            <h4 class="p-0 m-0">Local Sales</h4>
+          </div>
+        </div>
+        <table class="table table-sm table-borderless m-0 p-0">
+          <tbody>
+            <tr>
+              <td>Opening</td>
+              <td>{{ localSalesOpening }}</td>
+            </tr>
+            <tr>
+              <td>Current Dr</td>
+              <td>{{ localSalesCurrentDr }}</td>
+            </tr>
+            <tr>
+              <td>Current Cr</td>
+              <td>{{ localSalesCurrentCr }}</td>
+            </tr>
+            <tr>
+              <td>Closing</td>
+              <td>{{ localSalesClosing }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="icon">
+        <i class="fas fa-shopping-cart"></i>
+      </div>
+      <a class="small-box-footer p-0 m-0">
+        <button class="btn btn-sm" style="background-color: transparent; color: white" (click)="GoToSelectedTrialBalanceFromLocalSales()">
+          More info <i id="footer-icon" class="fas fa-arrow-circle-right"></i>
+        </button>
+      </a>
+    </div>
+  </div>
+  <!--  **************************************** 6th CARD Start ****************************************  -->
+  <div class="col-lg-3 col-md-6 col-sm-12">
+    <div class="small-box" style="background: #9d11a2">
+      <div class="inner">
+        <div class="d-flex justify-content-center align-items-center text-center m-0 p-0">
+          <div class="m-0 p-0">
+            <h4 class="p-0 m-0" id="SecondRowCardHeading">Brand Sales</h4>
+          </div>
+        </div>
+        <table class="table table-sm table-borderless m-0 p-0">
+          <tr>
+            <td>Opening</td>
+            <td>{{ brandSalesOpening }}</td>
+          </tr>
+          <tr>
+            <td>Current Dr</td>
+            <td>{{ brandSalesCurrentDr }}</td>
+          </tr>
+          <tr>
+            <td>Current CR</td>
+            <td>{{ brandSalesCurrentCr }}</td>
+          </tr>
+          <tr>
+            <td>Closing</td>
+            <td>{{ brandSalesClosing }}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="icon">
+        <i class="fas fa-shipping-fast"></i>
+      </div>
+      <a class="small-box-footer p-0 m-0">
+        <button class="btn btn-sm" style="background-color: transparent; color: white" (click)="GoToSelectedTrialBalanceFromBrandSales()">
+          More info
+          <i id="footer-icon" class="fas fa-arrow-circle-right"> </i>
+        </button>
+      </a>
+    </div>
+  </div>
+  <!--  **************************************** 6th CARD END ****************************************  -->
+  <!--  **************************************** 7th CARD Start ****************************************  -->
+  <div class="col-lg-3 col-md-6 col-sm-12">
+    <div class="small-box" style="background: #04446c">
+      <div class="inner">
+        <div class="d-flex justify-content-center align-items-center text-center m-0 p-0">
+          <div class="m-0 p-0">
+            <h4 class="p-0 m-0" id="SecondRowCardHeading">Export / Sales</h4>
+          </div>
+        </div>
+        <table class="table table-sm table-borderless m-0 p-0">
+          <tr>
+            <td>Opening</td>
+            <td>{{ exportSalesOpening }}</td>
+          </tr>
+          <tr>
+            <td>Current Dr</td>
+            <td>{{ exportSalesCurrentDr }}</td>
+          </tr>
+          <tr>
+            <td>Current CR</td>
+            <td>{{ exportSalesCurrentCr }}</td>
+          </tr>
+          <tr>
+            <td>Closing</td>
+            <td>{{ exportSalesClosing }}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="icon">
+        <i class="fas fa-truck"></i>
+      </div>
+      <a class="small-box-footer p-0 m-0">
+        <button class="btn btn-sm" style="background-color: transparent; color: white" (click)="GoToSelectedTrialBalanceFromExportSales()">
+          More info
+          <i id="footer-icon" class="fas fa-arrow-circle-right"> </i>
+        </button>
+      </a>
+    </div>
+  </div>
+  <!--  **************************************** 7th CARD END ****************************************  -->
+
+  <!--  **************************************** 7thA CARD Start ****************************************  -->
+
+  <!--  **************************************** 7thA CARD END ****************************************  -->
+</div>
+
+<!-- Cheque Account Boxes: -->
+<div class="row">
+  <div class="col-lg-3 col-md-6 col-sm-12">
+    <div class="small-box" style="background: #ffc107">
+      <div class="inner">
+        <div class="d-flex justify-content-center align-items-center text-center m-0 p-0">
+          <div class="m-0 p-0">
+            <h4 class="p-0 m-0" id="SecondRowCardHeading">Other Sales</h4>
+          </div>
+        </div>
+        <table class="table table-sm table-borderless m-0 p-0">
+          <tr>
+            <td>Opening</td>
+            <td>{{ otherSalesOpening }}</td>
+          </tr>
+          <tr>
+            <td>Current Dr</td>
+            <td>{{ otherSalesCurrentDr }}</td>
+          </tr>
+          <tr>
+            <td>Current CR</td>
+            <td>{{ otherSalesCurrentCr }}</td>
+          </tr>
+          <tr>
+            <td>Closing</td>
+            <td>{{ otherSalesClosing }}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="icon">
+        <i class="fas fa-truck"></i>
+      </div>
+      <a class="small-box-footer p-0 m-0">
+        <button class="btn btn-sm" style="background-color: transparent; color: white" (click)="GoToSelectedTrialBalanceFromOtherSales()">
+          More info <i id="footer-icon" class="fas fa-arrow-circle-right"></i>
+        </button>
+      </a>
+    </div>
+  </div>
+  <!--  **************************************** 8th CARD Start ****************************************  -->
+  <div class="col-lg-3 col-md-6 col-sm-12 d-none">
+    <div class="small-box" style="background: #d81b60">
+      <div class="inner">
+        <div class="d-flex justify-content-center align-items-center text-center m-0 p-0">
+          <div class="m-0 p-0">
+            <h4 class="p-0 m-0">PDC Current Stock</h4>
+          </div>
+        </div>
+        <table class="table table-sm table-borderless m-0 p-0">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Quantity</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Opening</td>
+              <td>{{ this.PdcOpCheqqty }}</td>
+              <td>{{ this.PdcOpCheqamount }}</td>
+            </tr>
+            <tr>
+              <td>Current</td>
+              <td>{{ this.PdcCurrqty }}</td>
+              <td>{{ this.PdcCurramount }}</td>
+            </tr>
+            <tr>
+              <td>Closing</td>
+              <td>{{ this.PdcClqty }}</td>
+              <td>{{ this.PdcClamount }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="icon">
+        <i class="fas fa-money-check"></i>
+      </div>
+      <a href="#" class="small-box-footer p-0 m-0"> More info <i id="footer-icon" class="fas fa-arrow-circle-right"></i> </a>
+    </div>
+  </div>
+
+  <!--  **************************************** 8th CARD END ****************************************  -->
+  <!--  **************************************** 9th CARD Start ****************************************  -->
+  <div class="col-lg-3 col-md-6 col-sm-12 d-none">
+    <div class="small-box" style="background: #6610f2">
+      <div class="inner">
+        <div class="d-flex justify-content-center align-items-center text-center m-0 p-0">
+          <div class="m-0 p-0">
+            <h4 class="p-0 m-0">PDC Total Stock</h4>
+          </div>
+        </div>
+        <table class="table table-sm table-borderless m-0 p-0">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Quantity</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Opening</td>
+              <td>{{ this.PdctotalOpCheqqty }}</td>
+              <td>{{ this.PdctotalOpCheqamount }}</td>
+            </tr>
+            <tr>
+              <td>Current</td>
+              <td>{{ this.PdctotalCurrqty }}</td>
+              <td>{{ this.PdctotalCurramount }}</td>
+            </tr>
+            <tr>
+              <td>Closing</td>
+              <td>{{ this.PdctotalClqty }}</td>
+              <td>{{ this.PdctotalClamount }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="icon">
+        <i class="fas fa-"></i>
+      </div>
+      <a href="#" class="small-box-footer p-0 m-0"> More info <i id="footer-icon" class="fas fa-arrow-circle-right"></i> </a>
+    </div>
+  </div>
+  <!--  **************************************** 3rd CARD Start ****************************************  -->
+  <div class="col-lg-3 col-md-6 col-sm-12 d-none">
+    <div class="small-box" style="background: #dc3545">
+      <div class="inner">
+        <div class="d-flex justify-content-center align-items-center text-center m-0 p-0">
+          <div class="m-0 p-0">
+            <h4 class="p-0 m-0">Extra Card</h4>
+          </div>
+        </div>
+        <table class="table table-sm table-borderless m-0 p-0">
+          <tr>
+            <td>Opening</td>
+            <td>{{ bankOpening }}</td>
+          </tr>
+          <tr>
+            <td>Current Dr</td>
+            <td>{{ bankCurrDr }}</td>
+          </tr>
+          <tr>
+            <td>Current CR</td>
+            <td>{{ bankCurrCr }}</td>
+          </tr>
+          <tr>
+            <td>Closing</td>
+            <td>{{ bankClosing }}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="icon">
+        <i class="fas fa-university"></i>
+      </div>
+      <a routerLink="/account-reports/bank-balances" class="small-box-footer p-0 m-0"> More info <i id="footer-icon" class="fas fa-arrow-circle-right"></i> </a>
+    </div>
+  </div>
+  <!--  **************************************** 3rd CARD END ****************************************  -->
+  <!--  **************************************** 4th CARD Start ****************************************  -->
+  <div class="col-lg-3 col-md-6 col-sm-12 d-none">
+    <div class="small-box" style="background: #17a2b8">
+      <div class="inner">
+        <div class="d-flex justify-content-center align-items-center text-center m-0 p-0">
+          <div class="m-0 p-0">
+            <h4 class="p-0 m-0">Extra Cards</h4>
+          </div>
+        </div>
+        <table class="table table-sm table-borderless m-0 p-0">
+          <tr>
+            <td>Opening</td>
+            <td>{{ payableOpening }}</td>
+          </tr>
+          <tr>
+            <td>Current Dr</td>
+            <td>{{ payableCurrDr }}</td>
+          </tr>
+          <tr>
+            <td>Current CR</td>
+            <td>{{ payableCurrCr }}</td>
+          </tr>
+          <tr>
+            <td>Closing</td>
+            <td>{{ payableClosing }}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="icon">
+        <i class="fas fa-wallet"></i>
+      </div>
+      <a routerLink="/account-reports/payable" class="small-box-footer p-0 m-0"> More info <i id="footer-icon" class="fas fa-arrow-circle-right"></i> </a>
+    </div>
+  </div>
+  <!--  **************************************** 4th CARD END ****************************************  -->
+</div>
+<!--  **************************************** 9th CARD END ****************************************  -->
+
+<!--  **************************************** 10th CARD Start ****************************************  -->
+<h1>Inventory</h1>
+<div class="row">
+  <div class="col-lg-3 col-md-6 col-sm-12">
+    <div class="small-box" style="background: #ff851b">
+      <div class="inner">
+        <div class="d-flex justify-content-center align-items-center text-center m-0 p-0">
+          <div class="m-0 p-0">
+            <h4 class="p-0 m-0">Export Contracts</h4>
+          </div>
+        </div>
+        <table class="table table-sm table-borderless m-0 p-0">
+          <thead>
+            <tr>
+              <th></th>
+              <th>M.Ton</th>
+              <th>Container</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Contract</td>
+              <td>{{ EximContractMTon }}</td>
+              <td>{{ EximContractCntrs }}</td>
+            </tr>
+            <tr>
+              <td>Invoiced</td>
+              <td>{{ EximShippedMTon }}</td>
+              <td>{{ EximShippedCntrs }}</td>
+            </tr>
+            <tr>
+              <td>Balance</td>
+              <td>{{ EximBalanceMton }}</td>
+              <td>{{ EximBalanceCntrs }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="icon">
+        <i class="fas fa-shopping-cart"></i>
+      </div>
+      <a href="#" class="small-box-footer p-0 m-0"> More info <i id="footer-icon" class="fas fa-arrow-circle-right"></i> </a>
+    </div>
+  </div>
+  <!--  **************************************** 6th CARD Start ****************************************  -->
+  <div class="col-lg-3 col-md-6 col-sm-12 d-none">
+    <div class="small-box" style="background: #8a9198">
+      <div class="inner">
+        <div class="d-flex justify-content-center align-items-center text-center m-0 p-0">
+          <div class="m-0 p-0">
+            <h4 class="p-0 m-0" id="SecondRowCardHeading">Export Payables</h4>
+          </div>
+        </div>
+        <table class="table table-sm table-borderless m-0 p-0">
+          <tr>
+            <td>Opening</td>
+            <td>{{ EximPayableOpening }}</td>
+          </tr>
+          <tr>
+            <td>Current Dr</td>
+            <td>{{ EximPayableCurrDr }}</td>
+          </tr>
+          <tr>
+            <td>Current CR</td>
+            <td>{{ EximPayableCurrCr }}</td>
+          </tr>
+          <tr>
+            <td>Closing</td>
+            <td>{{ EximPayableClosing }}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="icon">
+        <i class="fas fa-shipping-fast"></i>
+      </div>
+      <a href="#" class="small-box-footer p-0 m-0"> More info <i id="footer-icon" class="fas fa-arrow-circle-right"></i> </a>
+    </div>
+  </div>
+  <!--  **************************************** 6th CARD END ****************************************  -->
+  <!--  **************************************** 7th CARD Start ****************************************  -->
+  <div class="col-lg-3 col-md-6 col-sm-12 d-none">
+    <div class="small-box" style="background: #001f3f">
+      <div class="inner">
+        <div class="d-flex justify-content-center align-items-center text-center m-0 p-0">
+          <div class="m-0 p-0">
+            <h4 class="p-0 m-0" id="SecondRowCardHeading">Extra Card</h4>
+          </div>
+        </div>
+        <table class="table table-sm table-borderless m-0 p-0">
+          <tr>
+            <td>Opening</td>
+            <td>{{ EximReceivablesOpening }}</td>
+          </tr>
+          <tr>
+            <td>Current Dr</td>
+            <td>{{ EximReceivablesCurrDr }}</td>
+          </tr>
+          <tr>
+            <td>Current CR</td>
+            <td>{{ EximReceivablesCurrCr }}</td>
+          </tr>
+          <tr>
+            <td>Closing</td>
+            <td>{{ EximReceivablesClosing }}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="icon">
+        <i class="fas fa-truck"></i>
+      </div>
+      <a href="#" class="small-box-footer p-0 m-0"> More info <i id="footer-icon" class="fas fa-arrow-circle-right"></i> </a>
+    </div>
+  </div>
+  <!--  **************************************** 7th CARD END ****************************************  -->
+
+  <!--  **************************************** 7thA CARD Start ****************************************  -->
+  <div class="col-lg-3 col-md-6 col-sm-12 d-none">
+    <div class="small-box" style="background: #ffc107">
+      <div class="inner">
+        <div class="d-flex justify-content-center align-items-center text-center m-0 p-0">
+          <div class="m-0 p-0">
+            <h4 class="p-0 m-0" id="SecondRowCardHeading">Extra Card</h4>
+          </div>
+        </div>
+        <table class="table table-sm table-borderless m-0 p-0">
+          <tr>
+            <td>Opening</td>
+            <td>{{ EximReceivablesOpening }}</td>
+          </tr>
+          <tr>
+            <td>Current Dr</td>
+            <td>{{ EximReceivablesCurrDr }}</td>
+          </tr>
+          <tr>
+            <td>Current CR</td>
+            <td>{{ EximReceivablesCurrCr }}</td>
+          </tr>
+          <tr>
+            <td>Closing</td>
+            <td>{{ EximReceivablesClosing }}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="icon">
+        <i class="fas fa-truck"></i>
+      </div>
+      <a href="#" class="small-box-footer p-0 m-0"> More info <i id="footer-icon" class="fas fa-arrow-circle-right"></i> </a>
+    </div>
+  </div>
+
+  <!--  **************************************** 10th CARD END ****************************************  -->
+</div>

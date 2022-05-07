@@ -1,0 +1,25 @@
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { environment } from "../../../../environments/environment";
+
+@Injectable({
+  providedIn: "root",
+})
+export class AccountsBudgetService {
+  apiUrl = environment.apiUrl;
+  headers = new HttpHeaders({
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*",
+  });
+  constructor(private http: HttpClient) {}
+
+  getDocumentNo() {
+    return this.http.get<any>(this.apiUrl + "AccountsBudgetHeader/GenerateCode");
+  }
+
+  getExpenseAccount(data) {
+    return this.http.post<any>(this.apiUrl + "COAAllocation/GetAll", data, {
+      headers: this.headers,
+    });
+  }
+}

@@ -1,0 +1,28 @@
+<dx-popup
+[width]="WidthOfPopupWithGrid -GetPercentageValue(ReducePopupWidhtBy,WidthOfPopupWithGrid)"
+[height]="HeightOfPopupWithGrid -GetPercentageValue(ReducePopupHegihtBy,HeightOfPopupWithGrid)"
+[position]="'center'"
+[showTitle]="true"
+titleTemplate="titleTemplate"
+[dragEnabled]="true"
+[showCloseButton]="true"
+[closeOnOutsideClick]="false"
+[(visible)]="PopupVisible"
+[animation]="{ hide: { type: 'slideOut', direction: 'right', duration: 1000 }, show: { type: 'slideIn', direction: 'left', duration: 1500 } }"
+>
+<div *dxTemplate="let content of 'titleTemplate'" class="d-flex justify-content-between">
+  <div class="">
+    <h4>{{PopupHeading}}</h4>
+  </div>
+  <div class="d-flex justify-content-end">
+    
+    <dx-button class="p-0 border-0" (onClick)="Close()" icon="close"></dx-button>
+  </div>
+</div>
+<div *dxTemplate="let data of 'content'">
+  <dx-scroll-view [showScrollbar]="'always'" [scrollByContent]="true" [scrollByThumb]="true">
+    <ng-container [ngTemplateOutlet]="inputElement">
+    </ng-container>
+  </dx-scroll-view>
+</div>
+</dx-popup>

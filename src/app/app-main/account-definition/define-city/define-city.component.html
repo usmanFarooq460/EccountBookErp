@@ -1,0 +1,103 @@
+<div class="container-fluid">
+  <!-- start page title -->
+  <app-pagetitle title="City Definition" *ngIf="SomeElementsVisible" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+  <!-- end page title -->
+  <div class="d-flex justify-content-between">
+    <div class="">
+      <dx-button id="filter" class="ml-3 mb-3" type="default" text="Add New" icon="plus" (onClick)="addData()"> </dx-button>
+    </div>
+    <div class="">
+      <dx-button class="ml-3 mb-3" type="danger" [visible]="SomeElementsVisible" text="Go Back" icon="back" routerLink="/accounts-definition/country" style="background-color: #ffa100"> </dx-button>
+    </div>
+  </div>
+  <div class="row">
+    <!-- end col -->
+    <div class="col-md-12">
+      <div class="card">
+        <dx-data-grid
+          id="gridContainer"
+          [height]="IsLoadedInPopup == false ? gridHeight : gridHeightInPopupWithGrid"
+          [dataSource]="dataSource"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+          (onToolbarPreparing)="onToolbarPreparing($event)"
+        >
+          <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-filter-row [visible]="filter"></dxo-filter-row>
+          <dxo-header-filter [visible]="filter"></dxo-header-filter>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-load-panel [enabled]="true"></dxo-load-panel>
+          <dxo-export [enabled]="true" fileName="Estimates" [allowExportSelectedData]="true">
+            <dxo-texts exportAll="Export All Rows"></dxo-texts>
+          </dxo-export>
+          <dxo-paging [enabled]="true"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true"></dxo-pager>
+          <dxi-column dataField="Id" caption="Id" dataType="number" [visible]="false"></dxi-column>
+          <dxi-column dataField="CountryId" caption="CountryId " dataType="number" [visible]="false"></dxi-column>
+          <dxi-column dataField="CountryName" caption="Country Name" dataType=" "></dxi-column>
+          <dxi-column dataField="Code" caption="City Code" dataType=""></dxi-column>
+          <dxi-column dataField="CityName" caption="City Name" dataType=" "></dxi-column>
+          <dxi-column
+            dataField="button"
+            [fixed]="true"
+            [fixedPosition]="'right'"
+            [width]="90"
+            alignment="right"
+            caption="Action"
+            [allowEditing]="false"
+            [allowExporting]="false"
+            [allowFiltering]="false"
+            [allowFixing]="false"
+            [allowGrouping]="false"
+            [allowHeaderFiltering]="false"
+            [allowHiding]="false"
+            [allowReordering]="false"
+            [allowResizing]="false"
+            [allowSearch]="false"
+            [allowSorting]="false"
+            cellTemplate="buttonTemplate"
+          ></dxi-column>
+          <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+            <div class="d-con-cell-action">
+              <dx-button type="default" stylingMode="text" (onClick)="editPopup(cellInfo.data)">
+                <i class="ri-edit-2-line"></i>
+              </dx-button>
+            </div>
+          </div>
+          <dxo-export [enabled]="true" [allowExportSelectedData]="true"></dxo-export>
+          <dxo-summary> </dxo-summary>
+          <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+        </dx-data-grid>
+        <dx-popup [width]="350" [height]="280" [showTitle]="true" title="Define City" [dragEnabled]="false" [closeOnOutsideClick]="true" [(visible)]="formPopup" (onShown)="setFocus()">
+          <div *dxTemplate="let data of 'content'">
+            <dx-form id="form" [formData]="cityFormData" #cityForm>
+              <dxi-item
+                dataField="CountryId"
+                editorType="dxSelectBox"
+                [editorOptions]="{
+                  items: countryNameList,
+                  valueExpr: 'Id',
+                  displayExpr: 'Description'
+                }"
+              >
+                <dxi-validation-rule type="required" message="Country Name is required"></dxi-validation-rule>
+              </dxi-item>
+              <dxi-item dataField="Code" editorType="dxTextBox"> <dxi-validation-rule type="required" message="Code is required"></dxi-validation-rule></dxi-item>
+              <dxi-item dataField="Description" editorType="dxTextBox"> <dxi-validation-rule type="required" message="City Name is required"></dxi-validation-rule></dxi-item>
+            </dx-form>
+            <div class="mt-4 d-flex justify-content-end">
+              <dx-button (onClick)="submit()" type="success" icon="save" text="{{ CityParamsId > 0 ? 'Update' : 'Save' }}"></dx-button>
+              <div class="m-1"></div>
+              <dx-button icon="remove" type="danger" text="Close" (onClick)="cancel()"></dx-button>
+            </div>
+          </div>
+        </dx-popup>
+      </div>
+    </div>
+  </div>
+</div>

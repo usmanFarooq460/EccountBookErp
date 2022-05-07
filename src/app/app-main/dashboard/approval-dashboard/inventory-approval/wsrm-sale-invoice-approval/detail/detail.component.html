@@ -1,0 +1,29 @@
+<dx-data-grid
+  id="gridContainer"
+  [dataSource]="detailDataSource"
+  [showColumnLines]="false"
+  [showRowLines]="true"
+  [allowColumnReordering]="true"
+  [rowAlternationEnabled]="true"
+  [allowColumnResizing]="true"
+  [columnAutoWidth]="true"
+  [showBorders]="true"
+>
+  <dxi-column dataField="ItemName" caption="Item Name" dataType="string" alignment="left"></dxi-column>
+  <dxi-column dataField="ItemQty" caption="Item Qty" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="ItemRate" caption="Item Rate" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="ItemAmount" caption="Item Amount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <!-- <dxi-column dataField="DiscountPerItem" caption="Discount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column> -->
+  <dxi-column dataField="TotalDiscount" caption="Total Discount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="NetItemAmount" caption="Net Amount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+  <dxi-column dataField="WareHouseName" caption="WareHouse" dataType="string" alignment="left"></dxi-column>
+  <dxi-column dataField="RemarksDetail" caption="Remarks" dataType="string" alignment="left"></dxi-column>
+
+  <dxo-summary>
+    <dxi-total-item column="ItemQty" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+    <dxi-total-item column="ItemAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+    <dxi-total-item column="TotalDiscount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+    <dxi-total-item column="NetItemAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+  </dxo-summary>
+  <dxo-scrolling [mode]="'virtual'" [columnRenderingMode]="'virtaul'"></dxo-scrolling>
+</dx-data-grid>

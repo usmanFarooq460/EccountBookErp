@@ -1,0 +1,619 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="d-flex justify-content-between">
+        <div class="">
+          <app-pagetitle [title]="'Purchase Invoice'"></app-pagetitle>
+        </div>
+        <div class="">
+          <dx-button class="mr-2" [hint]="'Load Data'" type="danger" icon="download" (onClick)="handleLoaderPopupVisiblity($event)"> </dx-button>
+          <dx-button class="mr-2" [hint]="'Add New'" type="default" icon="plus" (onClick)="resetForm()"> </dx-button>
+          <dx-button icon="refresh" class="mr-2" type="success" [hint]="'Reload Form Fields'" (onClick)="FetchData()"></dx-button>
+          <dx-switch #switch [value]="true" class="mr-2" hint="Print On Save" (onValueChanged)="printAfterSave($event)"></dx-switch>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+
+  <div class="custom-row">
+    <div class="custom-col">
+      <dx-form [formData]="PurchaseInvoiceFormData" #PurchaseInvoiceForm1 [showRequiredMark]="false" [colCountByScreen]="{ lg: 2, md: 2, sm: 2, xs: 2 }">
+        <dxi-item
+          cssClass="px-1 mb-2"
+          dataField="DocNo"
+          editorType="dxNumberBox"
+          [editorOptions]="{
+            placeholder: 'Doc No.',
+            readOnly: true
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="custom" [validationCallback]="validateNumberBox" message="Doc No is required"></dxi-validation-rule>
+        </dxi-item>
+
+        <dxi-item
+          cssClass="px-1 mb-2"
+          dataField="DocDate"
+          editorType="dxDateBox"
+          [editorOptions]="{
+            placeholder: 'Date',
+            displayFormat: 'dd-MMM-yyyy'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+      </dx-form>
+      <div class="SupplierCustomerBox shadow" style="min-height: 165px">
+        <div class="header">
+          <dx-form [formData]="PurchaseInvoiceFormData" #PurchaseInvoiceForm2 [showRequiredMark]="false" [colCountByScreen]="{ lg: 2, md: 2, sm: 2, xs: 2 }">
+            <dxi-item
+              dataField="SupplierCustomerId"
+              [colSpan]="2"
+              cssClass="pr-2 mb-2"
+              editorType="dxSelectBox"
+              [editorOptions]="{
+                placeholder: 'Supplier/Customer',
+                dataSource: supplierCustomerList,
+                valueExpr: 'Id',
+                displayExpr: 'CompanyName',
+                searchEnabled: true,
+                onValueChanged: handleCustomerChange
+              }"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <dxi-validation-rule type="required" message="Supplier/Customer is required"></dxi-validation-rule>
+            </dxi-item>
+          </dx-form>
+        </div>
+        <app-supp-cust-detail-under-combo
+          #SuppCustDetailUnderComboComponentForCustomer
+          [SupplierCustomerFormType]="1"
+          [ComboValue]="PurchaseInvoiceFormData?.SupplierCustomerId > 0"
+        ></app-supp-cust-detail-under-combo>
+       
+      </div>
+    </div>
+
+    <div class="custom-col">
+      <dx-form [formData]="PurchaseInvoiceFormData" #PurchaseInvoiceForm3 [showRequiredMark]="false" [colCountByScreen]="{ lg: 2, md: 2, sm: 2, xs: 2 }">
+        <dxi-item
+          dataField="DueDays"
+          cssClass="px-1 m-0"
+          editorType="dxNumberBox"
+          [editorOptions]="{
+            placeholder: 'DueDays',
+            onValueChanged: handleDueDaysChange
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Due Days are required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          dataField="DueDate"
+          cssClass="px-1 m-0"
+          editorType="dxDateBox"
+          [editorOptions]="{
+            placeholder: 'DueDate',
+            displayFormat: 'dd-MMM-yyyy'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Due Date is required"></dxi-validation-rule>
+        </dxi-item>
+
+        <dxi-item
+          dataField="ManualBillNo"
+          cssClass="px-1 m-0"
+          editorType="dxNumberBox"
+          [editorOptions]="{
+            placeholder: 'Bill No.'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="DeliveryTerm"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            placeholder: 'Delivery Term',
+            items: deliveryTermList,
+            searchEnabled: true
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Delivery Term is required"></dxi-validation-rule>
+        </dxi-item>
+
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="RemarksHeader"
+          [colSpan]="2"
+          editorType="dxTextArea"
+          [editorOptions]="{
+            placeholder: 'Remarks',
+            height: 110
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+      </dx-form>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-md-12">
+      <dx-accordion [selectedIndex]="-1" [collapsible]="true" [dataSource]="ListForAccordion" itemTemplate="item">
+        <div *dxTemplate="let itemData of 'item'">
+          <div class="custom-row">
+            <div class="custom-col">
+              <div class="SupplierCustomerBox shadow">
+                <div class="header">
+                  <dx-form [formData]="PurchaseInvoiceFormData" #PurchaseInvoiceForm4 [showRequiredMark]="false" [colCountByScreen]="{ lg: 2, md: 2, sm: 2, xs: 2 }">
+                    <dxi-item
+                      dataField="CommissionAgentId"
+                      editorType="dxSelectBox"
+                      [colSpan]="2"
+                      cssClass="pr-2 mb-2"
+                      [editorOptions]="{
+                        placeholder: 'Sales Man/Comm Agent',
+                        dataSource: supplierCustomerList,
+                        valueExpr: 'Id',
+                        displayExpr: 'CompanyName',
+                        searchEnabled: true,
+                        onValueChanged: handleComissionBlock
+                      }"
+                    >
+                      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+                    </dxi-item>
+                  </dx-form>
+                </div>
+                <app-supp-cust-detail-under-combo
+                  #SuppCustDetailUnderComboComponentForComissionAgent
+                  [SupplierCustomerFormType]="1"
+                  [ComboValue]="PurchaseInvoiceFormData?.CommissionAgentId > 0"
+                ></app-supp-cust-detail-under-combo>
+              </div>
+              <dx-form [formData]="PurchaseInvoiceFormData" #PurchaseInvoiceForm5 [showRequiredMark]="false" [colCountByScreen]="{ lg: 2, md: 2, sm: 2, xs: 2 }">
+                <dxi-item
+                  dataField="CommissionType"
+                  cssClass="px-1 m-0"
+                  editorType="dxSelectBox"
+                  [editorOptions]="{
+                    placeholder: 'Comm. Type',
+                    items: commissionTypeList,
+                    searchEnabled: true,
+                    onValueChanged: handleComissionBlock
+                  }"
+                >
+                  <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+                </dxi-item>
+                <dxi-item
+                  dataField="CommRate"
+                  cssClass="px-1 m-0"
+                  editorType="dxNumberBox"
+                  [editorOptions]="{
+                    placeholder: 'Comm. Rate',
+                    onValueChanged: handleComissionBlock
+                  }"
+                >
+                  <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+                </dxi-item>
+                <dxi-item
+                  dataField="UomScheduleIdCmRate"
+                  cssClass="px-1 m-0"
+                  editorType="dxSelectBox"
+                  [editorOptions]="{
+                    placeholder: 'Rate UOM',
+                    items: rateUOMList,
+                    searchEnabled: true,
+                    onValueChanged: handleComissionBlock
+                  }"
+                >
+                  <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+                </dxi-item>
+                <dxi-item
+                  dataField="CommAmount"
+                  editorType="dxNumberBox"
+                  cssClass="px-1 m-0"
+                  [editorOptions]="{
+                    placeholder: 'Amount',
+                    onValueChanged: handleComissionBlock,
+                    readOnly: true
+                  }"
+                >
+                  <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+                </dxi-item>
+                <dxi-item
+                  dataField="CommissionRemarks"
+                  [colSpan]="2"
+                  cssClass="px-1 m-0"
+                  editorType="dxTextBox"
+                  [editorOptions]="{
+                    placeholder: 'CommRemarks'
+                  }"
+                >
+                  <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+                </dxi-item>
+              </dx-form>
+            </div>
+            <div class="custom-col">
+              <!-- <div class="SupplierCustomerBox shadow"> -->
+              <div class="SupplierCustomerBox shadow">
+                <div class="header">
+                  <dx-form [formData]="PurchaseInvoiceFormData" #PurchaseInvoiceForm6 [showRequiredMark]="false" [colCountByScreen]="{ lg: 2, md: 2, sm: 2, xs: 2 }">
+                    <dxi-item
+                      dataField="BrokerAgentId"
+                      editorType="dxSelectBox"
+                      [colSpan]="2"
+                      cssClass="pr-2 mb-2"
+                      [editorOptions]="{
+                        placeholder: 'Brokery Agent',
+                        dataSource: supplierCustomerList,
+                        valueExpr: 'Id',
+                        displayExpr: 'CompanyName',
+                        searchEnabled: true,
+                        onValueChanged: handleBrokeryBlock
+                      }"
+                    >
+                      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+                    </dxi-item>
+                  </dx-form>
+                </div>
+                <app-supp-cust-detail-under-combo
+                  #SuppCustDetailUnderComboComponentForBrokerAgent
+                  [SupplierCustomerFormType]="1"
+                  [ComboValue]="PurchaseInvoiceFormData?.BrokerAgentId > 0"
+                ></app-supp-cust-detail-under-combo>
+              </div>
+              <dx-form [formData]="PurchaseInvoiceFormData" #PurchaseInvoiceForm7 [showRequiredMark]="false" [colCountByScreen]="{ lg: 2, md: 2, sm: 2, xs: 2 }">
+                <dxi-item
+                  dataField="BrokeryType"
+                  cssClass="px-1 m-0"
+                  editorType="dxSelectBox"
+                  [editorOptions]="{
+                    placeholder: 'Brokery Type',
+                    items: commissionTypeList,
+                    searchEnabled: true,
+                    onValueChanged: handleBrokeryCalculations
+                  }"
+                >
+                  <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+                </dxi-item>
+
+                <dxi-item
+                  dataField="BrokeryRate"
+                  cssClass="px-1 m-0"
+                  editorType="dxNumberBox"
+                  [editorOptions]="{
+                    placeholder: 'Brokery Rate',
+                    onValueChanged: handleBrokeryCalculations
+                  }"
+                >
+                  <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+                </dxi-item>
+
+                <dxi-item
+                  dataField="BrokeryUom"
+                  cssClass="px-1 m-0"
+                  editorType="dxSelectBox"
+                  [editorOptions]="{
+                    placeholder: 'Brok. Rate UOM',
+                    items: rateUOMList,
+                    searchEnabled: true,
+                    onValueChanged: handleBrokeryCalculations
+                  }"
+                >
+                  <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+                </dxi-item>
+
+                <dxi-item
+                  dataField="BrokeryAmount"
+                  editorType="dxNumberBox"
+                  cssClass="px-1 m-0"
+                  [editorOptions]="{
+                    placeholder: 'Brok. Amount',
+                    onValueChanged: handleBrokeryCalculations,
+                    readOnly: true
+                  }"
+                >
+                  <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+                </dxi-item>
+              </dx-form>
+            </div>
+          </div>
+        </div>
+      </dx-accordion>
+    </div>
+  </div>
+
+ 
+
+  <div class="col-md-12 fixed-bottom">
+    <div class="totalRecords">
+      <p>Total Amount: 43553</p>
+    </div>
+    <div class="d-flex justify-content-end pb-4">
+      <dx-button icon="save" text="{{ purchaseBillParamsId > 0 ? 'Update' : 'Save' }}" type="success" (onClick)="onSave()"></dx-button>
+      <div class="m-1"></div>
+      <dx-button icon="close" text="Close" type="danger" routerLink="/cus-sales/purchase-invoice-history"></dx-button>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="my-3">
+        <dx-data-grid
+          #detailGrid
+          id="detailGrid"
+          [dataSource]="dataSource"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+          [repaintChangesOnly]="true"
+          (onRowUpdated)="onRowUpdateInDetailGrid($event)"
+          (onContentReady)="onRowUpdateInDetailGrid($event)"
+        >
+          <!-- <dxo-load-panel [enabled]="true"></dxo-load-panel> -->
+          <dxo-editing mode="cell" [allowUpdating]="true" [allowDeleting]="true" [useIcons]="true"> </dxo-editing>
+          <dxi-column dataField="ItemId" dataType="number" caption="Item" [visible]="false" alignment="center"></dxi-column>
+          <dxi-column dataField="ItemName" caption="Item" alignment="center" [allowEditing]="false"></dxi-column>
+          <dxi-column dataField="CropYear" caption="CropYear" alignment="center" [allowEditing]="false"></dxi-column>
+          <!-- <dxi-column dataField="ItemUOMId" dataType="number" caption="Pack UOM" [visible]="false" alignment="center"> </dxi-column> -->
+          <dxi-column dataField="UOMCodeItem" caption="Pack UOM" alignment="center" [allowEditing]="false"></dxi-column>
+          <dxi-column dataField="ItemQty" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }" caption="Qty" [allowEditing]="false"></dxi-column>
+          <dxi-column dataField="LabAnalisysNo" caption="LabRef#" alignment="center" [allowEditing]="false"> </dxi-column>
+          <!-- <dxi-column dataField="PurchaseOrderId" dataType="number" caption="Order #" alignment="center" [visible]="false"></dxi-column> -->
+          <dxi-column dataField="PurchaseOrder" caption="Order #" alignment="center" [allowEditing]="false"></dxi-column>
+          <dxi-column dataField="EBTotalWt" dataType="number" caption="EBTotalWt" [format]="{ type: 'fixedPoint', precision: 0 }" alignment="right" [allowEditing]="false"></dxi-column>
+          <dxi-column dataField="WeightCutTotal" dataType="number" caption="WeightCutTotal" [format]="{ type: 'fixedPoint', precision: 0 }" alignment="right" [allowEditing]="false"></dxi-column>
+          <dxi-column dataField="NetBillWeight" dataType="number" caption="NetBillWeight" [format]="{ type: 'fixedPoint', precision: 0 }" alignment="right" [allowEditing]="false"></dxi-column>
+          <dxi-column dataField="GrossWeight" dataType="number" caption="GrossWeight" [format]="{ type: 'fixedPoint', precision: 0 }" alignment="right" [allowEditing]="false"></dxi-column>
+          <dxi-column dataField="NetStockWeight" dataType="number" caption="NetStockWeight" [format]="{ type: 'fixedPoint', precision: 0 }" alignment="right" [allowEditing]="false"></dxi-column>
+          <dxi-column dataField="ItemRate" dataType="number" caption="Rate" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }" [allowEditing]="false"></dxi-column>
+          <dxi-column dataField="UomScheduleIdRate" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }" caption="Rate UOM" [visible]="false"> </dxi-column>
+          <dxi-column dataField="EquivalentPoRate" caption="Rate UOM" alignment="center" [allowEditing]="false"></dxi-column>
+          <dxi-column dataField="ItemAmount" dataType="number" caption="Item Amount" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }" [allowEditing]="false"></dxi-column>
+          <dxi-column
+            dataField="RateCut"
+            dataType="number"
+            caption="RateCut"
+            alignment="right"
+            [format]="{ type: 'fixedPoint', precision: 0 }"
+            [setCellValue]="onRateCutChangeInDetailGrd"
+          ></dxi-column>
+          <dxi-column dataField="RateCutAmount" dataType="number" caption="RateCutAmount" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }" [allowEditing]="false"></dxi-column>
+          <dxi-column dataField="BillAmount" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }" caption="BillAmount" alignment="right" [allowEditing]="false"></dxi-column>
+          <dxi-column dataField="CarriageAmount" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }" caption="Freight" alignment="right" [allowEditing]="false"></dxi-column>
+          <dxi-column dataField="ExpenseAmount" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }" caption="Expense" alignment="right" [allowEditing]="false"></dxi-column>
+          <dxi-column dataField="CommissionAmount" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }" caption="Commision" alignment="right" [allowEditing]="false"></dxi-column>
+
+          <dxi-column dataField="WareHouseName" caption="Warehouse" [visible]="false" alignment="center" [allowEditing]="false"> </dxi-column>
+          <dxi-column dataField="JobLotId" dataType="number" caption="Lot" [visible]="false" alignment="center"> </dxi-column>
+          <dxi-column dataField="PackingTypeId" dataType="number" caption="PackingTypeId" [visible]="false" alignment="center"> </dxi-column>
+
+          <dxo-summary [recalculateWhileEditing]="true">
+            <dxi-total-item column="NetBillWeight" summaryType="sum" displayFormat="{0}" valueFormat="#,##0" name="ItemQty"> </dxi-total-item>
+            <dxi-total-item column="UomScheduleIdRate" summaryType="sum" displayFormat="{0}" valueFormat="#,##0" name="ItemQty"> </dxi-total-item>
+            <dxi-total-item column="ItemAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0" name="ItemRate"> </dxi-total-item>
+            <dxi-total-item column="RateCut" summaryType="sum" displayFormat="{0}" valueFormat="#,##0" name="ItemAmount"> </dxi-total-item>
+            <dxi-total-item column="RateCutAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0" name="RateCut"> </dxi-total-item>
+            <dxi-total-item column="CarriageAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0" name="RateCutAmount"> </dxi-total-item>
+            <dxi-total-item column="ExpenseAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0" name="ExpenseAmount"> </dxi-total-item>
+            <dxi-total-item column="CommissionAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0" name="CommissionAmount"> </dxi-total-item>
+            <dxi-total-item column="BillAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0" name="BillAmount"> </dxi-total-item>
+          </dxo-summary>
+          <dxo-scrolling [scrollByContent]="true" [scrollByThumb]="true" [showScrollbar]="'always'" [scrollLeft]="true" mode="infinite"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <dx-tab-panel #tabPanel [selectedIndex]="0">
+        <!-- TransporterGrid -->
+        <dxi-item title="Transportation">
+          <div *dxTemplate class="p-1" class="p-1">
+            <dx-data-grid
+              #PayablesDebitToItemGrid
+              id="PayablesDebitToItemGrid"
+              [dataSource]="transpotationGridDataSource"
+              [showColumnLines]="false"
+              [showRowLines]="true"
+              [rowAlternationEnabled]="true"
+              [allowColumnResizing]="true"
+              [columnAutoWidth]="true"
+              [showBorders]="true"
+              (onContentReady)="setTransportationExpenseInDetailGridProportionally($event)"
+              (onRowUpdated)="setTransportationExpenseInDetailGridProportionally($event)"
+            >
+              <dxo-load-panel [enabled]="true"></dxo-load-panel>
+              <dxo-editing mode="cell" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true" [useIcons]="true"> </dxo-editing>
+              <dxi-column dataField="InvGrnId" caption="InvGrnId" alignment="center" dataType="number" [visible]="false"></dxi-column>
+              <dxi-column dataField="TansporterId" caption="Transporter" dataType="number" [allowSearch]="true">
+                <dxo-lookup [dataSource]="transporterList" [displayExpr]="'AccountTitle'" [valueExpr]="'Id'"></dxo-lookup>
+                <dxi-validation-rule type="custom" [validationCallback]="checkValidationForTransporterIdIntTranspotationGrid" message="Please Select Account To be Credited for Transportation!">
+                </dxi-validation-rule>
+              </dxi-column>
+              <dxi-column dataField="FreightAmount" caption="Credit" alignment="center" dataType="number" [setCellValue]="onFreightChangeInTranspotationGrid">
+                <dxi-validation-rule type="custom" [validationCallback]="checkValidationForFreightAmountTranspotationGrid" message="Please Enter Amount To be Credited against Account!">
+                </dxi-validation-rule>
+              </dxi-column>
+              <dxi-column dataField="Remarks" caption="Remarks" alignment="left" dataType="string"></dxi-column>
+
+              <dxo-summary [recalculateWhileEditing]="true">
+                <dxi-total-item column="FreightAmount" summaryType="sum" name="FreightAmount" displayFormat="{0}" valueFormat="#,##0"></dxi-total-item>
+              </dxo-summary>
+              <dxo-scrolling [scrollByContent]="true" [scrollByThumb]="true" [showScrollbar]="'always'" [scrollLeft]="true" mode="infinite"></dxo-scrolling>
+            </dx-data-grid>
+          </div>
+        </dxi-item>
+        <!-- Supplier Add/Ls Grid -->
+        <dxi-item title="Supplier Add/Less">
+          <div *dxTemplate class="p-1" class="p-1">
+            <dx-data-grid
+              #journalGrid
+              id="journalGrid"
+              [dataSource]="journalDataSource"
+              [showColumnLines]="false"
+              [showRowLines]="true"
+              [rowAlternationEnabled]="true"
+              [allowColumnResizing]="true"
+              [columnAutoWidth]="true"
+              [showBorders]="true"
+              [repaintChangesOnly]="true"
+              (onContentReady)="onSuupplierAddLessRowUpdated($event)"
+              (onRowUpdated)="onSuupplierAddLessRowUpdated($event)"
+            >
+              <dxo-load-panel [enabled]="true"></dxo-load-panel>
+              <dxo-editing mode="cell" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true" [useIcons]="true"> </dxo-editing>
+              <dxi-column dataField="ChartofAccountId" caption="Account (Cr)" dataType="number">
+                <dxo-lookup [dataSource]="accountList" [displayExpr]="'AccountTitle'" [valueExpr]="'Id'"></dxo-lookup>
+                <dxi-validation-rule
+                  type="custom"
+                  [validationCallback]="checkValidationForAccountInSupplierAddLsGrid"
+                  message="You cannot Select Supplier Account in Header.Please Select Different Account!"
+                >
+                </dxi-validation-rule>
+              </dxi-column>
+              <!-- <dxi-column dataField="JvPrcnt"  caption="%" alignment="center" dataType="number" [setCellValue]="onPercentChangeInSupplierGrd"></dxi-column> -->
+              <dxi-column dataField="JvQty" caption="Qty" alignment="center" dataType="number" [setCellValue]="onQtyChangeInSupplierGrd"></dxi-column>
+              <dxi-column dataField="JvRate" caption="Rate" alignment="center" dataType="number" [setCellValue]="onRateChangeInSupplierGrd"></dxi-column>
+
+              <dxi-column dataField="JvDebit" caption="Debit" alignment="center" dataType="number" [setCellValue]="onDebAmountChangeInSupplierGrd"></dxi-column>
+              <dxi-column dataField="JvCredit" caption="Credit" alignment="center" dataType="number" [setCellValue]="onCreAmountChangeInSupplierGrd"></dxi-column>
+              <dxi-column dataField="JvRemarks" caption="Remarks" alignment="center"></dxi-column>
+              <dxo-summary [recalculateWhileEditing]="true">
+                <!-- <dxi-total-item column="JvPrcnt" summaryType="sum" name="JvPrcnt"></dxi-total-item> -->
+                <dxi-total-item column="JvQty" summaryType="sum" name="JvQty" displayFormat="{0}" valueFormat="#,##0"></dxi-total-item>
+                <dxi-total-item column="JvRate" summaryType="sum" name="JvRate" displayFormat="{0}" valueFormat="#,##0"></dxi-total-item>
+                <dxi-total-item column="JvDebit" summaryType="sum" name="JvDebit" displayFormat="{0}" valueFormat="#,##0"></dxi-total-item>
+                <dxi-total-item column="JvCredit" summaryType="sum" name="JvCredit" displayFormat="{0}" valueFormat="#,##0"></dxi-total-item>
+              </dxo-summary>
+              <dxo-scrolling [scrollByContent]="true" [scrollByThumb]="true" [showScrollbar]="'always'" [scrollLeft]="true" mode="infinite"></dxo-scrolling>
+            </dx-data-grid>
+          </div>
+        </dxi-item>
+        <!-- Item Add/Ls Grid -->
+        <dxi-item title="Item Add/Less">
+          <div *dxTemplate class="p-1">
+            <dx-data-grid
+              #expenseGrid
+              id="expenseGrid"
+              [dataSource]="expenseDataSource"
+              [showColumnLines]="false"
+              [showRowLines]="true"
+              [rowAlternationEnabled]="true"
+              [allowColumnResizing]="true"
+              [columnAutoWidth]="true"
+              [showBorders]="true"
+              [repaintChangesOnly]="true"
+              (onContentReady)="onRowUpdatedItemGrd($event)"
+              (onRowUpdated)="onRowUpdatedItemGrd($event)"
+            >
+              <dxo-load-panel [enabled]="true"></dxo-load-panel>
+              <dxo-editing mode="cell" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true" [useIcons]="true"> </dxo-editing>
+              <dxi-column dataField="InvRevExpItemId" caption="Account">
+                <dxo-lookup [dataSource]="itemAccountList" [valueExpr]="'Id'" dataType="number" [displayExpr]="'OtherItemName'"></dxo-lookup>
+                <dxi-validation-rule type="custom" [validationCallback]="checkValidationForAccountInItemAddLsGrid" message="Please Select Expense Type!"> </dxi-validation-rule>
+              </dxi-column>
+              <dxi-column dataField="Qty" caption="Qty" alignment="center" dataType="number" [setCellValue]="onQtyChangeInItemGrd"></dxi-column>
+              <dxi-column dataField="Rate" caption="Rate" alignment="center" dataType="number" [setCellValue]="onRateChangeInItemGrd"></dxi-column>
+              <dxi-column dataField="Amount" caption="Amount" dataType="number" [setCellValue]="onExpenseAmountChangeInItemGrid">
+                <dxi-validation-rule type="custom" [validationCallback]="checkValidationForAmmountInItemAddLsGrid" message="Please Enter Amount For Expense!"> </dxi-validation-rule>
+              </dxi-column>
+              <dxi-column dataField="Remarks" caption="Remarks" alignment="center"></dxi-column>
+              <dxo-summary [recalculateWhileEditing]="true">
+                <dxi-total-item column="Qty" summaryType="sum" name="Qty" displayFormat="{0}" valueFormat="#,##0"></dxi-total-item>
+                <dxi-total-item column="Rate" summaryType="sum" name="Rate" displayFormat="{0}" valueFormat="#,##0"></dxi-total-item>
+                <dxi-total-item column="Amount" summaryType="sum" name="Amount" displayFormat="{0}" valueFormat="#,##0"></dxi-total-item>
+              </dxo-summary>
+              <dxo-scrolling [scrollByContent]="true" [scrollByThumb]="true" [showScrollbar]="'always'" [scrollLeft]="true" mode="infinite"></dxo-scrolling>
+            </dx-data-grid>
+          </div>
+        </dxi-item>
+        <!-- Empty Bags Gid -->
+        <dxi-item title="Empty Bags">
+          <div *dxTemplate class="p-1" class="p-1">
+            <dx-data-grid
+              #EmptyBagsDataGrid
+              id="Datagrid-5"
+              [dataSource]="emptyBagsDataSource"
+              [showColumnLines]="false"
+              [showRowLines]="true"
+              [rowAlternationEnabled]="true"
+              [allowColumnResizing]="true"
+              [columnAutoWidth]="true"
+              [showBorders]="true"
+              (onContentReady)="onEmptyBagGridRowUpdated($event)"
+              (onRowUpdated)="onEmptyBagGridRowUpdated($event)"
+            >
+              <dxo-load-panel [enabled]="true"></dxo-load-panel>
+              <dxo-editing mode="cell" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="true" [useIcons]="true"> </dxo-editing>
+              <dxi-column dataField="InvGrnId" caption="InvGrnId" alignment="center" dataType="number" [visible]="false"></dxi-column>
+              <dxi-column dataField="ItemId" caption="ItemId" [visible]="false" dataType="number"></dxi-column>
+              <dxi-column dataField="ItemName" caption="Other Item" [allowEditing]="false" dataType="string"></dxi-column>
+              <dxi-column dataField="PurchaseQty" caption="Purchase Qty" [allowEditing]="false" alignment="center" dataType="number"></dxi-column>
+              <dxi-column dataField="Rate" caption="Rate" alignment="center" dataType="number" [setCellValue]="onRateChangeInEmptyBags"></dxi-column>
+              <dxi-column dataField="Amount" caption="Amount" [allowEditing]="false" alignment="center" dataType="number"></dxi-column>
+              <dxi-column dataField="Remarks" caption="Remarks" [allowEditing]="false" alignment="center" dataType="string"></dxi-column>
+              <!--  [setCellValue]="calculateFreightInDetailGrid"  -->
+              <dxo-summary [recalculateWhileEditing]="true">
+                <dxi-total-item column="Amount" summaryType="sum" name="Amount" displayFormat="{0}" valueFormat="#,##0"></dxi-total-item>
+              </dxo-summary>
+              <dxo-scrolling [scrollByContent]="true" [scrollByThumb]="true" [showScrollbar]="'always'" [scrollLeft]="true" mode="infinite"></dxo-scrolling>
+            </dx-data-grid>
+          </div>
+        </dxi-item>
+
+        <!-- <dxi-item title="Payment Due Schedule">
+          <div *dxTemplate class="p-1" class="p-1">
+            <dx-data-grid
+              #paymentGrid
+              id="gridContainer3"
+              [dataSource]="paymentDueDataSource"
+              [showColumnLines]="false"
+              [showRowLines]="true"
+              [rowAlternationEnabled]="true"
+              [allowColumnResizing]="true"
+              [columnAutoWidth]="true"
+              [showBorders]="true"
+            >
+              <dxo-load-panel [enabled]="true"></dxo-load-panel>
+              <dxo-editing mode="cell" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true" [useIcons]="true"> </dxo-editing>
+              <dxi-column dataField="DueDays" caption="Due Days" dataType="number" [setCellValue]="onDueDaysChangeInPaymentGrd"></dxi-column>
+              <dxi-column dataField="DueDate" caption="Due Date" dataType="date" [format]="'dd-MMM-yyyy'"></dxi-column>
+              <dxi-column dataField="DuePercentage" caption="Due %" dataType="number"></dxi-column>
+              <dxi-column dataField="Amount" caption="Amount" dataType="number"></dxi-column>
+              <dxo-summary [recalculateWhileEditing]="true">
+                <dxi-total-item column="DuePercentage" summaryType="sum" name="Qty"></dxi-total-item>
+                <dxi-total-item column="Amount" summaryType="sum" name="Qty"></dxi-total-item>
+              </dxo-summary>
+              <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+            </dx-data-grid>
+          </div>
+        </dxi-item> -->
+      </dx-tab-panel>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+      <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+      <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+    </div>
+    <div class="col-md-12">
+      <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+    </div>
+  </div>
+
+  <purchase-invoice-loader [visibility]="loaderVisible" (closeLoaderPopup)="handleLoaderPopupVisiblity($event)" (getSelectedData)="loadDataAgainstSelectedGRNs($event)"></purchase-invoice-loader>
+</div>

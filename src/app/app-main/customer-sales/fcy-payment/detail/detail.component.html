@@ -1,0 +1,27 @@
+<dx-data-grid
+  #detailGrid
+  id="detailGrid"
+  [dataSource]="detailArray"
+  [showColumnLines]="false"
+  [showRowLines]="true"
+  [rowAlternationEnabled]="true"
+  [allowColumnResizing]="true"
+  [columnAutoWidth]="true"
+  [showBorders]="true"
+  [repaintChangesOnly]="true"
+>
+  <dxo-load-panel [enabled]="true"></dxo-load-panel>
+
+  <dxi-column dataField="Type" caption="Type" alignment="left" dataType="string"></dxi-column>
+  <dxi-column dataField="ExImProceedsChargesTypeId" caption="Account Title" [visible]="false" alignment="left" dataType="number"></dxi-column>
+  <dxi-column dataField="ProceedsChargesTypeCode" caption="Account Title" alignment="left" dataType="string"></dxi-column>
+  <dxi-column dataField="FcAmount" caption="Fcy Amount" alignment="center" dataType="number"></dxi-column>
+  <dxi-column dataField="RsAmount" caption="Hcy Amount" alignment="center" dataType="number"></dxi-column>
+  <dxi-column dataField="ProceedsRemarks" caption="Remarks" alignment="left" dataType="string"></dxi-column>
+
+  <dxo-summary [recalculateWhileEditing]="true">
+    <dxi-total-item column="FcAmount" summaryType="sum" name="Qty" displayFormat="{0}" valueFormat="#,##0"></dxi-total-item>
+    <dxi-total-item column="RsAmount" summaryType="sum" name="Rate" displayFormat="{0}" valueFormat="#,##0"></dxi-total-item>
+  </dxo-summary>
+  <dxo-scrolling columnRenderingMode="virtual" [scrollByContent]="true" [scrollByThumb]="true" [scrollLeft]="true" [showScrollbar]="'always'"></dxo-scrolling>
+</dx-data-grid>

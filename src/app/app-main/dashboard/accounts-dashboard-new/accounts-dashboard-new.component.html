@@ -1,0 +1,147 @@
+<div class="container-fluid">
+  <app-pagetitle [title]="'Accounts Dashboard'" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+  <dx-form id="form" [formData]="AccountsDashboardFormData" #AccountsDashboardForm [showRequiredMark]="false">
+    <dxi-item itemType="group" cssClass="second-group" [colCount]="6">
+      <dxi-item> </dxi-item>
+
+      <dxi-item
+        dataField="dateType"
+        editorType="dxSelectBox"
+        [editorOptions]="{
+          placeholder: 'Date Type',
+          items: dateList,
+          valueExpr: 'Id',
+          displayExpr: 'name',
+          onInitialized: setFocus,
+          onValueChanged: datetypeChanged,
+          stylingMode: 'underlined'
+        }"
+      >
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      </dxi-item>
+      <dxi-item
+        cssClass="px-1 m-0 "
+        dataField="FromDate"
+        editorType="dxDateBox"
+        [editorOptions]="{
+          placeholder: 'From Date',
+          displayFormat: 'dd-MMM-yyyy',
+          stylingMode: 'underlined'
+        }"
+      >
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        <dxi-validation-rule type="required" message="From Date is required"></dxi-validation-rule>
+      </dxi-item>
+
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="ToDate"
+        editorType="dxDateBox"
+        [editorOptions]="{
+          placeholder: 'To Date',
+          displayFormat: 'dd-MMM-yyyy',
+          stylingMode: 'underlined'
+        }"
+      >
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        <dxi-validation-rule type="required" message="To Date is required"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item>
+        <dx-button class="btn-sm" style="margin-top: 10px" text="Show" type="success" (onClick)="onSubmit()"></dx-button>
+      </dxi-item>
+    </dxi-item>
+  </dx-form>
+</div>
+
+<dx-popup
+  [width]="1200"
+  [height]="'auto'"
+  [position]="{ my: 'left top', at: 'left top', of: 'form', offset: '100 100' }"
+  [showTitle]="true"
+  title="{{ dashboardTitle }}"
+  [dragEnabled]="true"
+  [closeOnOutsideClick]="false"
+  [(visible)]="loadStatus"
+>
+  <div *dxTemplate="let data of 'content'">
+    <dx-data-grid
+      #popupGrid
+      style="height: 770px"
+      id="gridContainer"
+      [dataSource]="popupDataSource"
+      [showColumnLines]="false"
+      [showRowLines]="true"
+      [rowAlternationEnabled]="true"
+      [allowColumnResizing]="true"
+      [columnAutoWidth]="true"
+      [showBorders]="true"
+    >
+      <dxo-load-panel [enabled]="true"></dxo-load-panel>
+      <!-- <dxo-selection mode="multiple" selectAllMode="page" showCheckBoxesMode="always"></dxo-selection> -->
+      <dxi-column dataField="AccountCode" caption="Ac_Code"></dxi-column>
+      <dxi-column dataField="AccountType" caption="Ac_Type"></dxi-column>
+      <dxi-column dataField="AccountTitle" caption="Ac_Title"></dxi-column>
+      <dxi-column dataField="ObDebit" caption="Ob Debit" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+      <dxi-column dataField="ObCredit" caption="Ob Credit" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+      <dxi-column dataField="CurrDebit" caption="Curr Debit" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+      <dxi-column dataField="CurrCredit" caption="Curr Credit" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+      <dxi-column dataField="ClDebit" caption="Cl Debit" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+      <dxi-column dataField="ClCredit" caption="Cl Credit" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+      <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+      <dxo-summary>
+        <dxi-total-item column="ObDebit" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+        <dxi-total-item column="ObCredit" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+        <dxi-total-item column="CurrDebit" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+        <dxi-total-item column="CurrCredit" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+        <dxi-total-item column="ClDebit" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+        <dxi-total-item column="ClCredit" summaryType="sum" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+
+        <dxi-group-item column="ClDebit" summaryType="sum" displayFormat="{0}" [showInGroupFooter]="true" [alignByColumn]="true"> </dxi-group-item>
+        <dxi-group-item column="ClCredit" summaryType="sum" displayFormat="{0}" [showInGroupFooter]="true" [alignByColumn]="true"> </dxi-group-item>
+        <dxi-group-item column="CurrCredit" summaryType="sum" displayFormat="{0}" [showInGroupFooter]="true" [alignByColumn]="true"> </dxi-group-item>
+        <dxi-group-item column="CurrDebit" summaryType="sum" displayFormat="{0}" [showInGroupFooter]="true" [alignByColumn]="true"> </dxi-group-item>
+        <dxi-group-item column="ObCredit" summaryType="sum" displayFormat="{0}" [showInGroupFooter]="true" [alignByColumn]="true"> </dxi-group-item>
+        <dxi-group-item column="ObDebit" summaryType="sum" displayFormat="{0}" [showInGroupFooter]="true" [alignByColumn]="true"> </dxi-group-item>
+      </dxo-summary>
+    </dx-data-grid>
+  </div>
+</dx-popup>
+
+
+
+<!-- =========================================================================================== -->
+<div class="row mt-4">
+    <div class="col-lg-3 col-md-6 col-sm-12" *ngFor="let item of AccountsDashboardData,let i=index">
+    <div class="small-box"  [ngStyle]="{background: getBackGroundColor(i)}">
+      <div class="inner">
+        <div class="d-flex justify-content-center align-items-center text-center m-0 p-0">
+          <div class="m-0 p-0">
+            <h4 class="p-0 m-0" id="SecondRowCardHeading">{{item.AccountDescription}}</h4>
+          </div>
+        </div>
+        <table class="table table-sm table-borderless m-0 p-0">
+          <tr>
+            <td>Opening</td>
+            <td>{{ item.Opening }}</td>
+          </tr>
+          <tr>
+            <td>Current Dr</td>
+            <td>{{ item.CurrDr }}</td>
+          </tr>
+          <tr>
+            <td>Current CR</td>
+            <td>{{ item.CurrCr }}</td>
+          </tr>
+          <tr>
+            <td>Closing</td>
+            <td>{{ item.Closing }}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="icon" id="recievableIcon">
+        <i class="fas fa-shopping-cart"></i>
+      </div>
+      <a (click)="handleMoreInfoButtonClick(item.AccountDescription)" class="small-box-footer p-0 m-0"> More info <i style="cursor: pointer;" id="footer-icon" class="fas fa-arrow-circle-right"></i> </a>
+    </div>
+  </div>
+</div>

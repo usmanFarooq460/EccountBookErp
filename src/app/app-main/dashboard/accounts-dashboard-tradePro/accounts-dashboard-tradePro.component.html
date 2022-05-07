@@ -1,0 +1,229 @@
+<div class="container-fluid">
+  <app-pagetitle [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+  <dx-form id="form" [formData]="AccountsDashboardTradeProFormData" #AccountsDashboardTradeProForm [showRequiredMark]="false">
+    <dxi-item itemType="group" cssClass="second-group" [colCount]="6">
+      <dxi-item> </dxi-item>
+
+      <dxi-item
+        dataField="dateType"
+        editorType="dxSelectBox"
+        [editorOptions]="{
+          placeholder: 'Date Type',
+          items: dateList,
+          valueExpr: 'Id',
+          displayExpr: 'name',
+          onInitialized: setFocus,
+          onValueChanged: datetypeChanged
+        }"
+      >
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      </dxi-item>
+      <dxi-item
+        cssClass="px-1 m-0 "
+        dataField="fromDate"
+        editorType="dxDateBox"
+        [editorOptions]="{
+          placeholder: 'From Date',
+          displayFormat: 'dd-MMM-yyyy'
+        }"
+      >
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        <dxi-validation-rule type="required" message="Document Date is required"></dxi-validation-rule>
+      </dxi-item>
+
+      <dxi-item
+        cssClass="px-1 m-0"
+        dataField="toDate"
+        editorType="dxDateBox"
+        [editorOptions]="{
+          placeholder: 'To Date',
+          displayFormat: 'dd-MMM-yyyy'
+        }"
+      >
+        <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        <dxi-validation-rule type="required" message="To Date is required"></dxi-validation-rule>
+      </dxi-item>
+      <dxi-item>
+        <dx-button class="btn-sm" style="margin-top: 10px" text="Show" type="success" (onClick)="onSubmit()"></dx-button>
+      </dxi-item>
+    </dxi-item>
+  </dx-form>
+</div>
+
+<div class="d-flex p-0 m-0 text-center"><h1>Accounts Dashboard</h1></div>
+<div class="row">
+  <!--  **************************************** FIRST CARD START **************************************  -->
+  <div class="col-lg-3 col-md-6 col-sm-12">
+    <div class="small-box">
+      <div class="inner">
+        <div class="d-flex justify-content-center align-items-center text-center m-0 p-0">
+          <div class="m-0 p-0" id="small-box-header">
+            <h4 class="p-0 m-0">Today Business</h4>
+          </div>
+        </div>
+        <table class="table table-sm table-borderless m-0 p-0">
+          <tr>
+            <td>Opening</td>
+            <td>{{ tbOpening }}</td>
+          </tr>
+          <tr>
+            <td>Current Dr</td>
+            <td>{{ tbCurrDr }}</td>
+          </tr>
+          <tr>
+            <td>Current CR</td>
+            <td>{{ tbCurrCr }}</td>
+          </tr>
+          <tr>
+            <td>Closing</td>
+            <td>{{ tbClosing }}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="icon">
+        <i class="fas fa-money-bill-wave"></i>
+      </div>
+      <a routerLink="/account-reports/activity-summary" class="small-box-footer p-0 m-0"> More info <i id="footer-icon" class="fas fa-arrow-circle-right"></i> </a>
+    </div>
+  </div>
+  <!--  **************************************** FIRST CARD END ****************************************  -->
+  <!--  **************************************** SECOND CARD START *************************************  -->
+  <div class="col-lg-3 col-md-6 col-sm-12">
+    <div class="small-box" style="background: #28a745">
+      <div class="inner">
+        <div class="d-flex justify-content-center align-items-center text-center m-0 p-0">
+          <div class="m-0 p-0">
+            <h4 class="p-0 m-0">Cash Balances</h4>
+          </div>
+        </div>
+        <table class="table table-sm table-borderless m-0 p-0">
+          <tr>
+            <td>Opening</td>
+            <td>{{ cashOpening }}</td>
+          </tr>
+          <tr>
+            <td>Current Dr</td>
+            <td>{{ cashCurrDr }}</td>
+          </tr>
+          <tr>
+            <td>Current CR</td>
+            <td>{{ cashCurrCr }}</td>
+          </tr>
+          <tr>
+            <td>Closing</td>
+            <td>{{ cashClosing }}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="icon">
+        <i class="fas fa-dollar-sign"></i>
+      </div>
+      <a routerLink="/account-reports/cash-balances" class="small-box-footer p-0 m-0"> More info <i id="footer-icon" class="fas fa-arrow-circle-right"></i> </a>
+    </div>
+  </div>
+  <!--  **************************************** SECOND CARD END ****************************************  -->
+  <!--  **************************************** 3rd CARD Start *****************************************  -->
+  <div class="col-lg-3 col-md-6 col-sm-12">
+    <div class="small-box" style="background: #dc3545">
+      <div class="inner">
+        <div class="d-flex justify-content-center align-items-center text-center m-0 p-0">
+          <div class="m-0 p-0">
+            <h4 class="p-0 m-0">Bank Balances</h4>
+          </div>
+        </div>
+        <table class="table table-sm table-borderless m-0 p-0">
+          <tr>
+            <td>Opening</td>
+            <td>{{ bankOpening }}</td>
+          </tr>
+          <tr>
+            <td>Current Dr</td>
+            <td>{{ bankCurrDr }}</td>
+          </tr>
+          <tr>
+            <td>Current CR</td>
+            <td>{{ bankCurrCr }}</td>
+          </tr>
+          <tr>
+            <td>Closing</td>
+            <td>{{ bankClosing }}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="icon">
+        <i class="fas fa-university"></i>
+      </div>
+      <a routerLink="/account-reports/bank-balances" class="small-box-footer p-0 m-0"> More info <i id="footer-icon" class="fas fa-arrow-circle-right"></i> </a>
+    </div>
+  </div>
+  <!--  **************************************** 3rd CARD END *******************************************  -->
+  <!--  **************************************** 4th CARD Start *****************************************  -->
+  <div class="col-lg-3 col-md-6 col-sm-12">
+    <div class="small-box" style="background: #17a2b8">
+      <div class="inner">
+        <div class="d-flex justify-content-center align-items-center text-center m-0 p-0">
+          <div class="m-0 p-0">
+            <h4 class="p-0 m-0">Payables</h4>
+          </div>
+        </div>
+        <table class="table table-sm table-borderless m-0 p-0">
+          <tr>
+            <td>Opening</td>
+            <td>{{ payableOpening }}</td>
+          </tr>
+          <tr>
+            <td>Current Dr</td>
+            <td>{{ payableCurrDr }}</td>
+          </tr>
+          <tr>
+            <td>Current CR</td>
+            <td>{{ payableCurrCr }}</td>
+          </tr>
+          <tr>
+            <td>Closing</td>
+            <td>{{ payableClosing }}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="icon">
+        <i class="fas fa-wallet"></i>
+      </div>
+      <a routerLink="/account-reports/payable" class="small-box-footer p-0 m-0"> More info <i id="footer-icon" class="fas fa-arrow-circle-right"></i> </a>
+    </div>
+  </div>
+  <!--  **************************************** 4th CARD END ****************************************  -->
+  <!--  **************************************** 5th CARD Start ****************************************  -->
+  <div class="col-lg-3 col-md-6 col-sm-12">
+    <div class="small-box" style="background: #ffc107">
+      <div class="inner">
+        <div class="d-flex justify-content-center align-items-center text-center m-0 p-0">
+          <div class="m-0 p-0">
+            <h4 class="p-0 m-0" id="SecondRowCardHeading">Recievables</h4>
+          </div>
+        </div>
+        <table class="table table-sm table-borderless m-0 p-0">
+          <tr>
+            <td>Opening</td>
+            <td>{{ receivablesOpening }}</td>
+          </tr>
+          <tr>
+            <td>Current Dr</td>
+            <td>{{ receivablesCurrDr }}</td>
+          </tr>
+          <tr>
+            <td>Current CR</td>
+            <td>{{ receivablesCurrCr }}</td>
+          </tr>
+          <tr>
+            <td>Closing</td>
+            <td>{{ receivablesClosing }}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="icon" id="recievableIcon">
+        <i class="fas fa-shopping-cart"></i>
+      </div>
+      <a routerLink="/account-reports/receivable" class="small-box-footer p-0 m-0"> More info <i id="footer-icon" class="fas fa-arrow-circle-right"></i> </a>
+    </div>
+  </div>
+</div>

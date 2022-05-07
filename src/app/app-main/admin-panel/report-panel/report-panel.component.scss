@@ -1,0 +1,39 @@
+section {
+  padding-top: 4rem;
+  padding-bottom: 5rem;
+  background-color: #f1f4fa;
+  font-family: "Trebuchet MS", sans-serif;
+}
+.card-header {
+  color: rgba(74, 75, 72, 0.897);
+  font-family: "Trebuchet MS", sans-serif;
+  font-size: 30px;
+  font-weight: 500;
+  padding: 0;
+}
+.card-body {
+  padding-bottom: 0;
+}
+
+.card-title {
+  font-family: "Nunito";
+  color: coral;
+  font-size: 17px;
+}
+.card-title:hover {
+  font-size: 17px;
+  color: rgb(247, 100, 47);
+}
+.card-text {
+  color: #555555;
+  font-family: "Noto Sans", sans-serif;
+  font-size: 12px;
+}
+hr {
+  padding-bottom: 1px;
+}
+
+.span:hover {
+  background-color: #111111;
+  transition: all 0.3s ease 0s;
+}

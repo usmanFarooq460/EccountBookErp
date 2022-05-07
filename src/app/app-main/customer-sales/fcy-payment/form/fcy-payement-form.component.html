@@ -1,0 +1,860 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="d-flex justify-content-between">
+        <div class="">
+          <app-pagetitle [title]="'Fcy Payment Form'"></app-pagetitle>
+        </div>
+        <div class="">
+          <dx-button class="mr-2" [hint]="'Add New'" type="default" icon="plus" (onClick)="resetForm()"> </dx-button>
+          <dx-button icon="refresh" class="mr-2" type="success" [hint]="'Reload Form Fields'" (onClick)="FetchData()"></dx-button>
+          <dx-button text="Define" icon="add" type="success" (onClick)="handleProceedChargesAccountDefinationPopupVisibility()"></dx-button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="row">
+    <div class="col-md-12 d-flex justify-content-between">
+      <div class=""></div>
+      <div class="">
+        <dx-button text="Define" icon="add" type="success" (onClick)="handleProceedChargesAccountDefinationPopupVisibility()"></dx-button>
+      </div>
+    </div>
+  </div> -->
+
+  <div class="row">
+    <div class="col-lg-8 my-2">
+      <dx-form [formData]="FcyPaymentFormData" #FcyPaymentForm1 [showRequiredMark]="false" [colCountByScreen]="{ lg: 3, md: 3, sm: 3, xs: 3 }">
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="DocumentNo"
+          editorType="dxNumberBox"
+          [editorOptions]="{
+            placeholder: 'Vouchar No',
+            readOnly: true
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Voucher No  is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="DocumentDate"
+          editorType="dxDateBox"
+          [editorOptions]="{
+            placeholder: 'Vourcher Date',
+            displayFormat: 'dd-MMM-yyyy',
+            pickerType: 'calender'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Voucher Date  is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="ExmLcPaymentTerm"
+          [colSpan]="1"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: PaymentTermsList,
+            valueExpr: 'term',
+            displayExpr: 'term',
+            placeholder: 'Payment Term',
+            searchEnabled: true,
+            onValueChanged: handlePaymentTermChange
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Payment Term is required"></dxi-validation-rule>
+        </dxi-item>
+      </dx-form>
+      <div class="ship-to-buyer shadow mt-2">
+        <div class="header">
+          <dx-form [formData]="FcyPaymentFormData" #FcyPaymentForm2 [showRequiredMark]="false" [colCountByScreen]="{ lg: 2, md: 2, sm: 2, xs: 2 }">
+            <dxi-item
+              cssClass="pr-1 mb-2"
+              dataField="SupplierCustomerId"
+              [colSpan]="2"
+              editorType="dxSelectBox"
+              [editorOptions]="{
+                dataSource: SupplierList,
+                valueExpr: 'SupplierCustomerId',
+                displayExpr: 'CompanyName',
+                placeholder: 'Supplier ',
+                searchEnabled: true,
+                onValueChanged: handleSupplierChange
+              }"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <dxi-validation-rule type="required" message="Supplier is required"></dxi-validation-rule>
+            </dxi-item>
+          </dx-form>
+        </div>
+        <app-supp-cust-detail-under-combo
+          #SuppCustDetailUnderComboComponent
+          [ComboValue]="FcyPaymentFormData?.SupplierCustomerId > 0"
+          [SupplierCustomerFormType]="2"
+        ></app-supp-cust-detail-under-combo>
+      </div>
+
+      <dx-form [formData]="FcyPaymentFormData" #FcyPaymentForm1 [showRequiredMark]="false" [colCountByScreen]="{ lg: 3, md: 3, sm: 3, xs: 3 }">
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="ExImInvoiceId"
+          [visible]="FcyPaymentFormData?.ExmLcPaymentTerm == 'Invoice Payment'"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: InvoiceNumbersList,
+            valueExpr: 'Id',
+            displayExpr: 'InvoiceNo',
+            placeholder: 'Invoice No ',
+            searchEnabled: true,
+            onValueChanged: handleInvoiceNumberChange,
+            readOnly: InvoiceNumberReadOnly
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="custom" [validationCallback]="validateInvoiceNumber" message="Invoice Number is Required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="ExImLcOrderId"
+          [visible]="FcyPaymentFormData?.ExmLcPaymentTerm == 'Advanced Payment'"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: ImportContractNumbersList,
+            valueExpr: 'Id',
+            displayExpr: 'LcOrderNo',
+            placeholder: 'Import Contract No ',
+            searchEnabled: true,
+            readOnly: ContractNumberReadOnly,
+            onValueChanged: handleContractNumberChange
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="custom" [validationCallback]="validateContractNumber" message="Invoice Number is Required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="BankGlDrAc"
+          [colSpan]="2"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            dataSource: BanksList,
+            valueExpr: 'Id',
+            displayExpr: 'AccountTitle',
+            placeholder: 'Bank Account(Dr)',
+            searchEnabled: true
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Bank Account is Required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="BankFbpNo"
+          editorType="dxNumberBox"
+          [editorOptions]="{
+            placeholder: 'Bank FBP#'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="custom" [validationCallback]="validateContractNumber" message="Bank FBP # is Required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="MultiCurrencyId"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: FcyCodeList,
+            valueExpr: 'Id',
+            displayExpr: 'CurrencyCode',
+            placeholder: 'Fcy Code',
+            searchEnabled: true,
+            readOnly: true
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Fcy Code is Required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="FcGrossAmount"
+          editorType="dxNumberBox"
+          [editorOptions]="{
+            placeholder: 'Fcy Amount',
+            onValueChanged: handleMainFormCalculations
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Fcy Amount is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="ExchangeRate"
+          editorType="dxNumberBox"
+          [editorOptions]="{
+            placeholder: 'Exchange Rate',
+            onValueChanged: handleMainFormCalculations
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Exchange Rate is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="NetAmountRs"
+          editorType="dxNumberBox"
+          [editorOptions]="{
+            placeholder: 'Local Amount',
+            readOnly: true
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Exchange Rate is required"></dxi-validation-rule>
+        </dxi-item>
+
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="VoucherHeadId"
+          [colSpan]="2"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            dataSource: GainLossAccountList,
+            valueExpr: 'Id',
+            displayExpr: 'AccountTitle',
+            placeholder: 'Gain Loss Account',
+            searchEnabled: true
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Fcy Code is Required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          [colSpan]="2"
+          cssClass="px-1 m-0"
+          dataField="Remarks"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            placeholder: 'Remarks'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+      </dx-form>
+    </div>
+    <div class="col-lg-4 my-2">
+      <div class="card">
+        <h4 *ngIf="FcyPaymentFormData?.ExmLcPaymentTerm == 'Invoice Payment'" class="title">Invoice Info</h4>
+        <h4 *ngIf="FcyPaymentFormData?.ExmLcPaymentTerm != 'Invoice Payment'" class="title">Charges Info</h4>
+        <div class="invoice-box" *ngIf="FcyPaymentFormData?.ExmLcPaymentTerm == 'Invoice Payment'">
+          <div class="Contract-info-wrape">
+            <div class="caption-wrape">
+              <div class="caption">Invoice #:</div>
+              <div class="value">23</div>
+            </div>
+            <div class="caption-wrape">
+              <div class="caption">Invoice Amount:</div>
+              <div class="value">2323425</div>
+            </div>
+            <div class="caption-wrape">
+              <div class="caption">Received Amount:</div>
+              <div class="value">239978</div>
+            </div>
+            <div class="caption-wrape">
+              <div class="caption">Balance Amount:</div>
+              <div class="value">239978</div>
+            </div>
+          </div>
+        </div>
+        <hr />
+        <div class="Contract-info-wrape">
+          <div class="caption-wrape">
+            <div class="caption">Total FCY Charges (PKR):</div>
+            <div class="value">3245342</div>
+          </div>
+          <div class="caption-wrape">
+            <div class="caption">Total HCY Charges (PKR):</div>
+            <div class="value">3245342</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <dx-form [formData]="FcyPaymentFormData" [colCountByScreen]="{ lg: 6, md: 4, sm: 3, xs: 2 }" #FcyPaymentForm [showRequiredMark]="false">
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="DocumentNo"
+      editorType="dxNumberBox"
+      [editorOptions]="{
+        placeholder: 'Vouchar No',
+        readOnly: true
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Voucher No  is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="DocumentDate"
+      editorType="dxDateBox"
+      [editorOptions]="{
+        placeholder: 'Vourcher Date',
+        displayFormat: 'dd-MMM-yyyy',
+        pickerType: 'calender'
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Voucher Date  is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="ExmLcPaymentTerm"
+      [colSpan]="1"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        items: PaymentTermsList,
+        valueExpr: 'term',
+        displayExpr: 'term',
+        placeholder: 'Payment Term',
+        searchEnabled: true,
+        onValueChanged: handlePaymentTermChange
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Payment Term is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="SupplierCustomerId"
+      [colSpan]="2"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        dataSource: SupplierList,
+        valueExpr: 'SupplierCustomerId',
+        displayExpr: 'CompanyName',
+        placeholder: 'Supplier ',
+        searchEnabled: true,
+        onValueChanged: handleSupplierChange
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Supplier is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="ExImInvoiceId"
+      [colSpan]="1"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        items: InvoiceNumbersList,
+        valueExpr: 'Id',
+        displayExpr: 'InvoiceNo',
+        placeholder: 'Invoice No ',
+        searchEnabled: true,
+        onValueChanged: handleInvoiceNumberChange,
+        readOnly: InvoiceNumberReadOnly
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="custom" [validationCallback]="validateInvoiceNumber" message="Invoice Number is Required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="ExImLcOrderId"
+      [colSpan]="1"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        items: ImportContractNumbersList,
+        valueExpr: 'Id',
+        displayExpr: 'LcOrderNo',
+        placeholder: 'Import Contract No ',
+        searchEnabled: true,
+        readOnly: ContractNumberReadOnly,
+        onValueChanged: handleContractNumberChange
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="custom" [validationCallback]="validateContractNumber" message="Invoice Number is Required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="BankGlDrAc"
+      [colSpan]="2"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        dataSource: BanksList,
+        valueExpr: 'Id',
+        displayExpr: 'AccountTitle',
+        placeholder: 'Bank Account(Dr)',
+        searchEnabled: true
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Bank Account is Required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="BankFbpNo"
+      editorType="dxNumberBox"
+      [editorOptions]="{
+        placeholder: 'Bank FBP#'
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Bank FBP# is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="MultiCurrencyId"
+      [colSpan]="1"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        items: FcyCodeList,
+        valueExpr: 'Id',
+        displayExpr: 'CurrencyCode',
+        placeholder: 'Fcy Code',
+        searchEnabled: true,
+        readOnly: true
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Fcy Code is Required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="FcGrossAmount"
+      editorType="dxNumberBox"
+      [editorOptions]="{
+        placeholder: 'Fcy Amount',
+        onValueChanged: handleMainFormCalculations
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Fcy Amount is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="ExchangeRate"
+      editorType="dxNumberBox"
+      [editorOptions]="{
+        placeholder: 'Exchange Rate',
+        onValueChanged: handleMainFormCalculations
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Exchange Rate is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="NetAmountRs"
+      editorType="dxNumberBox"
+      [editorOptions]="{
+        placeholder: 'Local Amount',
+        readOnly: true
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Exchange Rate is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="FcNetAmount"
+      editorType="dxNumberBox"
+      [editorOptions]="{
+        placeholder: 'Fcy Net Amount',
+        readOnly: true
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Fcy Net Amount is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="BankDrAmount"
+      editorType="dxNumberBox"
+      [editorOptions]="{
+        placeholder: 'Bank Dr Amount',
+        readOnly: true
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Fcy Net Amount is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="VoucherExchangeRate"
+      editorType="dxNumberBox"
+      [editorOptions]="{
+        placeholder: 'Imp Voucher Rate',
+        readOnly: true
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Imp Voucher Rate is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="TotalInvoiceAmount"
+      editorType="dxNumberBox"
+      [editorOptions]="{
+        placeholder: 'Invoice Amount',
+        readOnly: true
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="TotalPaidAmount"
+      editorType="dxNumberBox"
+      [editorOptions]="{
+        placeholder: 'Paid Amount',
+        readOnly: true
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="InvoiceBalanceAmount"
+      editorType="dxNumberBox"
+      [editorOptions]="{
+        placeholder: 'Balance Amount',
+        readOnly: true
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="FcyChargesLocalAmount"
+      editorType="dxNumberBox"
+      [editorOptions]="{
+        placeholder: 'Total FcyCharges(Local)',
+        readOnly: true
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="HcyChargesLocalAmount"
+      editorType="dxNumberBox"
+      [editorOptions]="{
+        placeholder: 'Total Local Charges',
+        readOnly: true
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+    </dxi-item>
+
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="VoucherHeadId"
+      [colSpan]="2"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        dataSource: GainLossAccountList,
+        valueExpr: 'Id',
+        displayExpr: 'AccountTitle',
+        placeholder: 'Gain Loss Account',
+        searchEnabled: true
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Fcy Code is Required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      [colSpan]="2"
+      cssClass="px-1 m-0"
+      dataField="Remarks"
+      editorType="dxTextBox"
+      [editorOptions]="{
+        placeholder: 'Remarks'
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+    </dxi-item>
+  </dx-form> -->
+  <hr />
+  <dx-form [formData]="FcyPaymentDetailFormData" [colCountByScreen]="{ lg: 5, md: 4, sm: 3, xs: 2 }" #FcyPaymentDetailForm [showRequiredMark]="false">
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="Type"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        items: ChargesTypeList,
+        valueExpr: 'type',
+        displayExpr: 'type',
+        placeholder: 'Charges Type',
+        searchEnabled: true
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Charges Type is Required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="ExImProceedsChargesTypeId"
+      [colSpan]="2"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        dataSource: ProceedsChargesTypeAccountList,
+        valueExpr: 'Id',
+        displayExpr: 'ProceedsChargesTypedescription',
+        placeholder: 'Account Title',
+        searchEnabled: true
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Account Title is Required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="FcAmount"
+      editorType="dxNumberBox"
+      [editorOptions]="{
+        placeholder: 'Fcy Amount',
+        min: 1,
+        onValueChanged: HandleDetailFormCalculations
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Fcy Amount is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="RsAmount"
+      editorType="dxNumberBox"
+      [editorOptions]="{
+        placeholder: 'Local Amount'
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Local Amount is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      [colSpan]="2"
+      dataField="ProceedsRemarks"
+      editorType="dxTextBox"
+      [editorOptions]="{
+        placeholder: 'Remarks'
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <!-- <dxi-validation-rule type="required" message=" Amount is required"></dxi-validation-rule> -->
+    </dxi-item>
+    <dxi-item cssClass="mt-2">
+      <div *dxTemplate>
+        <dx-button type="default" icon="plus" text="{{ detailEditMode ? 'Update' : 'Add' }}" (onClick)="addDetailRecord2Grid()"> </dx-button>
+      </div>
+    </dxi-item>
+  </dx-form>
+  <div class="row mt-3">
+    <div class="col-md-12">
+      <dx-data-grid
+        #detailGrid
+        id="detailGrid"
+        [dataSource]="dataSource"
+        [showColumnLines]="false"
+        [showRowLines]="true"
+        [rowAlternationEnabled]="true"
+        [allowColumnResizing]="true"
+        [allowColumnReordering]="true"
+        [columnAutoWidth]="true"
+        [showBorders]="true"
+        [repaintChangesOnly]="true"
+      >
+        <dxo-load-panel [enabled]="true"></dxo-load-panel>
+        <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+        <dxo-group-panel [visible]="true"></dxo-group-panel>
+        <!-- <dxo-editing mode="form" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="false" [useIcons]="true"> </dxo-editing> -->
+        <!-- <dxi-column dataField="ItemId" caption="Account">
+            <dxo-lookup [dataSource]="itemAccountList" [valueExpr]="'Id'" dataType="number" [displayExpr]="'OtherItemName'"></dxo-lookup>
+            <dxi-validation-rule type="custom" [validationCallback]="checkValidationForAccountInItemAddLsGrid" message="Please Select Expense Type!"> </dxi-validation-rule>
+          </dxi-column> -->
+        <dxi-column dataField="Type" caption="Type" alignment="left" dataType="string"></dxi-column>
+        <dxi-column dataField="ExImProceedsChargesTypeId" caption="Account Title" [visible]="false" alignment="left" dataType="number"></dxi-column>
+        <dxi-column dataField="ProceedsChargesTypeCode" caption="Account Title" alignment="left" dataType="string"></dxi-column>
+        <dxi-column dataField="FcAmount" caption="Fcy Amount" alignment="center" dataType="number"></dxi-column>
+        <dxi-column dataField="RsAmount" caption="Hcy Amount" alignment="center" dataType="number"></dxi-column>
+        <dxi-column dataField="ProceedsRemarks" caption="Remarks" alignment="left" dataType="string"></dxi-column>
+        <dxi-column
+          dataField="button"
+          [fixed]="true"
+          [fixedPosition]="'right'"
+          [width]="90"
+          alignment="right"
+          caption="Action"
+          [allowEditing]="false"
+          [allowExporting]="false"
+          [allowFiltering]="false"
+          [allowFixing]="false"
+          [allowGrouping]="false"
+          [allowHeaderFiltering]="false"
+          [allowHiding]="false"
+          [allowReordering]="false"
+          [allowResizing]="false"
+          [allowSearch]="false"
+          [allowSorting]="false"
+          cellTemplate="buttonTemplate"
+        ></dxi-column>
+        <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+          <div class="d-con-cell-action">
+            <dx-button type="default" stylingMode="text" icon="edit" (onClick)="editDetailRecordRow(cellInfo.data, cellInfo.rowIndex)"> </dx-button>
+            <dx-button type="danger" stylingMode="text" icon="trash" (onClick)="deleteDetailRecordRow(cellInfo.rowIndex)"> </dx-button>
+          </div>
+        </div>
+        <dxo-summary [recalculateWhileEditing]="true">
+          <dxi-total-item column="FcAmount" summaryType="sum" name="Qty" displayFormat="{0}" valueFormat="#,##0"></dxi-total-item>
+          <dxi-total-item column="RsAmount" summaryType="sum" name="Rate" displayFormat="{0}" valueFormat="#,##0"></dxi-total-item>
+        </dxo-summary>
+        <dxo-scrolling columnRenderingMode="virtual" [scrollByContent]="true" [scrollByThumb]="true" [scrollLeft]="true" [showScrollbar]="'always'"></dxo-scrolling>
+      </dx-data-grid>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="d-flex justify-content-end fixed-bottom p-4 pb-6">
+        <dx-button icon="save" text="{{ FcyPaymentParamsId > 0 ? 'Update' : 'Save' }}" type="success" (onClick)="Save()"></dx-button>
+        <div class="m-1"></div>
+        <dx-button icon="close" text="Close" type="danger" routerLink="/cus-sales/fcy-payment-voucher-history"></dx-button>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+      <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+      <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+    </div>
+    <div class="col-md-12">
+      <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <dx-popup
+        [width]="WidthOfPopupWithGrid - GetPercentageValue(40, WidthOfPopupWithGrid)"
+        [height]="HeightOfPopupWithGrid - GetPercentageValue(40, HeightOfPopupWithGrid)"
+        [position]="'center'"
+        [showTitle]="true"
+        titleTemplate="titleTemplate"
+        [dragEnabled]="true"
+        [showCloseButton]="true"
+        [closeOnOutsideClick]="false"
+        [(visible)]="ProceedChargesAccountDefinationFormPopupVisibile"
+        [animation]="{ hide: { type: 'slideOut', direction: 'right', duration: 1000 }, show: { type: 'slideIn', direction: 'left', duration: 1500 } }"
+      >
+        <div *dxTemplate="let content of 'titleTemplate'" class="d-flex justify-content-between">
+          <div class="">
+            <h4>Define Proceed Charges Account</h4>
+          </div>
+          <div class="d-flex justify-content-end">
+            <dx-button class="p-0 border-0" (onClick)="handleProceedChargesAccountDefinationPopupVisibility()" icon="close"></dx-button>
+          </div>
+        </div>
+        <div *dxTemplate="let data of 'content'">
+          <dx-form [formData]="ProceedChargesAccountDefinationFormData" [colCountByScreen]="{ lg: 3, md: 2, sm: 1, xs: 1 }" #ProceedChargesAccountDefinationForm [showRequiredMark]="false">
+            <dxi-item
+              cssClass="px-1 m-0"
+              dataField="ProceedsChargesGlAccount"
+              [colSpan]="2"
+              editorType="dxSelectBox"
+              [editorOptions]="{
+                dataSource: ProceedsChargesGlAccountList,
+                valueExpr: 'Id',
+                displayExpr: 'AccountTitle',
+                placeholder: 'Gl Account Title',
+                searchEnabled: true
+              }"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <dxi-validation-rule type="required" message="Gl Account is Required"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item
+              cssClass="px-1 m-0"
+              dataField="ProceedsChargesTypeCode"
+              editorType="dxTextBox"
+              [editorOptions]="{
+                placeholder: 'Proceed Charges Account Code'
+              }"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <dxi-validation-rule type="required" message="Proceed Charges Account Code is required"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item
+              cssClass="px-1 m-0"
+              dataField="ProceedsChargesTypedescription"
+              editorType="dxTextBox"
+              [editorOptions]="{
+                placeholder: 'Proceed Charges Account Description'
+              }"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <dxi-validation-rule type="required" message="Proceed Charges Account Description is required"></dxi-validation-rule>
+            </dxi-item>
+          </dx-form>
+          <div class="mt-2">
+            <dx-data-grid
+              #ProceedChargesAccountDefinationHitoryGrid
+              [height]="HeightOfGridInPopupWithGrid - GetPercentageValue(70, HeightOfGridInPopupWithGrid)"
+              id="ProceedChargesAccountDefinationHitoryGrid"
+              [dataSource]="ProceedsChargesTypeAccountList._store._array"
+              [showColumnLines]="false"
+              [showRowLines]="true"
+              [rowAlternationEnabled]="true"
+              [allowColumnResizing]="true"
+              [columnAutoWidth]="true"
+              [showBorders]="true"
+            >
+              <dxo-load-panel [enabled]="true"></dxo-load-panel>
+              <dxo-filter-row [visible]="filter"></dxo-filter-row>
+              <dxo-header-filter [visible]="filter"></dxo-header-filter>
+              <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+              <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+              <dxi-column dataField="AccountTitle" caption="Gl Account" dataTaype="string" alignment="left"></dxi-column>
+              <dxi-column dataField="ProceedsChargesTypeCode" caption="Proceed Charges Account Code" dataTaype="string" alignment="left"></dxi-column>
+              <dxi-column dataField="ProceedsChargesTypedescription" caption="Proceed Charges Account Desc" dataTaype="string" alignment="left"></dxi-column>
+
+              <dxi-column
+                dataField="button"
+                [fixed]="true"
+                [fixedPosition]="'right'"
+                [width]="90"
+                alignment="center"
+                caption="Action"
+                [allowEditing]="false"
+                [allowExporting]="false"
+                [allowFiltering]="false"
+                [allowFixing]="false"
+                [allowGrouping]="false"
+                [allowHeaderFiltering]="false"
+                [allowHiding]="false"
+                [allowReordering]="false"
+                [allowResizing]="false"
+                [allowSearch]="false"
+                [allowSorting]="false"
+                cellTemplate="buttonTemplate"
+              ></dxi-column>
+              <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+                <div class="d-con-cell-action">
+                  <dx-button type="default" stylingMode="text" (onClick)="onProceedAccountEdid(cellInfo.data)">
+                    <i class="ri-edit-2-line"></i>
+                  </dx-button>
+                </div>
+              </div>
+              <dxo-scrolling mode="infinite" [scrollByContent]="true" [scrollByThumb]="true" [showScrollbar]="'always'"></dxo-scrolling>
+            </dx-data-grid>
+          </div>
+          <div class="d-flex justify-content-end fixed-bottom p-4 pb-6">
+            <dx-button icon="save" text="{{ ProceedsChargesTypeAccountDefinationParamsId > 0 ? 'Update' : 'Save' }}" type="success" (onClick)="SaveProceedAccount()"></dx-button>
+            <div class="m-1"></div>
+          </div>
+        </div>
+      </dx-popup>
+    </div>
+  </div>
+</div>

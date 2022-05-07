@@ -1,0 +1,68 @@
+<div class="body">
+    <div class="body-title">
+      <!-- <h6 class="zero-padding-margin">{{CustomerInfoObject.}}</h6> -->
+      <div class="d-flex justify-content-between">
+        <div class="" style="font-weight: bold; font-family: cursive;">
+          <h6>
+             {{InfoObject?.PhoneNumberPersonal}}
+          </h6>
+        </div>
+        <div class="mr-2" style="font-weight: bold; font-family: cursive;">
+          <h6>
+                  {{InfoObject?.Email}}
+          </h6>
+        </div>
+      </div>
+      <div class="d-flex justify-content-between">
+        <div class="" *ngIf="InfoObject?.Id>0">
+            <p class="zero-padding-margin">{{InfoObject?.City +', '+ InfoObject?.Province+', '+InfoObject?.Country}}</p>
+        </div>
+      <div class="mr-2">
+        {{InfoObject?.PostalCode}}
+      </div>
+      </div>
+      <div class="d-flex justify-content-center">
+        <div class="">
+          {{InfoObject?.Address}}
+        </div>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center" *ngIf="ComboValue>0">
+      <div class="">
+        <dx-button cssClass="p-0 m-0" type="success" hint="Edit Customer" stylingMode="text" icon="edit" (onClick)="handleCustomerFormPopupVisibility(InfoObject?.Id)"> </dx-button>
+      </div>
+    </div>
+  </div>
+  <!-- <dx-popup
+  [width]="WidthOfPopupWithGrid - GetPercentageValue(40, WidthOfPopupWithGrid)"
+  [height]="HeightOfPopupWithGrid - GetPercentageValue(40, HeightOfPopupWithGrid)"
+  [position]="'center'"
+  [showTitle]="true"
+  titleTemplate="titleTemplate"
+  [dragEnabled]="true"
+  [showCloseButton]="true"
+  [closeOnOutsideClick]="false"
+  [(visible)]="CustomerFormPopupVisible"
+  [animation]="{ hide: { type: 'slideOut', direction: 'right', duration: 1000 }, show: { type: 'slideIn', direction: 'left', duration: 1500 } }"
+>
+  <div *dxTemplate="let content of 'titleTemplate'" class="d-flex justify-content-between">
+    <div class="">
+      <h4>Supplier Customer</h4>
+    </div>
+    <div class="d-flex justify-content-end">
+      <dx-button class="p-0 border-0" (onClick)="handleCustomerFormPopupVisibility(0)" icon="close"></dx-button>
+    </div>
+  </div>
+  <div *dxTemplate="let data of 'content'">
+    <div class="row">
+      <div class="col-md-12">
+        <app-define-supplier-form
+        *ngIf="CustomerFormPopupVisible==true"
+        [FormType]="SupplierCustomerFormType"
+        [SupplierCustomerParamsId]="InfoObject.Id"
+        (CloseForm)="handleCustomerFormPopupVisibility($event)"
+        ></app-define-supplier-form>
+      </div>
+    </div>
+  </div>
+</dx-popup> -->

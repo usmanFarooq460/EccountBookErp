@@ -1,0 +1,79 @@
+#abcdedf:hover {
+  transform: scale(1.2);
+  font-weight: bolder;
+  background-color: rgba(180, 252, 255, 0.857);
+}
+#viewButton :hover {
+  color: black;
+}
+
+.ship-to-buyer {
+  background-color: white;
+  border: 1px solid rgba(128, 128, 128, 0.596);
+  border-radius: 5px;
+  .header {
+    padding-left: 10px;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.479);
+  }
+  .body {
+    padding-left: 10px;
+    .body-title {
+      padding-top: 6px;
+      h6 {
+        font-size: 15px;
+        color: #065a7c;
+      }
+      div {
+        display: flex;
+        p {
+          &:nth-child(2) {
+            color: green;
+            padding-left: 50px;
+          }
+        }
+      }
+    }
+    .body-footer {
+      margin-top: 30px;
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+}
+
+.card {
+  .title {
+    text-align: center;
+    padding: 10px;
+    background-color: #179ed3;
+    color: white;
+  }
+  .Contract-info-wrape {
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    .caption-wrape {
+      display: flex;
+      align-items: center;
+      .caption {
+        font-size: 15px;
+        color: #065a7c;
+        font-weight: bold;
+        padding: 5px;
+      }
+      .value {
+        color: black;
+        font-weight: normal;
+      }
+    }
+
+    .sub-title {
+      text-align: center;
+      font-size: 15px;
+      background-color: #179ed380;
+      color: white;
+      font-weight: bold;
+      padding: 5px;
+    }
+  }
+}

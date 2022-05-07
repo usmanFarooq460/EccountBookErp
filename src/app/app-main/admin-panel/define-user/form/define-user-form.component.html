@@ -1,0 +1,159 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <dx-popup
+        [width]="WidthOfPopupWithGrid - GetPercentageValue(40, WidthOfPopupWithGrid)"
+        [height]="HeightOfPopupWithGrid - GetPercentageValue(40, HeightOfPopupWithGrid)"
+        [position]="'center'"
+        [showTitle]="true"
+        titleTemplate="titleTemplate"
+        [dragEnabled]="true"
+        [showCloseButton]="true"
+        [closeOnOutsideClick]="false"
+        [(visible)]="DefineUserFormPopupVisible"
+        [animation]="{ hide: { type: 'slideOut', direction: 'right', duration: 1000 }, show: { type: 'slideIn', direction: 'left', duration: 1500 } }"
+      >
+        <div *dxTemplate="let content of 'titleTemplate'" class="d-flex justify-content-between">
+          <div class="">
+            <!-- <h4>Define User</h4> -->
+          </div>
+          <div class="d-flex justify-content-end">
+            <!-- <dx-button class="p-0 border-0" type="danger" (onClick)="onLoadClick()" icon="download"></dx-button> -->
+            <dx-button class="p-0 border-0" (onClick)="close()" icon="close"></dx-button>
+          </div>
+        </div>
+        <div *dxTemplate="let data of 'content'">
+          <div class="row">
+            <div class="col-md-12">
+              <h4>Define User Form</h4>
+            </div>
+          </div>
+          <dx-form [formData]="DefineUserFormData" [colCountByScreen]="{ lg: 6, md: 4, sm: 2, xs: 2 }" #DefineUserForm [showRequiredMark]="false">
+            <dxi-item
+              cssClass="px-1 m-0"
+              [colSpan]="2"
+              dataField="FirstName"
+              editorType="dxTextBox"
+              [editorOptions]="{
+                placeholder: 'First Name'
+              }"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <dxi-validation-rule type="required" message="First Name is required"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item
+              cssClass="px-1 m-0"
+              [colSpan]="2"
+              dataField="LastName"
+              editorType="dxTextBox"
+              [editorOptions]="{
+                placeholder: 'Last Name'
+              }"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <dxi-validation-rule type="required" message="First Name is required"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item
+              cssClass="px-1 m-0"
+              [colSpan]="2"
+              dataField="UserName"
+              editorType="dxTextBox"
+              [editorOptions]="{
+                placeholder: 'User Name'
+              }"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <dxi-validation-rule type="required" message="First Name is required"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item
+              cssClass="px-1 m-0"
+              [colSpan]="2"
+              dataField="Password"
+              editorType="dxTextBox"
+              [editorOptions]="{
+                placeholder: 'Password'
+              }"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <dxi-validation-rule type="required" message="First Name is required"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item
+              cssClass="px-1 m-0"
+              [colSpan]="2"
+              dataField="CellNo"
+              editorType="dxTextBox"
+              [editorOptions]="{
+                placeholder: 'Cell No'
+              }"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <!-- <dxi-validation-rule type="required" message="First Name is required"></dxi-validation-rule> -->
+            </dxi-item>
+            <dxi-item
+              cssClass="px-1 m-0"
+              dataField="UserRoleId"
+              [colSpan]="2"
+              editorType="dxSelectBox"
+              [editorOptions]="{
+                items: RolesList,
+                valueExpr: 'Id',
+                displayExpr: 'RoleDescription',
+                placeholder: 'User Role',
+                searchEnabled: true
+              }"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <!-- <dxi-validation-rule type="required" message="User Role is required"></dxi-validation-rule> -->
+            </dxi-item>
+            <dxi-item [colSpan]="2">
+              <div *dxTemplate class="d-flex px-1 mt-2">
+                <div class="dx-field-label" style="width: 140% !important">Status</div>
+                <div class="dx-field-value">
+                  <dx-switch [(value)]="UserStatus" (onValueChanged)="handleUserStatusChane($event)"> </dx-switch>
+                </div>
+              </div>
+            </dxi-item>
+          </dx-form>
+          <div class="row mt-4">
+            <div class="col-md-12 px-3 m-0">
+              <dx-drop-down-box [(value)]="selectedComapanyIds" valueExpr="Id" displayExpr="CompName" placeholder="Select Comanies..." [dataSource]="CompanyList" [showClearButton]="true">
+                <div *dxTemplate="let data of 'content'">
+                  <dx-data-grid
+                    [dataSource]="CompanyList"
+                    [selection]="{ mode: 'multiple' }"
+                    [hoverStateEnabled]="true"
+                    [paging]="{ enabled: true, pageSize: 5 }"
+                    [filterRow]="{ visible: true }"
+                    [scrolling]="{ mode: 'virtual' }"
+                    [height]="280"
+                    [(selectedRowKeys)]="selectedComapanyIds"
+                  >
+                    <dxo-editing mode="cell" [allowAdding]="false" [allowUpdating]="true" [allowDeleting]="false" [useIcons]="true"> </dxo-editing>
+                    <dxi-column dataField="CompName" caption="Name" dataType="string" alignment="left"></dxi-column>
+                    <dxi-column dataField="CompAddress" caption="Address" dataType="string" alignment="left"></dxi-column>
+                    <dxi-column dataField="IsActive" caption="User Status" dataType="boolean" alignment="center"></dxi-column>
+                  </dx-data-grid>
+                </div>
+              </dx-drop-down-box>
+            </div>
+          </div>
+          <div class="row">
+            <div class="d-flex justify-content-end fixed-bottom p-4 pb-6">
+              <dx-button icon="save" text="{{ DefineUserParamsId > 0 ? 'Update' : 'Save' }}" type="success" (onClick)="Save()"></dx-button>
+              <!-- <div class="m-1"></div>
+              <dx-button icon="close" text="Close" type="danger" routerLink="/admin-panel/define-user-history"></dx-button> -->
+            </div>
+            <div class="col-md-12">
+              <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+              <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+              <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+            </div>
+            <div class="col-md-12">
+              <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+            </div>
+          </div>
+        </div>
+      </dx-popup>
+    </div>
+  </div>
+</div>

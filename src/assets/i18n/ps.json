@@ -1,0 +1,193 @@
+{
+	"Purchase_Trading": {
+		"Purchase_Bill": {
+			"Atachments": "ملحقات",
+			"Form": {
+				"Calculations": "حسابونه",
+				"Load_Caption": "د پیرود امر څخه بار کړئ",
+				"Loader_Title": "د پیرود امر بار",
+				"Payment_Due_Schedule": "د تادیاتو مهال ویش"
+			},
+			"Stock_Party": "د سټاک ګوند"
+		},
+		"purchase_Trading_Return": {
+			"Comm_Amount": "د کمیسیون اندازه",
+			"comm_Remarks": "د کمیسیون څرګندونې"
+		},
+		"purchase_invoice_trading": {
+			"ItemAddLess": "اضافه/لږ توکي",
+			"creditAccount": "د حساب کریډیټ",
+			"debitToItem": "توکي ته چارج کړئ",
+			"suppAddLess": "عرضه کوونکي لږ اضافه کړئ"
+		},
+		"purchase_order": {
+			"DeliveryStartDate": "د سپارلو د پیل نیټه",
+			"OrderExpiryDate": "د امر د ختمیدو نیټه",
+			"RefNo": "د حوالې شمیره",
+			"catSerail": "کټګوري سریال",
+			"orderCat": "د امر کټګوري",
+			"termsDescription": "د شرایطو توضیحات",
+			"validateDate": "د اعتبار نیټه"
+		}
+	},
+	"SharedGridCaptions": {
+		"Grid_Message": "د کالم سرلیک دلته د هغه کالم لخوا ګروپ ته کش کړئ",
+		"SR_": "سریال نمبر",
+		"Total_Records": "ټول ریکارډونه",
+		"action": "عمل",
+		"noRecordAdded": "هیڅ ریکارډ ندی اضافه شوی",
+		"noRecordFound": "هیڅ ریکارډ ونه موندل شو",
+		"open": "خلاص",
+		"sum": "مجموعه"
+	},
+	"Stock_Reports": {
+		"Item_ledger": {
+			"Add_Less_weight": "لږ وزن اضافه کړئ",
+			"Amount_In": "په مقدار کې",
+			"Amount_Out": "مقدار بهر",
+			"Balance_Weight": "د وزن توازن",
+			"Bill_Weight_Out": "د بل وزن",
+			"Bill_Weight_in": "د بل وزن",
+			"Expense_Amount_in": "د لګښت اندازه"
+		},
+		"Stock_reports_With_Average_Rates": {
+			"Retail_Rate": "پرچون نرخ",
+			"Retail_Sale_Value": "د پرچون پلور ارزښت",
+			"Whole_Sale_Rate": "د عمده پلور نرخ",
+			"Whole_Sale_Value": "د ټول خرڅلاو ارزښت"
+		},
+		"Transaction_Stock_Rice": {
+			"Balance_Out": "بیلانس بهر"
+		},
+		"stock_reports": {
+			"Closing": "تړل",
+			"Main_Type": "اصلي ډول",
+			"Report_Type": "د راپور ډول",
+			"Variety_Type": "د ډول ډول ډول"
+		}
+	},
+	"Titles": {
+		"Purchase_Bill_History_Title": "د پیرود بل",
+		"Purchase_Trading": {
+			"Purchase_Bill_Form_Title": "د پیرود بل فورمه",
+			"Purchase_Return_form": "د پیرود بیرته راستنیدو بڼه",
+			"purchaseInvoiceTradingFormTitle": "د پیرود رسید فورمه",
+			"purchaseOrderHistoryTitle": "د پیرود امر",
+			"purchase_Invoice_Trading_History_Title": "د پیرود رسید",
+			"purchase_Order_From": "د پیرود امر فورمه",
+			"purchase_Return_History": "د پیرود بیرته ستنیدل"
+		},
+		"StockReports": {
+			"ItemLedger": "د توکو لیجر",
+			"Item_Ledger_TradePro": "د توکو لیجر تجارت پرو",
+			"Stock_Report_TradePro": "د سټاک راپور سوداګرۍ پرو",
+			"Stock_Reports_With_Average_Rates": "د اوسط نرخونو سره سټاک راپورونه",
+			"Transactio_Stock_Rice": "د راکړې ورکړې سټاک چای",
+			"stock_Report": "د سټاک راپورونه"
+		}
+	},
+	"sharedBtnsCaptions": {
+		"Clear": "روښانه",
+		"Close": "بندول",
+		"Go_Back": "بيرته لاړ شه",
+		"Load": "بار",
+		"Reset": "بیا تنظیمول",
+		"Search": "لټون",
+		"add": "اضافه کول",
+		"add_new": "نوی اضافه کړئ",
+		"filter": "چا",
+		"generate": "پیدا کول",
+		"save": "خوندي کړئ",
+		"show": "ښودل",
+		"update": "تازه"
+	},
+	"sharedFormHistoryCaptions": {
+		"Account": "ګ .ون",
+		"Amount": "مقدار",
+		"Average_Rate": "اوسط نرخ",
+		"Balance": "بیلانس",
+		"Balance_Qty": "د بیلانس مقدار",
+		"Balance_Weight": "د وزن توازن",
+		"Bill_Amount": "د بیل مقدار",
+		"Bill_Number": "د بیل نمبر",
+		"Branch": "د څانګې نوم",
+		"Closing_Balance": "د بیلانس تړل",
+		"Comm_Rate": "د کمیسیون نرخ",
+		"Commission_Amount": "د کمیسیون اندازه",
+		"Commission_Remarks": "د کمیسیون څرګندونې",
+		"Crop_Year": "د فصل کال",
+		"Current_Amount_In": "په اوسني مقدار کې",
+		"Current_Quantity_In": "په اوسني مقدار کې",
+		"Current_Quantity_Out": "اوسنی مقدار بهر",
+		"Current_Weight_in": "اوسنی وزن",
+		"Current_weight_Out": "اوسنی وزن کم",
+		"Date": "نیټه",
+		"DeliveryDays": "د تحویلۍ ورځې",
+		"Delivery_Term": "د سپارلو موده",
+		"Description": "تفصیل",
+		"Doc_Type": "د سند ډول",
+		"DocumentDate": "د اسنادو نیټه",
+		"Document_Code": "د سند کوډ",
+		"Due_Date": "د تاریخ په مطابق",
+		"Due_Days": "ټاکل شوې ورځې",
+		"Due_Percent": "ټاکل شوې سلنه\t",
+		"From_Date": "له نیټې څخه",
+		"GP_No": "د جی پی شمیره",
+		"Gp_Date": "د GP نیټه",
+		"Is_Required": "اړین دی",
+		"Item_Category": "د توکو کټګوري",
+		"Item_Code": "د توکي کوډ",
+		"Item_Quantity": "د توکو مقدار",
+		"Item_Type": "د توکي ډول",
+		"Job/Lot": "دنده/لوټ",
+		"Manual_Bill": "لاسي بل نمبر",
+		"Net_Weight": "خالص وزن",
+		"Opening_Balance": "د پرانیستلو بیلانس",
+		"Opening_In": "د پرانستلو بیلانس دننه",
+		"Opening_Out": "د بیلانس خلاصول",
+		"Opening_Weight": "د پرانیستلو وزن",
+		"Order_Category": "د امر کټګوري",
+		"Order_Number": "د امر شمیره",
+		"Pack_Type": "د بسته بندۍ ډول",
+		"Payment_Term": "تادیه",
+		"Project_Name": "د پروژې نوم",
+		"Qty_In": "په مقدار کې",
+		"Qty_Out": "مقدار بهر",
+		"Quantity": "مقدار",
+		"Rate": "قیمت",
+		"Rate_UOM": "د اندازه کولو واحد نرخ",
+		"Record_Number": "د ثبت شمیره",
+		"Remarks": "څرګندونې",
+		"Stock_Price": "د سټاک قیمت",
+		"Stock_Quantity": "د سټاک مقدار",
+		"Stock_Value": "د سټاک ارزښت",
+		"Stock_Weight": "د سټاک وزن",
+		"Supplier_Customer": "عرضه کوونکی/پیرودونکی",
+		"Tax": "مالیه٪",
+		"Tax_Amount": "د مالیاتو اندازه",
+		"To_Date": "نن ورځ",
+		"Total_Amount": "جمله پیسی",
+		"Total_Quantity": "ټول مقدار",
+		"Type": "ډول",
+		"UOM": "د اندازه کولو واحد",
+		"UOM_Code": "د اندازه کولو واحد کوډ",
+		"User_Name": "د کارونکي نوم",
+		"Vehicle_No": "د وسایطو شمیره",
+		"Voucher": "واؤچر",
+		"Warehouse": "ګودام",
+		"Weight_In": "په وزن کې",
+		"Weight_Out": "بهر وزن",
+		"commAgent": "د کمیسیون استازی",
+		"commType": "د کمیسیون ډول",
+		"credit": "کریډیټ",
+		"debit": "پور",
+		"docNo": "د سند شمیره",
+		"expenseAmount": "د لګښت اندازه",
+		"freightAmount": "د بار وړلو مقدار",
+		"itemName": "د توکي نوم",
+		"percentage": "سلنه",
+		"status": "حالت",
+		"supplierName": "د عرضه کونکي نوم",
+		"userName": "د کارونکي نوم"
+	}
+}

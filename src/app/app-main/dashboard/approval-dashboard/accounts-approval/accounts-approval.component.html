@@ -1,0 +1,116 @@
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <dx-data-grid
+      #popupGrid
+      [height]="gridHeightInPopupWithGrid"
+      width="100%"
+      id="GridWithHeading"
+      [dataSource]="dataSouce"
+      [showColumnLines]="false"
+      [showRowLines]="true"
+      [allowColumnReordering]="true"
+      [rowAlternationEnabled]="true"
+      [allowColumnResizing]="true"
+      [columnAutoWidth]="true"
+      [showBorders]="true"
+      (onToolbarPreparing)="AccountsApprovalPopupGridToolbarPreparing($event)"
+      ><dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+      <dxo-load-panel [enabled]="true"></dxo-load-panel>
+      <dxo-paging [enabled]="true"></dxo-paging>
+      <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, dataSouce.length]" [showInfo]="true"></dxo-pager>
+      <!-- <dxo-filter-row [visible]="filter"></dxo-filter-row> -->
+      <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+      <!-- <dxo-header-filter [visible]="filter"></dxo-header-filter> -->
+      <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+      <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('AccountsApprovalPopupGrid') }}"></dxo-state-storing>
+      <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+      <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+
+      <!-- <dxo-selection mode="multiple" selectAllMode="page" showCheckBoxesMode="always"></dxo-selection> -->
+      <div *dxTemplate="let data of 'AccountsApprovalPopupGridHeading'">
+        <div class="HeadingDiv">
+          <h4 class="Heading" style="font-weight: bold; color: whitesmoke">{{ ''+ AccountsApprovalName +'' +CompanyData!=null && CompanyData!=undefined?' ('+CompanyData.CompanyName+')':'' }}</h4>
+          <!-- <h3 class="count">{{ OutstandingPaddyPurchaseOrderDataCount }}</h3> -->
+        </div>
+      </div>
+      <dxi-column dataField="" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+      <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+        <div class="d-con-cell-action">
+          <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+        </div>
+      </div>
+      <dxi-column dataField="VoucherCode" caption="Code" dataType="number" alignment="left"></dxi-column>
+      <dxi-column dataField="DocumentTypeCode" caption="Type" dataType="string" alignment="let"></dxi-column>
+      <dxi-column dataField="VoucherDate" caption="Voucher Date" dataType="date" [format]="'dd-MMM-yyyy'" alignment="center" [width]="110"></dxi-column>
+      <dxi-column dataField="AccountTitle" caption="Account Title" dataType="string" alignment="left"></dxi-column>
+
+      <dxi-column dataField="VoucherAmount" caption="Voucher Amount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+      <dxi-column dataField="IsApproved" caption="Status" cellTemplate="statusTemplate"></dxi-column>
+      <div *dxTemplate="let cellInfo of 'statusTemplate'">
+        <div *ngIf="cellInfo.value == true; else falseStatus">
+          <span class="badge badge-success">Approved</span>
+        </div>
+        <ng-template #falseStatus class="badge badge-danger"> <span class="badge badge-danger">Not Approved</span></ng-template>
+      </div>
+      <dxi-column dataField="ChequeNo" caption="Cheque No." dataType="string" alignment="left"></dxi-column>
+      <dxi-column dataField="UserName" caption="User Name" dataType="string" alignment="left"></dxi-column>
+      <dxi-column dataField="Remarks" caption="Remarks" dataType="string" alignment="left"></dxi-column>
+      <dxi-column
+        dataField="button"
+        [fixed]="true"
+        [fixedPosition]="'right'"
+        [width]="100"
+        alignment="right"
+        caption="Action"
+        [allowEditing]="false"
+        [allowExporting]="false"
+        [allowFiltering]="false"
+        [allowFixing]="false"
+        [allowGrouping]="false"
+        [allowHeaderFiltering]="false"
+        [allowHiding]="false"
+        [allowReordering]="false"
+        [allowResizing]="false"
+        [allowSearch]="false"
+        [allowSorting]="false"
+        cellTemplate="buttonTemplate"
+      ></dxi-column>
+      <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+        <div class="d-con-cell-action">
+          <dx-button type="default" stylingMode="text" hint="Approved Voucher" (onClick)="onApproved(cellInfo.data)">
+            <i class="ri-checkbox-fill" style="height: 24px; width: 24px"></i>
+          </dx-button>
+
+          <dx-button type="danger" stylingMode="text" hint="102-Voucher Slip" (onClick)="onReportSlipClick(cellInfo.data)">
+            <i class="ri-printer-line"></i>
+          </dx-button>
+        </div>
+      </div>
+      <dxo-scrolling mode="infinite" [scrollByContent]="true" [showScrollbar]="'always'" [scrollLeft]="true" [scrollByThumb]="true"></dxo-scrolling>
+      <dxo-summary>
+        <dxi-total-item column="AccountTitle" summaryType="count" displayFormat="Total Records: {0}"> </dxi-total-item>
+        <dxi-total-item column="VoucherAmount" summaryType="sum" displayFormat="{0}"> </dxi-total-item>
+      </dxo-summary>
+    </dx-data-grid>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <notification-popups
+        [title]="'Confirmation'"
+        [type]="'confirmation'"
+        (confirmed)="handleYesNoClicked($event)"
+        [visibility]="confirmationPopupVisible"
+        [message]="'Do You want to Approve?'"
+      ></notification-popups>
+      <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+      <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+      <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+    </div>
+        <div class="col-md-12">
+      <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+<div class="" *ngIf="buttonType == 'loader'">
+  <dx-button icon="download" type="danger" style="margin-right: 5px" (onClick)="onButtonClick()"></dx-button>
+</div>
+<div class="" *ngIf="buttonType == 'refresh'">
+  <dx-button icon="refresh" style="margin-right: 5px" (onClick)="onButtonClick()"></dx-button>
+</div>
+<div class="" *ngIf="buttonType == 'save'">
+  <dx-button icon="save" text="{{ paramsId > 0 ? 'Update' : 'Save' }}" style="margin-right: 5px" type="success" (onClick)="onButtonClick()"></dx-button>
+</div>
+<div class="" *ngIf="buttonType == 'close'">
+  <dx-button icon="close" text="Close" style="margin-right: 5px" type="danger" (onClick)="onButtonClick()"></dx-button>
+</div>
+<div class="" *ngIf="buttonType == 'custom'">
+  <dx-button icon="{{ icon }}" text="{{ title }}" style="margin-right: 5px" type="{{ color }}" (onClick)="onButtonClick()"></dx-button>
+</div>
+
+<div class="" *ngIf="buttonType == 'PrintButton'">
+  <dx-button id="button" icon="print" style="background-color: #c300ff" [height]="40" [width]="180" (onClick)="onButtonClick()">
+    <div *dxTemplate="let data of 'content'">
+      <dx-load-indicator class="button-indicator" [visible]="loadIndicatorVisible"> </dx-load-indicator>
+      <span class="dx-button-text">{{ title }}</span>
+    </div>
+  </dx-button>
+</div>

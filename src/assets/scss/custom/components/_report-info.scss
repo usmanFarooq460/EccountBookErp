@@ -1,0 +1,12 @@
+.info {
+  border: 3px solid;
+  min-height: 30px;
+  position: relative;
+}
+
+.info > h4 {
+  position: absolute;
+  top: -20px;
+  left: 30px;
+  background-color: whitesmoke;
+}

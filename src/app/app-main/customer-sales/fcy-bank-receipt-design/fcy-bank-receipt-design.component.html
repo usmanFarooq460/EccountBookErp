@@ -1,0 +1,389 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="d-flex justify-content-between">
+        <div class="">
+          <app-pagetitle [title]="'Purchase Invoice'"></app-pagetitle>
+        </div>
+        <div class="">
+          <dx-button class="mr-2" [hint]="'Add New'" type="default" icon="plus" (onClick)="resetForm()"> </dx-button>
+          <dx-button icon="refresh" class="mr-2" type="success" [hint]="'Reload Form Fields'" (onClick)="FetchData()"></dx-button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-8 my-2">
+      <dx-form [formData]="fcyBankReceiptFormData" #fcyBankReceiptForm1 [showRequiredMark]="false" [colCountByScreen]="{ lg: 3, md: 2, sm: 2, xs: 2 }">
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="DocumentNo"
+          editorType="dxNumberBox"
+          [editorOptions]="{
+            placeholder: 'Document No.',
+            readOnly: true
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="DocumentDate"
+          editorType="dxDateBox"
+          [editorOptions]="{
+            placeholder: 'Document Date',
+            displayFormat: 'dd-MMM-yyyy'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Document Date is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="ExmLcPaymentTerm"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: PaymentTermList,
+            valueExpr: 'name',
+            displayExpr: 'name',
+            placeholder: 'Payment Term',
+            searchEnabled: true,
+            onValueChanged: GetLcNInvoiceNoByPaymentTerm
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Payment Term is required"></dxi-validation-rule>
+        </dxi-item>
+      </dx-form>
+
+      <div class="ship-to-buyer shadow mt-2">
+        <div class="header">
+          <dx-form id="form" [formData]="fcyBankReceiptFormData" #fcyBankReceiptForm2 [showRequiredMark]="false" [colCountByScreen]="{ lg: 2, md: 2, sm: 1, xs: 1 }">
+            <dxi-item
+              cssClass="px-1 mb-2"
+              [colSpan]="2"
+              dataField="SupplierCustomerId"
+              editorType="dxSelectBox"
+              [editorOptions]="{
+                dataSource: supplierCustomerList,
+                valueExpr: 'Id',
+                displayExpr: 'CompanyName',
+                placeholder: 'Supplier',
+                searchEnabled: true,
+                onValueChanged: handleCustomerChange
+              }"
+            >
+              <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+              <dxi-validation-rule type="required" message="Sales Person Ac is required"></dxi-validation-rule>
+            </dxi-item>
+          </dx-form>
+        </div>
+        <app-supp-cust-detail-under-combo
+          #SuppCustDetailUnderComboComponent
+          [ComboValue]="fcyBankReceiptFormData?.SupplierCustomerId > 0"
+          [SupplierCustomerFormType]="2"
+        ></app-supp-cust-detail-under-combo>
+      </div>
+      <dx-form [formData]="fcyBankReceiptFormData" #fcyBankReceiptForm3 [showRequiredMark]="false" [colCountByScreen]="{ lg: 3, md: 2, sm: 2, xs: 2 }">
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="ExImInvoiceId"
+          [visible]="fcyBankReceiptFormData?.ExmLcPaymentTerm == 'Invoice Payment'"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: InvoiceNoList,
+            valueExpr: 'Id',
+            displayExpr: 'InvoiceNo',
+            placeholder: 'Invoice No',
+            searchEnabled: true
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          [visible]="fcyBankReceiptFormData?.ExmLcPaymentTerm == 'Advanced Payment'"
+          dataField="ExImLcOrderId"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: LcorderList,
+            valueExpr: 'Id',
+            displayExpr: 'LcOrderNo',
+            placeholder: 'Contract No',
+            searchEnabled: true
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          [colSpan]="2"
+          dataField="BankGlDrAc"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            dataSource: bankDrAcList,
+            valueExpr: 'ChartofAccountId',
+            displayExpr: 'AccountTitle',
+            placeholder: 'Bank Account (Dr)',
+            searchEnabled: true
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Bank is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="BankFbpNo"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            placeholder: 'Bank Fbp No'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Bank Fbp No is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="MultiCurrencyId"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: MultiCurrencyList,
+            valueExpr: 'Id',
+            displayExpr: 'CurrencyCode',
+            placeholder: 'Fcy Code',
+            readOnly: true,
+            searchEnabled: true
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Currecny Code is required"></dxi-validation-rule>
+        </dxi-item>
+
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="FcGrossAmount"
+          editorType="dxNumberBox"
+          [editorOptions]="{
+            placeholder: 'Fcy  Amount'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Fc Gross Amount is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="ExchangeRate"
+          editorType="dxNumberBox"
+          [editorOptions]="{
+            placeholder: 'Exchange Rate'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Exchange Rate is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          dataField="BankDrAmount"
+          editorType="dxNumberBox"
+          [editorOptions]="{
+            placeholder: 'HCY Amount',
+            format: '#,###'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          <dxi-validation-rule type="required" message="Bank Dr Amount is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          [colSpan]="2"
+          dataField="VoucherHeadId"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            dataSource: GainLossGlAcList,
+            valueExpr: 'Id',
+            displayExpr: 'AccountTitle',
+            placeholder: 'Gain/Lose Ac',
+            searchEnabled: true
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          [colSpan]="2"
+          dataField="Remarks"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            placeholder: 'Remarks'
+          }"
+        >
+          <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+        </dxi-item>
+      </dx-form>
+    </div>
+    <div class="col-md-4 my-2">
+      <div class="card">
+        <h4 *ngIf="fcyBankReceiptFormData?.ExmLcPaymentTerm == 'Invoice Payment'" class="title">Invoice Info</h4>
+        <h4 *ngIf="fcyBankReceiptFormData?.ExmLcPaymentTerm != 'Invoice Payment'" class="title">Contract Info</h4>
+        <div class="invoice-box" *ngIf="fcyBankReceiptFormData?.ExmLcPaymentTerm == 'Invoice Payment'">
+          <div class="Contract-info-wrape">
+            <div class="caption-wrape">
+              <div class="caption">Invoice #:</div>
+              <div class="value">23</div>
+            </div>
+            <div class="caption-wrape">
+              <div class="caption">Invoice Amount:</div>
+              <div class="value">2323425</div>
+            </div>
+            <div class="caption-wrape">
+              <div class="caption">Received Amount:</div>
+              <div class="value">239978</div>
+            </div>
+            <div class="caption-wrape">
+              <div class="caption">Balance Amount:</div>
+              <div class="value">239978</div>
+            </div>
+          </div>
+        </div>
+        <hr />
+        <div class="Contract-info-wrape">
+          <div class="caption-wrape">
+            <div class="caption">Total FCY Charges (PKR):</div>
+            <div class="value">3245342</div>
+          </div>
+          <div class="caption-wrape">
+            <div class="caption">Total HCY Charges (PKR):</div>
+            <div class="value">3245342</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <hr />
+      <dx-form [formData]="FcyBankReceiptDetailFormData" #FcyBankReceiptDetailForm [showRequiredMark]="false" [colCountByScreen]="{ lg: 6, md: 4, sm: 3, xs: 2 }">
+        <dxi-item
+          cssClass="px-1 m-0"
+          [colSpan]="2"
+          dataField="ExImProceedsChargesTypeId"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: ChargesTypeList,
+            valueExpr: 'Id',
+            displayExpr: 'ProceedsChargesTypeCode',
+            placeholder: 'Account Tilte',
+            searchEnabled: true
+          }"
+        >
+          <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+          <dxi-validation-rule type="required" message="Charges Type is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          editorType="dxNumberBox"
+          dataField="FcAmount"
+          [editorOptions]="{
+            placeholder: 'Fcy Amount',
+            onValueChanged: AmountDetailCalcFcToRs
+          }"
+        >
+          <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+        </dxi-item>
+        <dxi-item
+          cssClass="px-1 m-0"
+          [colSpan]="1"
+          editorType="dxNumberBox"
+          dataField="RsAmount"
+          [editorOptions]="{
+            placeholder: 'Rs Amount',
+            format: '#,###'
+          }"
+        >
+          <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+          <dxi-validation-rule type="required" message="Rs Amount is required"></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item cssClass="mt-2" [colSpan]="2">
+          <div *dxTemplate>
+            <dx-button type="default" icon="plus" text="{{ detailEditMode ? 'Update' : 'Add' }}" (onClick)="addDetailRecord2Grid()"> </dx-button>
+          </div>
+        </dxi-item>
+      </dx-form>
+    </div>
+  </div>
+
+  <div class="row my-4">
+    <div class="col-md-12">
+      <div class="card">
+        <dx-data-grid
+          id="gridContainer"
+          [dataSource]="dataSource"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+        >
+          <dxo-load-panel [enabled]="true"></dxo-load-panel>
+          <dxi-column dataField="ExImProceedsChargesTypeId" [visible]="false" caption="ExImProceedsChargesTypeId"></dxi-column>
+          <dxi-column dataField="Type" dataType="string" caption="Type" [groupIndex]="0"></dxi-column>
+          <dxi-column dataField="ProceedsChargesTypeCode" dataType="string" caption="Charges Type"></dxi-column>
+          <dxi-column dataField="FcAmount" caption="FcAmount" dataType="number" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+          <dxi-column dataField="RsAmount" caption="RsAmount" dataType="number" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+          <dxo-summary>
+            <dxi-total-item column="FcAmount" summaryType="sum" name="FcAmount" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+            <dxi-total-item column="RsAmount" summaryType="sum" name="RsAmount" displayFormat="{0}" valueFormat="#,##0.##"> </dxi-total-item>
+            <dxi-group-item column="FcAmount" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0.##"> </dxi-group-item>
+            <dxi-group-item column="RsAmount" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0.##"> </dxi-group-item>
+          </dxo-summary>
+          <dxi-column
+            dataField="button"
+            [fixed]="true"
+            [fixedPosition]="'right'"
+            [width]="90"
+            alignment="right"
+            caption="Action"
+            [allowEditing]="false"
+            [allowExporting]="false"
+            [allowFiltering]="false"
+            [allowFixing]="false"
+            [allowGrouping]="false"
+            [allowHeaderFiltering]="false"
+            [allowHiding]="false"
+            [allowReordering]="false"
+            [allowResizing]="false"
+            [allowSearch]="false"
+            [allowSorting]="false"
+            cellTemplate="buttonTemplate"
+          ></dxi-column>
+          <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+            <div class="d-con-cell-action">
+              <dx-button type="default" stylingMode="text" icon="edit" (onClick)="editDetailRecordRow(cellInfo.data, cellInfo.rowIndex)"> </dx-button>
+              <dx-button type="danger" stylingMode="text" icon="trash" (onClick)="deleteDetailRecordRow(cellInfo.rowIndex)"> </dx-button>
+            </div>
+          </div>
+          <dxo-scrolling columnRenderingMode="virtual" [scrollByContent]="true" [scrollByThumb]="true" [scrollLeft]="true" [showScrollbar]="'always'"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="d-flex justify-content-end fixed-bottom p-4 pb-6">
+        <dx-button icon="save" text="{{ fcBankReceiptParamsId > 0 ? 'Update' : 'Save' }}" type="success" (onClick)="onSave()"></dx-button>
+        <div class="m-1"></div>
+        <dx-button icon="close" text="Close" type="danger" routerLink="/account-transaction/fc-bank-receipt-history"></dx-button>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+      <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+      <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+    </div>
+    <div class="col-md-12">
+      <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+    </div>
+  </div>
+</div>

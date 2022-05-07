@@ -1,0 +1,526 @@
+<!-- Designed By Sufian Arshad -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <h2>Export Dashboard</h2>
+    </div>
+    <div class="col-md-9">
+      <dx-form id="form" [formData]="ExportDasboardFormData" #ExportDasboardForm [showRequiredMark]="false">
+        <dxi-item itemType="group" cssClass="second-group" [colCount]="6">
+          <dxi-item
+            dataField="dateType"
+            editorType="dxSelectBox"
+            [editorOptions]="{
+              placeholder: 'Date Type',
+              items: dateList,
+              valueExpr: 'Id',
+              displayExpr: 'name',
+              onInitialized: setFocus,
+              onValueChanged: datetypeChanged,
+              stylingMode: 'underlined'
+            }"
+          >
+            <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+          </dxi-item>
+          <dxi-item
+            cssClass="px-1 m-0 "
+            dataField="FromDate"
+            editorType="dxDateBox"
+            [editorOptions]="{
+              placeholder: 'From Date',
+              displayFormat: 'dd-MMM-yyyy',
+              stylingMode: 'underlined'
+            }"
+          >
+            <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+            <dxi-validation-rule type="required" message="From Date is required"></dxi-validation-rule>
+          </dxi-item>
+
+          <dxi-item
+            cssClass="px-1 m-0"
+            dataField="ToDate"
+            editorType="dxDateBox"
+            [editorOptions]="{
+              placeholder: 'To Date',
+              displayFormat: 'dd-MMM-yyyy',
+              stylingMode: 'underlined'
+            }"
+          >
+            <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+            <dxi-validation-rule type="required" message="To Date is required"></dxi-validation-rule>
+          </dxi-item>
+          <dxi-item>
+            <dx-button class="btn-sm" style="margin-top: 10px" text="Show" type="success" (onClick)="onSubmit()"></dx-button>
+          </dxi-item>
+        </dxi-item>
+      </dx-form>
+    </div>
+  </div>
+
+  <!-- Main Summary Dashboard Here-->
+
+  <div class="card">
+    <hr />
+
+    <div class="card-body">
+      <div class="row">
+        <!-- end col -->
+        <div class="col-xl-6 col-md-6 col-sm-12">
+          <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+            <div class="card-header" Id="OutStandingSalesContractCardHeaderId">
+              <h3>
+                Total Export Contract
+                <dx-button type="danger" stylingMode="text" style="color: rgb(235, 235, 232)" id="totalExportToolTipButton" (onClick)="showFirstToolTip()">
+                  <i class="fa fa-question-circle"></i>
+                </dx-button>
+              </h3>
+              <!-- <dx-button class="ml-3 mb-3" (onClick)="showFirstToolTip()" icon="fa fa-question-circle" id="totalExportToolTipButton"></dx-button> -->
+              <dx-tooltip target="#totalExportToolTipButton" [(visible)]="totalContractToolTipValue" [closeOnOutsideClick]="false">
+                <div *dxTemplate="let data = data; of: 'content'"></div>
+              </dx-tooltip>
+
+              <dx-data-grid
+                style="height: 120px"
+                id="OutStandingSalesContract"
+                [dataSource]="TotalExportContractDataSource"
+                [showColumnLines]="false"
+                [showRowLines]="true"
+                [rowAlternationEnabled]="false"
+                [allowColumnResizing]="true"
+                [columnAutoWidth]="true"
+                [showBorders]="false"
+              >
+                <dxo-grouping [contextMenuEnabled]="false"></dxo-grouping>
+                <dxo-group-panel [visible]="false"></dxo-group-panel>
+                <dxo-filter-row [visible]="filter"></dxo-filter-row>
+                <dxo-header-filter [visible]="filter"></dxo-header-filter>
+                <dxo-column-chooser [enabled]="false"></dxo-column-chooser>
+                <dxo-load-panel [enabled]="false"></dxo-load-panel>
+
+                <dxi-column dataField="Column1" caption="Column1" [visible]="false"></dxi-column>
+                <dxi-column dataField="Contract_MTons" caption="MTons" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="FcyCode" caption="Fcy" dataType="string" alignment="center" [width]="50"></dxi-column>
+                <dxi-column dataField="Fcy_Rate" caption="Fcy Rate" dataType="number" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+                <dxi-column dataField="Fcy_Amount" caption="Fcy Amount" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="PKR_AmountTotal" caption="PKR Amount" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+
+                <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+              </dx-data-grid>
+
+              <a routerLink="/export-reports/sale-contract-register" class="small-box-footer p-0 m-0" data-toggle="tooltip" data-placement="top" title="Click For Open Sales Contract Detail Report">
+                More info <i id="footer-icon" class="fas fa-arrow-circle-right" style="color: white"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-6 col-md-6 col-sm-12">
+          <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+            <div class="card-header" Id="OutStandingSalesContractCardHeaderId">
+              <h3>Outstanding Export Contract</h3>
+              <dx-data-grid
+                style="height: 120px"
+                id="OutStandingSalesContract"
+                [dataSource]="outstandingcontractDataSource"
+                [showColumnLines]="false"
+                [showRowLines]="true"
+                [rowAlternationEnabled]="false"
+                [allowColumnResizing]="true"
+                [columnAutoWidth]="true"
+                [showBorders]="false"
+              >
+                <dxo-grouping [contextMenuEnabled]="false"></dxo-grouping>
+                <dxo-group-panel [visible]="false"></dxo-group-panel>
+                <dxo-filter-row [visible]="filter"></dxo-filter-row>
+                <dxo-header-filter [visible]="filter"></dxo-header-filter>
+                <dxo-column-chooser [enabled]="false"></dxo-column-chooser>
+                <dxo-load-panel [enabled]="false"></dxo-load-panel>
+
+                <dxi-column dataField="Column1" caption="Column1" [visible]="false"></dxi-column>
+                <dxi-column dataField="Balance_MTons" caption="MTons" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="FcyCode" caption="Fcy" dataType="string" alignment="center" [width]="50"></dxi-column>
+                <dxi-column dataField="Fcy_Rate" caption="Fcy Rate" dataType="number" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+                <dxi-column dataField="Fcy_Balance" caption="Fcy Amount" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="PKR_Amount" caption="PKR Amount" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+
+                <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+              </dx-data-grid>
+              <a class="small-box-footer p-0 m-0">
+                <button class="btn btn-sm" style="background-color: transparent; color: white" (click)="GetDetailOutstandingSubmit()">
+                  More info
+                  <i id="footer-icon" class="fas fa-arrow-circle-right"></i>
+                </button>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-6 col-md-6 col-sm-12">
+          <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+            <div class="card-header" Id="TotalExportCardHeaderId">
+              <h3>Total Export</h3>
+              <dx-data-grid
+                #datagrid
+                style="height: 120px"
+                id="TotalExportGrid"
+                [dataSource]="totalExportByFinancialYearDataSource"
+                [showColumnLines]="false"
+                [showRowLines]="true"
+                [rowAlternationEnabled]="false"
+                [allowColumnResizing]="true"
+                [columnAutoWidth]="true"
+                [showBorders]="false"
+              >
+                <dxo-grouping [contextMenuEnabled]="false"></dxo-grouping>
+                <dxo-group-panel [visible]="false"></dxo-group-panel>
+                <dxo-filter-row [visible]="filter"></dxo-filter-row>
+                <dxo-header-filter [visible]="filter"></dxo-header-filter>
+                <dxo-column-chooser [enabled]="false"></dxo-column-chooser>
+                <dxo-load-panel [enabled]="false"></dxo-load-panel>
+
+                <dxi-column dataField="Column1" caption="Column1" [visible]="false"></dxi-column>
+                <dxi-column dataField="Contract_MTons" caption="MTons" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="FcyCode" caption="Fcy" dataType="string" alignment="center" [width]="50"></dxi-column>
+                <dxi-column dataField="Fcy_Rate" caption="Fcy Rate" dataType="number" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+                <dxi-column dataField="Fcy_Amount" caption="Fcy Amount" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="PKR_AmountTotal" caption="PKR Amount" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+
+                <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+              </dx-data-grid>
+              <a routerLink="/export-reports/export-history-reports" class="small-box-footer p-0 m-0" data-toggle="tooltip" data-placement="top" title="Click For Open Export Detail Report">
+                More info <i id="footer-icon" class="fas fa-arrow-circle-right" style="color: white"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-6 col-md-6 col-sm-12">
+          <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+            <div class="card-header" Id="TotalExportCardHeaderId">
+              <h3>Current Month Export</h3>
+              <dx-data-grid
+                #datagrid
+                style="height: 120px"
+                id="TotalExportGrid"
+                [dataSource]="currentMonthExportDataSource"
+                [showColumnLines]="false"
+                [showRowLines]="true"
+                [rowAlternationEnabled]="false"
+                [allowColumnResizing]="true"
+                [columnAutoWidth]="true"
+                [showBorders]="false"
+              >
+                <dxo-grouping [contextMenuEnabled]="false"></dxo-grouping>
+                <dxo-group-panel [visible]="false"></dxo-group-panel>
+                <dxo-filter-row [visible]="filter"></dxo-filter-row>
+                <dxo-header-filter [visible]="filter"></dxo-header-filter>
+                <dxo-column-chooser [enabled]="false"></dxo-column-chooser>
+                <dxo-load-panel [enabled]="false"></dxo-load-panel>
+
+                <dxi-column dataField="Column1" caption="Column1" [visible]="false"></dxi-column>
+                <dxi-column dataField="Contract_MTons" caption="MTons" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="FcyCode" caption="Fcy" dataType="string" alignment="center" [width]="50"></dxi-column>
+                <dxi-column dataField="Fcy_Rate" caption="Fcy Rate" dataType="number" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+                <dxi-column dataField="Fcy_Amount" caption="Fcy Amount" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="PKR_AmountTotal" caption="PKR Amount" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+
+                <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+              </dx-data-grid>
+              <a routerLink="/export-reports/export-history-reports" class="small-box-footer p-0 m-0" data-toggle="tooltip" data-placement="top" title="Click For Open Export Detail Report">
+                More info <i id="footer-icon" class="fas fa-arrow-circle-right" style="color: white"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xl-6 col-md-6 col-sm-12">
+          <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+            <div class="card-header" Id="ForwardedCardHeaderId">
+              <h3>Forwarded But B/L Not Received</h3>
+              <dx-data-grid
+                #datagrid
+                style="height: 120px"
+                id="ForwardedBlNotReceivedDatagrid"
+                [dataSource]="outstandingBlNotReceivedDataSource"
+                [showColumnLines]="false"
+                [showRowLines]="true"
+                [rowAlternationEnabled]="false"
+                [allowColumnResizing]="true"
+                [columnAutoWidth]="true"
+                [showBorders]="false"
+              >
+                <dxo-grouping [contextMenuEnabled]="false"></dxo-grouping>
+                <dxo-group-panel [visible]="false"></dxo-group-panel>
+                <dxo-filter-row [visible]="filter"></dxo-filter-row>
+                <dxo-header-filter [visible]="filter"></dxo-header-filter>
+                <dxo-column-chooser [enabled]="false"></dxo-column-chooser>
+                <dxo-load-panel [enabled]="false"></dxo-load-panel>
+
+                <dxi-column dataField="Column1" caption="Column1" [visible]="false"></dxi-column>
+                <dxi-column dataField="Shipped_MTons" caption="MTons" dataType="number" alignment="center" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="FcyCode" caption="Fcy" dataType="string" alignment="center" [width]="50"></dxi-column>
+                <dxi-column dataField="Fcy_Rate" caption="Fcy Rate" dataType="number" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+                <dxi-column dataField="Fcy_Amount" caption="Fcy Amount" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="PKR_AmountTotal" caption="PKR Amount" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+
+                <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+              </dx-data-grid>
+              <a class="small-box-footer p-0 m-0">
+                <button class="btn btn-sm" style="background-color: transparent; color: white" (click)="getForwardedButBlNotReceivedReoprt()">
+                  More info
+                  <i id="footer-icon" class="fas fa-arrow-circle-right"></i>
+                </button>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-6 col-md-6 col-sm-12">
+          <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+            <div class="card-header" Id="ForwardedCardHeaderId">
+              <h3>Outstanding For Payment</h3>
+              <dx-data-grid
+                #datagrid
+                style="height: 120px"
+                id="ForwardedBlNotReceivedDatagrid"
+                [dataSource]="outstandingPaymentNotReceivedDataSource"
+                [showColumnLines]="false"
+                [showRowLines]="true"
+                [rowAlternationEnabled]="false"
+                [allowColumnResizing]="true"
+                [columnAutoWidth]="true"
+                [showBorders]="false"
+              >
+                <dxo-grouping [contextMenuEnabled]="false"></dxo-grouping>
+                <dxo-group-panel [visible]="false"></dxo-group-panel>
+                <dxo-filter-row [visible]="filter"></dxo-filter-row>
+                <dxo-header-filter [visible]="filter"></dxo-header-filter>
+                <dxo-column-chooser [enabled]="false"></dxo-column-chooser>
+                <dxo-load-panel [enabled]="false"></dxo-load-panel>
+
+                <dxi-column dataField="Column1" caption="Column1" [visible]="false"></dxi-column>
+
+                <dxi-column dataField="FcyCode" caption="Fcy" dataType="string" alignment="center" [width]="50"></dxi-column>
+                <dxi-column dataField="Fcy_Rate" caption="Fcy Rate" dataType="number" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+                <dxi-column dataField="Fcy_Balance" caption="Fcy Amount" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+                <dxi-column dataField="PKR_Amount" caption="PKR Amount" dataType="number" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+
+                <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+              </dx-data-grid>
+              <a class="small-box-footer p-0 m-0">
+                <button class="btn btn-sm" style="background-color: transparent; color: white" (click)="getForwardedButPaymentNotReceivedReoprt()">
+                  More info
+                  <i id="footer-icon" class="fas fa-arrow-circle-right"></i>
+                </button>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ENd Aproval Cards Here -->
+    <div class="card-footer center"></div>
+  </div>
+  <!-- Detail Popup Satarted Here-->
+  <!-- Detail Popup OutStanding Contracts Staart-->
+  <dx-popup
+    [width]="DetailPopupWidth"
+    [height]="DetailPopupHeight"
+    [position]="'center'"
+    [showTitle]="true"
+    titleTemplate="titleTemplate"
+    [dragEnabled]="true"
+    [closeOnOutsideClick]="false"
+    [(visible)]="OutStandingOrderPopupVisible"
+  >
+    <div *dxTemplate="let content of 'titleTemplate'" class="d-flex justify-content-between">
+      <div class="">
+        <h4>Outstanding Sales Contract</h4>
+      </div>
+      <div class="d-flex justify-content-end">
+        <dx-button class="p-0 mr-1 border-0" type="transparent" (onClick)="filteringOutstandsingPopup()" icon="filter"></dx-button>
+        <dx-button class="p-0 border-0" type="transparent" (onClick)="closOutStandingOrderApprovalPopup()" icon="close"></dx-button>
+      </div>
+    </div>
+    <div *dxTemplate="let data of 'content'">
+      <dx-data-grid
+        #popupGrid
+        width="100%"
+        height="100%"
+        id="gridContainer"
+        [dataSource]="OutStandingContractsDetailDataSource"
+        [showColumnLines]="false"
+        [showRowLines]="true"
+        [rowAlternationEnabled]="true"
+        [allowColumnResizing]="true"
+        [columnAutoWidth]="true"
+        [showBorders]="true"
+      >
+        <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+        <dxo-group-panel [visible]="true"></dxo-group-panel>
+        <dxo-filter-row [visible]="outstandingPopupFilter"></dxo-filter-row>
+        <dxo-header-filter [visible]="outstandingPopupFilter"></dxo-header-filter>
+        <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+        <dxo-load-panel [enabled]="true"></dxo-load-panel>
+        <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="OutStandingContractsDetailDataSourceLength" [showInfo]="true"></dxo-pager>
+        <dxo-load-panel [enabled]="true"></dxo-load-panel>
+        <dxi-column dataField="ContractNo" caption="ContractNo" dataType="string" [width]="110"></dxi-column>
+        <dxi-column dataField="ContractDate" caption="Date" alignment="center" dataType="date" [format]="'dd-MMM-yyyy'" [width]="110"></dxi-column>
+        <dxi-column dataField="Customer" caption="Customer" dataType="string" [width]="140" alignment="left"></dxi-column>
+        <dxi-column dataField="Contract_MTons" caption="Contract MTons" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="Shipped_MTons" caption="Shipped MTons" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="Balance_MTons" caption="Balance MTons" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="FcyCode" caption="Fcy" dataType="string" alignment="left" [groupIndex]="0"></dxi-column>
+        <dxi-column dataField="Fcy_Rate" caption="Fcy Rate" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
+        <dxi-column dataField="Fcy_Balance" caption="Fcy Amount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+        <dxi-column dataField="PKR_Amount" caption="PKR Amount" dataType="number" alignment="right" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+
+        <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+        <dxo-summary>
+          <dxi-total-item column="Fcy_Balance" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+          <dxi-total-item column="PKR_Amount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+          <dxi-total-item column="Contract_MTons" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+          <dxi-total-item column="Shipped_MTons" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+          <dxi-total-item column="Balance_MTons" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+
+          <dxi-group-item column="Fcy_Balance" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+          <dxi-group-item column="PKR_Amount" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+          <dxi-group-item column="Contract_MTons" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+          <dxi-group-item column="Shipped_MTons" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+          <dxi-group-item column="Balance_MTons" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+        </dxo-summary>
+      </dx-data-grid>
+    </div>
+  </dx-popup>
+  <!-- Detail Popup OutStanding Contracts End Here-->
+  <!-- Detail Popup Forwarded But B/L Not Received Start-->
+  <dx-popup
+    [width]="DetailPopupWidth"
+    [height]="DetailPopupHeight"
+    [position]="'center'"
+    [showTitle]="true"
+    titleTemplate="titleTemplate"
+    [dragEnabled]="true"
+    [closeOnOutsideClick]="false"
+    [(visible)]="ForwardedButBLNotReceivedVisible"
+  >
+    <div *dxTemplate="let content of 'titleTemplate'" class="d-flex justify-content-between">
+      <div class="">
+        <h4>Forwarded But B/L Not Received</h4>
+      </div>
+      <div class="d-flex justify-content-end">
+        <dx-button class="p-0 mr-1 border-0" type="transparent" (onClick)="filteringForwardedButBlNotReceivedPopup()" icon="filter"></dx-button>
+        <dx-button class="p-0 border-0" type="transparent" (onClick)="closeForwardedButBlNotReceivedPopup()" icon="close"></dx-button>
+      </div>
+    </div>
+    <div *dxTemplate="let data of 'content'">
+      <dx-data-grid
+        #popupGrid
+        width="100%"
+        height="100%"
+        id="gridContainer"
+        [dataSource]="ForwardedButBLNotReceivedDataSource"
+        [showColumnLines]="false"
+        [showRowLines]="true"
+        [rowAlternationEnabled]="true"
+        [allowColumnResizing]="true"
+        [columnAutoWidth]="true"
+        [showBorders]="true"
+      >
+        <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+        <dxo-group-panel [visible]="true"></dxo-group-panel>
+        <dxo-filter-row [visible]="ForwardedButBLNotReceivedPopupFilter"></dxo-filter-row>
+        <dxo-header-filter [visible]="ForwardedButBLNotReceivedPopupFilter"></dxo-header-filter>
+        <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+        <dxo-load-panel [enabled]="true"></dxo-load-panel>
+        <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="ForwardedButBLNotReceivedDataSourceLength" [showInfo]="true"></dxo-pager>
+        <dxo-load-panel [enabled]="true"></dxo-load-panel>
+
+        <dxi-column dataField="Customer" caption="Customer" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="InvoiceNo" caption="InvoiceNo" dataType="string" alignment="center" [width]="160"></dxi-column>
+        <dxi-column dataField="LcOrderNo" caption="Contract No" dataType="string" alignment="center" [width]="160"></dxi-column>
+        <dxi-column dataField="Forwarded_MTons" caption="M.Ton" [format]="{ type: 'fixedPoint', precision: 2 }" dataType="number" alignment="right"></dxi-column>
+        <dxi-column dataField="FcyCode" caption="Fcy Code" dataType="string" alignment="center"></dxi-column>
+        <dxi-column dataField="Fcy_Rate" caption="Fcy Rate" [format]="{ type: 'fixedPoint', precision: 2 }" dataType="number" alignment="right"></dxi-column>
+        <dxi-column dataField="Fcy_Forwarded" caption="Fcy Amount" [format]="{ type: 'fixedPoint', precision: 1 }" dataType="number" alignment="right"></dxi-column>
+        <dxi-column dataField="PKR_AmountBalance" caption="PKR Amount" [format]="{ type: 'fixedPoint', precision: 0 }" dataType="number" alignment="right"></dxi-column>
+
+        <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+        <dxo-summary>
+          <dxi-total-item column="Forwarded_MTons" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+          <dxi-total-item column="Fcy_Forwarded" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+          <dxi-total-item column="PKR_AmountBalance" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+
+          <dxi-group-item column="Forwarded_MTons" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+          <dxi-group-item column="Fcy_Forwarded" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+          <dxi-group-item column="PKR_AmountBalance" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+        </dxo-summary>
+      </dx-data-grid>
+    </div>
+  </dx-popup>
+  <!-- Detail Popup Forwarded But B/L Not Received End Here-->
+  <!-- Detail Popup Forwarded But Payment Not Received Start-->
+  <dx-popup
+    [width]="DetailPopupWidth"
+    [height]="DetailPopupHeight"
+    [position]="'center'"
+    [showTitle]="true"
+    titleTemplate="titleTemplate"
+    [dragEnabled]="true"
+    [closeOnOutsideClick]="false"
+    [(visible)]="ForwardedButPaymentNotReceivedVisible"
+  >
+    <div *dxTemplate="let content of 'titleTemplate'" class="d-flex justify-content-between">
+      <div class="">
+        <h4>Outstanding For Payment</h4>
+      </div>
+      <div class="d-flex justify-content-end">
+        <dx-button class="p-0 mr-1 border-0" type="transparent" (onClick)="filteringForwardedButPaymentNotReceivedPopup()" icon="filter"></dx-button>
+        <dx-button class="p-0 border-0" type="transparent" (onClick)="closeForwardedButPaymentNotReceivedPopup()" icon="close"></dx-button>
+      </div>
+    </div>
+    <div *dxTemplate="let data of 'content'">
+      <dx-data-grid
+        #popupGrid
+        width="100%"
+        height="100%"
+        id="gridContainer"
+        [dataSource]="ForwardedButPaymentNotReceivedDataSource"
+        [showColumnLines]="false"
+        [showRowLines]="true"
+        [rowAlternationEnabled]="true"
+        [allowColumnResizing]="true"
+        [columnAutoWidth]="true"
+        [showBorders]="true"
+      >
+        <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+        <dxo-group-panel [visible]="true"></dxo-group-panel>
+        <dxo-filter-row [visible]="ForwardedButPaymentNotReceivedPopupFilter"></dxo-filter-row>
+        <dxo-header-filter [visible]="ForwardedButPaymentNotReceivedPopupFilter"></dxo-header-filter>
+        <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+        <dxo-load-panel [enabled]="true"></dxo-load-panel>
+        <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="ForwardedButPaymentNotReceivedDataSourceLength" [showInfo]="true"></dxo-pager>
+        <dxo-load-panel [enabled]="true"></dxo-load-panel>
+
+        <dxi-column dataField="Customer" caption="Customer" dataType="string" alignment="left"></dxi-column>
+        <dxi-column dataField="InvoiceNo" caption="InvoiceNo" dataType="string" alignment="center" [width]="160"></dxi-column>
+        <dxi-column dataField="LcOrderNo" caption="Contract No" dataType="string" alignment="center" [width]="160"></dxi-column>
+
+        <dxi-column dataField="FcyCode" caption="Fcy Code" dataType="string" alignment="center"></dxi-column>
+        <dxi-column dataField="Fcy_Rate" caption="Fcy Rate" [format]="{ type: 'fixedPoint', precision: 2 }" dataType="number" alignment="right"></dxi-column>
+        <dxi-column dataField="Fcy_Balance" caption="Fcy Amount" [format]="{ type: 'fixedPoint', precision: 1 }" dataType="number" alignment="right"></dxi-column>
+        <dxi-column dataField="PKR_AmountBalance" caption="PKR Amount" [format]="{ type: 'fixedPoint', precision: 0 }" dataType="number" alignment="right"></dxi-column>
+
+        <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+        <dxo-summary>
+          <dxi-total-item column="Fcy_Balance" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+          <dxi-total-item column="PKR_AmountBalance" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+
+          <dxi-group-item column="Fcy_Balance" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+          <dxi-group-item column="PKR_AmountBalance" summaryType="sum" [showInGroupFooter]="true" displayFormat="{0}" [alignByColumn]="true" valueFormat="#,##0"> </dxi-group-item>
+        </dxo-summary>
+      </dx-data-grid>
+    </div>
+  </dx-popup>
+  <!-- Detail Popup Forwarded But Payment Not Received End Here-->
+</div>

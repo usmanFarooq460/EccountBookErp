@@ -1,0 +1,239 @@
+<div class="container-fluid mb-5 pb-5">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="d-flex justify-content-end">
+        <div class="mt-2">
+          <dx-button class="mr-2" [hint]="'Add New'" type="default" icon="plus" (onClick)="resetForm()"> </dx-button>
+          <dx-button icon="refresh" type="success" [hint]="'Reload Form Fields'" (onClick)="FetchData()"></dx-button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <dx-form id="form" [formData]="packingTypeFormData" #packingTypeForm [showRequiredMark]="false" [colCountByScreen]="{ lg: 5, md: 4, sm: 3 }">
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="DocNo"
+      editorType="dxNumberBox"
+      [editorOptions]="{
+        placeholder: 'Doc No.',
+        readOnly: true
+      }"
+    >
+      <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+      <dxi-validation-rule type="custom" [validationCallback]="validateNumberBox" message="Doc No is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0 "
+      dataField="DocDate"
+      editorType="dxDateBox"
+      [editorOptions]="{
+        placeholder: 'Doc Date',
+        displayFormat: 'dd-MMM-yyyy'
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Doc Date is required"></dxi-validation-rule>
+    </dxi-item>
+
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="InvProductionJobOrderId"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        items: jobOrderList,
+        placeholder: 'job Order No',
+        valueExpr: 'Id',
+        displayExpr: 'PlanCode',
+        searchEnabled: true
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="job Order No is required"></dxi-validation-rule>
+    </dxi-item>
+
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="ItemId"
+      [colSpan]="2"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        dataSource: itemsList,
+        placeholder: 'Item Name',
+        valueExpr: 'Id',
+        displayExpr: 'ItemName',
+        searchEnabled: true,
+        onValueChanged: onItemValueChange
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Item Name is required"></dxi-validation-rule>
+    </dxi-item>
+
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="itemUomSchId"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        items: UOMListByItemId,
+        placeholder: 'UOM',
+        valueExpr: 'Id',
+        displayExpr: 'UOMCode',
+        searchEnabled: true,
+        onValueChanged: calculationsInDetailForm
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Rate UOM is required"></dxi-validation-rule>
+    </dxi-item>
+
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="Qty"
+      editorType="dxNumberBox"
+      [editorOptions]="{
+        placeholder: 'Item Qty',
+        onValueChanged: calculationsInDetailForm
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="custom" [validationCallback]="validateNumberBox" message="Rate is required"></dxi-validation-rule>
+    </dxi-item>
+
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="Rate"
+      editorType="dxNumberBox"
+      [editorOptions]="{
+        placeholder: 'Item Rate',
+        onValueChanged: calculationsInDetailForm
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="custom" [validationCallback]="validateNumberBox" message="Rate is required"></dxi-validation-rule>
+    </dxi-item>
+
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="Amount"
+      editorType="dxNumberBox"
+      [editorOptions]="{
+        placeholder: 'Amount',
+        min: 0,
+        readOnly: true
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="custom" [validationCallback]="validateNumberBox" message="Amount is required"></dxi-validation-rule>
+    </dxi-item>
+
+    <dxi-item
+      cssClass="px-1 m-0"
+      [colSpan]="2"
+      dataField="pmRemarks"
+      editorType="dxTextBox"
+      [editorOptions]="{
+        placeholder: 'Remarks'
+      }"
+    >
+      <dxo-label text=" " [showColon]="false" location="top"></dxo-label>
+    </dxi-item>
+  </dx-form>
+
+  <div class="d-flex justify-content-end py-3">
+    <dx-button text="{{ packingTypeFormData?.Id > 0 ? 'Update' : 'Save' }}" class="btn-color mr-2" type="success" (onClick)="onSAveButtonClicked()"></dx-button>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card mt-4">
+        <dx-data-grid
+          id="gridContainer"
+          #packingTypeProductionGrid
+          [height]="gridHeight"
+          [dataSource]="dataSource"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnReordering]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="false"
+          (onToolbarPreparing)="onToolbarPreparing($event)"
+        >
+          <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-filter-row [visible]="filter"></dxo-filter-row>
+          <dxo-search-panel [visible]="true" [width]="250" [visible]="filter"></dxo-search-panel>
+          <dxo-header-filter [visible]="filter"></dxo-header-filter>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-state-storing [enabled]="true" type="localStorage" storageKey="{{ HistoryGridSateKey('packingTypeProductionGrid') }}"></dxo-state-storing>
+          <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+          <dxo-load-panel [enabled]="false"></dxo-load-panel>
+          <dxo-export [enabled]="true" fileName="Food Production Input Grid" [allowExportSelectedData]="true">
+            <dxo-texts exportAll="Export All Rows"></dxo-texts>
+          </dxo-export>
+          <dxo-paging [enabled]="true"></dxo-paging>
+
+          <dxi-column dataField="" [fixed]="true" [fixedPosition]="'left'" caption="Sr#" cellTemplate="SerialNumberTemplate"></dxi-column>
+          <div *dxTemplate="let cellInfo of 'SerialNumberTemplate'">
+            <div class="d-con-cell-action">
+              <h5 style="font-family: cursive; font-weight: bold">{{ cellInfo.rowIndex + 1 }}</h5>
+            </div>
+          </div>
+          <dxi-column dataField="DocNo" caption="Doc#" dataType="number" alignment="left" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="DocDate" caption="Doc Date" dataType="date" alignment="center" [format]="'dd-MM-yyyy'"></dxi-column>
+          <dxi-column dataField="ItemName" caption="Item Name" dataType="string"></dxi-column>
+          <dxi-column dataField="ItemCode" caption="Item Code" dataType="string"></dxi-column>
+          <dxi-column dataField="Qty" caption="Qty" dataType="number" alignment="left" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="Rate" caption="Rate" dataType="number" alignment="left" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="Amount" caption="Amount" dataType="number" alignment="left" [format]="{ type: 'fixedPoint', precision: 0 }"></dxi-column>
+          <dxi-column dataField="pmRemarks" caption="Remarks" dataType="string"></dxi-column>
+
+          <dxi-column
+            dataField="button"
+            [fixed]="true"
+            [fixedPosition]="'right'"
+            [width]="90"
+            alignment="center"
+            caption="Action"
+            [allowEditing]="false"
+            [allowExporting]="false"
+            [allowFiltering]="false"
+            [allowFixing]="false"
+            [allowGrouping]="false"
+            [allowHeaderFiltering]="false"
+            [allowHiding]="false"
+            [allowReordering]="false"
+            [allowResizing]="false"
+            [allowSearch]="false"
+            [allowSorting]="false"
+            cellTemplate="buttonTemplate"
+          ></dxi-column>
+          <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+            <div class="d-con-cell-action">
+              <dx-button type="default" stylingMode="text" icon="edit" (onClick)="editForm(cellInfo.data)"><i class="ri-edit-2-line"></i> </dx-button>
+            </div>
+          </div>
+
+          <dxo-summary>
+            <dxi-total-item column="Code" summaryType="count" displayFormat="Total Records: {0}"> </dxi-total-item>
+            <dxi-total-item column="Qty" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="Amount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+          </dxo-summary>
+
+          <dxo-scrolling [scrollByContent]="true" [scrollByThumb]="true" [showScrollbar]="'always'" [scrollLeft]="true" mode="infinite"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+      <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+      <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+    </div>
+    <div class="col-md-12">
+      <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+    </div>
+  </div>
+</div>

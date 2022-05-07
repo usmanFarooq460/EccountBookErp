@@ -1,0 +1,144 @@
+::ng-deep #OutstandingPaddyPurchaseOrdersGrid .dx-datagrid-header-panel {
+  padding: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(3, 11, 42, 1) 0%,
+    rgba(8, 126, 102, 1) 0%,
+    rgba(0, 36, 25, 1) 0%,
+    rgba(9, 121, 92, 1) 0%,
+    rgba(9, 123, 96, 1) 0%,
+    rgba(5, 167, 175, 1) 0%,
+    rgba(3, 186, 209, 1) 0%,
+    rgba(6, 159, 137, 1) 7%,
+    rgba(7, 151, 145, 1) 9%,
+    rgba(2, 97, 219, 1) 42%,
+    rgba(1, 153, 193, 1) 55%,
+    rgba(0, 255, 145, 1) 79%
+  );
+}
+
+::ng-deep #OutstandingPaddyPurchaseOrdersGrid .dx-datagrid-header-panel .dx-toolbar {
+  margin: 0;
+  padding-right: 20px;
+  background-color: transparent;
+}
+
+::ng-deep #OutstandingPaddyPurchaseOrdersGrid .dx-datagrid-header-panel .dx-toolbar-items-container {
+  height: 48px;
+}
+
+// ::ng-deep #OutstandingPaddyPurchaseOrdersGrid .dx-datagrid-header-panel .dx-toolbar-before .dx-toolbar-item:not(:first-child) {
+//   background-color: rgba(103, 171, 255, 0.6);
+// }
+
+::ng-deep #OutstandingPaddyPurchaseOrdersGrid .dx-datagrid-header-panel .dx-toolbar-before .dx-toolbar-item:last-child {
+  padding-right: 3px;
+  color: rgb(140, 174, 238);
+}
+::ng-deep OutstandingPaddyPurchaseOrdersGrid ::ng-deep #OutstandingPaddyPurchaseOrdersGrid .dx-datagrid-header-panel .dx-selectbox {
+  margin: 1px;
+}
+
+::ng-deep #OutstandingPaddyPurchaseOrdersGrid .dx-datagrid-header-panel .dx-button {
+  margin: 1px;
+}
+
+::ng-deep #OutstandingPaddyPurchaseOrdersGrid .informer {
+  display: inline-block;
+  font-family: "Abril Fatface", serif;
+  color: #fff;
+}
+
+::ng-deep #OutstandingPaddyPurchaseOrdersGrid .count {
+  line-height: 10px;
+  margin: 0;
+}
+
+//=============================================================================================================================================
+
+::ng-deep #HistoryRegisterGrid .dx-datagrid-header-panel {
+  padding: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(3, 11, 42, 1) 0%,
+    rgba(8, 126, 102, 1) 0%,
+    rgba(0, 36, 25, 1) 0%,
+    rgba(9, 121, 92, 1) 0%,
+    rgba(9, 123, 96, 1) 0%,
+    rgba(5, 167, 175, 1) 0%,
+    rgba(3, 186, 209, 1) 0%,
+    rgba(6, 159, 137, 1) 7%,
+    rgba(7, 151, 145, 1) 9%,
+    rgba(2, 97, 219, 1) 42%,
+    rgba(1, 153, 193, 1) 55%,
+    rgba(0, 255, 145, 1) 79%
+  );
+}
+
+::ng-deep #HistoryRegisterGrid .dx-datagrid-header-panel .dx-toolbar {
+  margin: 0;
+  padding-right: 20px;
+  background-color: transparent;
+}
+
+::ng-deep #HistoryRegisterGrid .dx-datagrid-header-panel .dx-toolbar-items-container {
+  height: 48px;
+}
+
+// ::ng-deep #HistoryRegisterGrid .dx-datagrid-header-panel .dx-toolbar-before .dx-toolbar-item:not(:first-child) {
+//   background-color: rgba(103, 171, 255, 0.6);
+// }
+
+::ng-deep #HistoryRegisterGrid .dx-datagrid-header-panel .dx-toolbar-before .dx-toolbar-item:last-child {
+  padding-right: 3px;
+  color: rgb(140, 174, 238);
+}
+
+::ng-deep #HistoryRegisterGrid .dx-datagrid-header-panel .dx-selectbox {
+  margin: 1px;
+}
+
+::ng-deep #HistoryRegisterGrid .dx-datagrid-header-panel .dx-button {
+  margin: 1px;
+}
+
+::ng-deep #HistoryRegisterGrid .informer {
+  display: inline-block;
+  font-family: "Abril Fatface", serif;
+  color: #fff;
+}
+
+::ng-deep #HistoryRegisterGrid .count {
+  line-height: 10px;
+  margin: 0;
+}
+
+//==============================================================================================================
+::ng-deep .state-tooltip {
+  height: 90px;
+}
+
+::ng-deep .state-tooltip > img {
+  width: 60px;
+  height: 40px;
+  display: block;
+  margin: 0 5px 0 0;
+  float: left;
+  border: 1px solid rgba(191, 191, 191, 0.25);
+}
+
+::ng-deep .state-tooltip > h4 {
+  line-height: 40px;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+::ng-deep .state-tooltip .caption {
+  font-weight: 500;
+}
+
+::ng-deep .state-tooltip sup {
+  font-size: 0.8em;
+  vertical-align: super;
+  line-height: 0;
+}

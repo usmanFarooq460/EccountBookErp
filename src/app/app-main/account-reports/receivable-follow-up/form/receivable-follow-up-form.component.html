@@ -1,0 +1,180 @@
+<div class="container-fluid">
+  <!-- start page title -->
+  <div class="row">
+    <div class="col-md-12">
+      <div class="d-flex justify-content-between">
+        <div class="">
+          <h4 class="mb-0">Receivable Follow Up</h4>
+        </div>
+        <div class="">
+          <dx-button class="mr-2" [hint]="'Add New'" type="default" icon="plus" (onClick)="resetForm()"> </dx-button>
+          <dx-button icon="refresh" type="success" [hint]="'Reload Form Fields'" (onClick)="FetchData()"></dx-button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end page title -->
+  <dx-form [formData]="ReceivableFollowUpFormData" [colCountByScreen]="{ lg: 6, md: 4, sm: 3, xs: 2 }" #ReceivableFollowUpForm [showRequiredMark]="false">
+          
+    <dxi-item
+      cssClass="px-1 m-0"
+      [colSpan]="3"
+      dataField="ChartOfAccountId"
+      editorType="dxSelectBox"
+      [editorOptions]="{
+        dataSource: AccountsList,
+        valueExpr: 'Id',
+        displayExpr: 'AccountTitle',
+        placeholder: 'Account Title',
+        searchEnabled: true,
+        onInitialized: setFocus
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Account Title is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="FollowupDate"
+      editorType="dxDateBox"
+      [editorOptions]="{
+        placeholder: 'Follow Up Date',
+        displayFormat: 'dd-MMM-yyyy'
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Follow Up Date is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="NextFollowupDays"
+      editorType="dxNumberBox"
+      [editorOptions]="{
+        placeholder: 'Next FollowUp Days'
+      }"
+    >
+      <dxi-validation-rule type="required" message="Next FollowUp Days is required"></dxi-validation-rule>
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+    </dxi-item>
+  
+  
+    <dxi-item
+      cssClass="px-1 m-0"
+      dataField="PromiseDate"
+      editorType="dxDateBox"
+      [editorOptions]="{
+        placeholder: 'Promise Date',
+        displayFormat: 'dd-MMM-yyyy'
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Promise Date is required"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item
+      [colSpan]="3"
+      cssClass="px-1 m-0"
+      dataField="CommentsDetail"
+      editorType="dxTextBox"
+      [editorOptions]="{
+        placeholder: 'Comments Detail'
+      }"
+    >
+      <dxo-label text=" " location="top" [showColon]="false"></dxo-label>
+    </dxi-item>
+  
+</dx-form>
+  <div class="row mt-3">
+    <div class="col-md-12">
+      <div class="card">
+        <dx-data-grid
+          id="gridContainer"
+          [dataSource]="dataSource"
+          [height]="IsLoadedInPopup == false ? gridHeight : gridHeightInPopupWithGrid"
+          [showColumnLines]="false"
+          [showRowLines]="true"
+          [rowAlternationEnabled]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+          (onToolbarPreparing)="onToolbarPreparing($event)"
+        >
+          <dxo-grouping [contextMenuEnabled]="true"></dxo-grouping>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-filter-row [visible]="filter"></dxo-filter-row>
+          <dxo-header-filter [visible]="filter"></dxo-header-filter>
+          <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+          <dxo-load-panel [enabled]="true"></dxo-load-panel>
+          <dxo-paging [enabled]="true"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true"></dxo-pager>
+          <dxi-column dataField="ChartOfAccountId" caption="ChartOfAccountId" [visible]="false" dataType="number" alignment="left"></dxi-column>
+          <dxi-column dataField="AccountTitle" caption="AccountTitle" dataType="string" alignment="left"></dxi-column>
+          <dxi-column dataField="FollowupDate" caption="FollowUpDate" dataType="date" alignment="left" [format]="'dd-MMM-yyyy'"></dxi-column>
+          <dxi-column dataField="NextFollowupDays" caption="NF-Days" dataType="number" alignment="left"></dxi-column>
+          <dxi-column dataField="PromiseDate" caption="Promise Date" dataType="date" alignment="left" [format]="'dd-MMM-yyyy'"></dxi-column>
+          <dxi-column dataField="CommentsDetail" caption="Comment Detail" dataType="string" alignment="left"></dxi-column>
+          <dxi-column
+            dataField="button"
+            [fixed]="true"
+            [fixedPosition]="'right'"
+            [width]="90"
+            alignment="right"
+            caption="Action"
+            [allowEditing]="false"
+            [allowExporting]="false"
+            [allowFiltering]="false"
+            [allowFixing]="false"
+            [allowGrouping]="false"
+            [allowHeaderFiltering]="false"
+            [allowHiding]="false"
+            [allowReordering]="false"
+            [allowResizing]="false"
+            [allowSearch]="false"
+            [allowSorting]="false"
+            cellTemplate="buttonTemplate"
+          ></dxi-column>
+          <dxo-summary>
+            <dxi-total-item column="LastBillsAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="LastRcvdAmount" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="ClDebit" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="Credit" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="ObDebit" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="ObCredit" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="CurrDebit" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+            <dxi-total-item column="CurrCredit" summaryType="sum" displayFormat="{0}" valueFormat="#,##0"> </dxi-total-item>
+          </dxo-summary>
+          <div *dxTemplate="let cellInfo of 'buttonTemplate'">
+            <div class="d-con-cell-action">
+              <dx-button type="default" stylingMode="text" (onClick)="onEdit(cellInfo.data)">
+                <i class="ri-edit-2-line"></i>
+              </dx-button>
+              <!-- <dx-button type="danger" stylingMode="text" hint="262-DeliveryOrder Slip" (onClick)="InvoiceSlip262(cellInfo.data)">
+                <i class="ri-printer-line"></i>
+              </dx-button> -->
+            </div>
+          </div>
+
+          <dxo-export [enabled]="true" [allowExportSelectedData]="true"></dxo-export>
+          <dxo-scrolling [scrollByContent]="true" [scrollByThumb]="true" [showScrollbar]="'always'" [scrollLeft]="true" mode="infinite"></dxo-scrolling>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="d-flex justify-content-end fixed-bottom p-4 pb-6">
+        <dx-button icon="save" text="{{ ParamsId > 0 ? 'Update' : 'Save' }}" type="success" (onClick)="handleSave()"></dx-button>
+        <div class="m-1"></div>
+        <!-- <dx-button icon="close" text="Close" type="danger" routerLink="/account-reports/receivableFollowUp-history" (onClick)="handleCancel()"></dx-button> -->
+      </div>
+    </div>
+    <div class="col-md-12">
+      <notification-popups [title]="'WARNING'" [type]="'warning'" (okClicked)="closeNotificationPopups($event)" [visibility]="warningPopupVisibility" [message]="message"></notification-popups>
+      <notification-popups [title]="'ERROR'" [type]="'error'" (okClicked)="closeNotificationPopups($event)" [visibility]="errorPopupVisisble" [message]="message"></notification-popups>
+      <notification-popups [title]="'Status'" [type]="'success'" (okClicked)="closeNotificationPopups($event)" [visibility]="successPopupVisible" [message]="message"></notification-popups>
+    </div>
+    <div class="col-md-12">
+      <load-panel [message]="loadPanelMessage" [visibility]="loadPanelVisible"></load-panel>
+    </div>
+
+  </div>
+</div>
